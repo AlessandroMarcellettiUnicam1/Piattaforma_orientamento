@@ -1,0 +1,205 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forms</title>
+
+</head>
+<body>
+  <div class="container">
+    <div class="wrapper">
+      <div>
+        <h1>Upload Fogli Excel</h1>
+      </div>
+      <div class="select-container">
+        <mat-form-field>
+          <mat-label>Seleziona tipo Upload</mat-label>
+          <mat-select (selectionChange)="cambioSel($event.value)">
+            <mat-option value="ATT">Upload Attività</mat-option>
+            <mat-option value="ISCR">Upload Immatricolati</mat-option>
+            <mat-option value="PROF">Upload Professori Scuole</mat-option>
+            <mat-option value="PROFUNICAM">Upload Professori Unicam</mat-option>
+            <mat-option value="SINGLEPROF">Upload Single Professore Scuole</mat-option>
+            <mat-option value="SINGLEPROFUNICAM">Upload Single Professore Unicam</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="upload">
+        <div class="attivita" *ngIf="visualizza == 'ATT'">
+         
+          <input type="text" id="text" (change)="cambioNome($event)" placeholder="Nome attività" />
+          <input type="text" id="text" (change)="cambioTipo($event)" placeholder="Tipo attività" />
+
+          <div>
+            <label for="sede">Sede</label>
+            <select id="sede" name="sede" [(ngModel)]="sede" (change)="onSedeChange($event)">
+              <option value="online">Online</option>
+              <option value="università">Università</option>
+              <option value="scuola">Scuola</option>
+              <option value="altro">Altro</option>
+            </select>
+          </div>
+
+         
+            <label for="citta">Città della Scuola</label>
+            <input type="text" id="citta" name="citta" [(ngModel)]="citta" (change)="cambioCitta($event)" required>
+            <button (click)="toggleDropdownS()" class="btn">Cerca Scuola!</button>
+            <div *ngIf="showDropdownS">
+              <h3>Scuole Presenti</h3>
+              <select [(ngModel)]="selectedItem" (change)="onSelectionChangeS($event)">
+                <option *ngFor="let scuola of scuole" [value]="scuola">{{scuola}}</option>
+              </select>
+            </div>
+         
+
+
+
+          <div class="field-group">
+            <div>
+              <label for="annoInizio">Anno Accademico Inizio</label>
+              <input type="number" id="annoInizio" name="annoInizio" [(ngModel)]="annoAccademicoInizio" required minlength="4" maxlength="4">
+            </div>
+            <div>
+              <label for="annoFine">Anno Accademico Fine</label>
+              <input type="number" id="annoFine" name="annoFine" [(ngModel)]="annoAccademicoFine" required minlength="4" maxlength="4">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <div>
+              <label for="dataInizio">Data Inizio</label>
+              <input type="datetime-local" id="dataInizio" name="dataInizio" [(ngModel)]="dataInizio" required>
+            </div>
+            <div>
+              <label for="dataFine">Data Fine</label>
+              <input type="datetime-local" id="dataFine" name="dataFine" [(ngModel)]="dataFine" required>
+            </div>
+          </div>
+
+          <input type="text" id="text" (change)="cambioDescrizione($event)" placeholder="Descrizione" />
+
+          <div>
+            <label for="prof">Professore Referente</label>
+            <button (click)="toggleDropdownP()" class="btn">Cerca Professore Referente!</button>
+            <div *ngIf="showDropdownP">
+              <h3>Professori Presenti</h3>
+              <select [(ngModel)]="selectedItem" (change)="onSelectionChange($event)">
+                <option *ngFor="let prof of professori" [value]="prof">{{prof}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="prof">Professore Unicam</label>
+            <button (click)="toggleDropdownU()" class="btn">Cerca Professore Unicam!</button>
+            <div class="containerp" *ngIf="showDropdownU">
+              <h3>Professori Unicam Presenti</h3>
+              <label for="profDropdown"></label>
+              <select id="profDropdown" [(ngModel)]="selectedProf" multiple>
+                <option *ngFor="let profUnicam of professoriUnicam" [value]="profUnicam">{{profUnicam}}</option>
+              </select>
+              <button (click)="saveSelections()">Salva Selezioni</button>
+            </div>
+          </div>
+
+          <input type="file" accept=".xlsx" (change)="onChangeFile($event)" />
+          <button (click)="submitAttForm()">Carica!</button>
+        
+        </div>
+
+        <div class="iscritt" *ngIf="visualizza == 'ISCR'">
+          <div class="field-group">
+            <div>
+              <label for="annoInizio">Anno accademico di inizio:</label>
+              <input type="number" id="annoInizio" name="annoInizio" [(ngModel)]="annoAccademicoInizio" required minlength="4" maxlength="4">
+            </div>
+            <div>
+              <label for="annoFine">Anno accademico di fine:</label>
+              <input type="number" id="annoFine" name="annoFine" [(ngModel)]="annoAccademicoFine" required minlength="4" maxlength="4">
+            </div>
+          </div>
+          <input type="file" accept=".xlsx" (change)="onChangeFileIscr($event)" />
+          <button (click)="submitIscrForm()">Carica!</button>
+        </div>
+
+        <div class="prof" *ngIf="visualizza == 'PROF'">
+          <input type="file" accept=".xlsx" (change)="onChangeFileProf($event)" />
+          <button (click)="onclickProf()">Carica!</button>
+        </div>
+
+        <div class="profUnicam" *ngIf="visualizza == 'PROFUNICAM'">
+          <input type="file" accept=".xlsx" (change)="onChangeFileProfUnicam($event)" />
+          <button (click)="onclickProfUnicam()">Carica!</button>
+        </div>
+
+        <div class="singleProf" *ngIf="visualizza == 'SINGLEPROF'">
+          <form>
+            <div>
+              <input type="text" id="text" (change)="cambioNome($event)" placeholder="Nome" />
+            </div>
+            <div>
+              <input type="text" id="text" (change)="cambioCognome($event)" placeholder="Cognome" />
+            </div>
+            <div>
+              <input type="text" id="text" (change)="cambioEmail($event)" placeholder="Email" />
+            </div>
+            <div>
+              <label for="citta">Città della Scuola</label>
+              <input type="text" id="citta" name="citta" [(ngModel)]="citta" (change)="cambioCitta($event)" required>
+              <button (click)="toggleDropdownS()" class="btn">Cerca Scuola!</button>
+              <div *ngIf="showDropdownS">
+                <h3>Scuole Presenti</h3>
+                <select [(ngModel)]="selectedItem" (change)="onSelectionChangeS($event)">
+                  <option *ngFor="let scuola of scuole" [value]="scuola">{{scuola}}</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <input type="text" id="text" (change)="cambioAttivita($event)" placeholder="Attività" />
+            </div>
+          </form>
+          <button (click)="onclickSingleProf()">Carica!</button>
+        </div>
+
+        <div class="singleProfUnicam" *ngIf="visualizza == 'SINGLEPROFUNICAM'">
+          <form>
+            <div>
+              <input type="text" id="text" (change)="cambioNome($event)" placeholder="Nome" />
+            </div>
+            <div>
+              <input type="text" id="text" (change)="cambioCognome($event)" placeholder="Cognome" />
+            </div>
+            <div>
+              <input type="text" id="text" (change)="cambioEmail($event)" placeholder="Email" />
+            </div>
+          </form>
+          <button (click)="onclickSingleProfUnicam()">Carica!</button>
+        </div>
+      </div>
+    </div>
+    <div class="image-container">
+      <div class="img-att" *ngIf="visualizza == 'ATT'">
+        <h3>Esempio formattazione file attività</h3>
+        <img src="assets/immagini/esempio_att.png" />
+      </div>
+      <div class="img-iscr" *ngIf="visualizza == 'ISCR'">
+        <h2>N.B: Nel file usato per l'inserimento gli iscritti devono essere tutti dello stesso corso!!!</h2>
+        <h3>Esempio formattazione file iscritti</h3>
+        <img src="assets/immagini/esempio_iscr.png" />
+      </div>
+      <div class="img-prof" *ngIf="visualizza == 'PROF'">
+        <h3>Esempio formattazione file professori</h3>
+        <img src="assets/immagini/esempio_prof.png" />
+      </div>
+      <div class="img-profUnicam" *ngIf="visualizza == 'PROFUNICAM'">
+        <h3>Esempio formattazione file professori Unicam</h3>
+        <img src="assets/immagini/esempio_profUnicam.png" />
+      </div>
+    </div>
+  </div>
+</body>
+</html>

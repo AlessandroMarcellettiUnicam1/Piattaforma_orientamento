@@ -1,0 +1,72 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Forms</title>
+</head>
+<body>
+  
+  
+  <div class="centered-title">
+    <h2>Iscrizione Attività</h2>
+  </div>
+  <form>
+  <div>
+    <button (click)="toggleDropdown()">Mostra Attività Presenti</button>
+    <div *ngIf="showDropdown">
+     
+      <select [(ngModel)]="selectedItem" (change)="onSelectionChange($event)">
+        <option *ngFor="let item of items" [value]="item">{{item}}</option>
+      </select>
+    </div>
+  </div>
+    <div>
+        <h2>Iscriviti</h2>
+        <form>
+          <div>
+            <input
+            type="text"
+            id="text"
+            (change)="cambioNome($event)"
+            placeholder="Nome"
+          />
+          </div>
+          <div>
+            <input
+            type="text"
+            id="text"
+            (change)="cambioCognome($event)"
+            placeholder="Cognome"
+          />
+          </div>
+          <div>
+            <input
+            type="text"
+            id="text"
+            (change)="cambioEmail($event)"
+            placeholder="Email"
+          />
+          </div>
+
+          <div >
+            <label for="citta">Città Scuola</label>
+            <input type="text" id="citta" name="citta" [(ngModel)]="citta" (change)="cambioCitta($event)" required>
+            <button (click)="toggleDropdownS()"class="btn">Cerca Scuola!</button>
+            
+            <div *ngIf="showDropdownS">
+           
+              <h3>ScuolePresenti</h3>
+              
+              <select [(ngModel)]="selectedItem" (change)="onSelectionChangeS($event)">
+                <option *ngFor="let scuola of scuole" [value]="scuola">{{scuola}}</option>
+              </select>
+            </div>
+        </div>
+
+
+          <button (click)="InviaIscrizione()">Invia!</button>
+        </form>
+      </div>
+    </form>  
+</body>
+</html>

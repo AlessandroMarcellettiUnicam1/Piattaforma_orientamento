@@ -1,0 +1,199 @@
+
+
+<div class="container">
+  <div class="wrapper">
+    <div class="bottoni">
+      <button mat-raised-button class="btn1" id="btn1" (click)="onClick1()">
+        Vista scuole
+      </button>
+      <button mat-raised-button class="btn2" id="btn2" (click)="onClick2()">
+        Vista attività
+      </button>
+      <button mat-raised-button class="btn3" id="btn3" (click)="onClick3()">
+        Vista Professori Scuole
+      </button>
+      <button mat-raised-button class="btn4" id="btn4" (click)="onClick4()">
+        Vista Professori Unicam
+      </button>
+
+
+
+
+      <mat-form-field *ngIf="click < 3">
+        <mat-label>Seleziona anno </mat-label>
+        <mat-select (selectionChange)="cambioRisultati($event.value)">
+          <mat-option *ngFor="let an of anni" [value]="an.value">
+            {{ an.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field *ngIf="click == 0 || click == 1">
+        <mat-label>Ordinamento vista</mat-label>
+        <mat-select (selectionChange)="cambioOrdinamento($event.value)">
+          <mat-option value="ISCRITTI">Per numero di iscritti</mat-option>
+          <mat-option value="REGIONI">Alfabetico per regione</mat-option>
+          <mat-option value="SCUOLE">Alfabetico per le scuole</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field *ngIf="click == 2">
+        <mat-label>Selziona ordinamento vista</mat-label>
+        <mat-select (selectionChange)="cambioOrdinamentoAtt($event.value)">
+          <mat-option value="ISCRITTI">Per numero di iscritti</mat-option>
+          <mat-option value="NOME">Alfabetico per attività</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+
+    </div>
+  </div>
+  <div class="generato">
+    <div *ngIf="click == 1" class="pannelli">
+      <div class="spazio">
+        
+        <button class="button"id="scaricaScuoleButton"(click)="scaricaVistaScuole()" >
+          <span class="button-content">Scarica Vista Scuole </span>
+        </button>
+
+      </div>
+      <div *ngFor="let ris of visualRis">
+        
+        <div>
+          <mat-accordion class="header-align">
+            <mat-expansion-panel
+              hideToggle
+              class="panel"
+              [ngStyle]="{
+                background: ris.iscritti.length > 0 ? 'ligthgreen' : 'coral'
+              }"
+            >
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{ ris.scuola.nome }}
+                  {{ ris.scuola.regione }}
+                  {{ ris.scuola.provincia }}
+                  {{ ris.scuola.citta }}
+                  {{ annoVisual }}
+                </mat-panel-title>
+                <mat-panel-description class="right-aligned">
+                  Totale iscritti {{ ris.iscritti.length }}
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <div>
+                <ng-container *ngFor="let a of ris.attivita">
+                 NomeAttività: {{ a.nomeAttivita }} Tipo: {{a.tipo}}<br />Partecipanti {{ a.partecipanti.length }},
+                  Iscritti {{ a.iscritti.length }}
+                  <br />
+                  <ng-container *ngFor="let i of a.iscritti">
+                    {{ i.nome }} {{ i.cognome }}
+                  </ng-container>
+                  <br/>
+                </ng-container>
+              </div>
+              <div *ngIf="ris.iscritti.length > 0">
+                Elenco Iscritti:<br>
+                <ng-container *ngFor="let i of ris.iscritti">
+                  {{ i.nome }} {{ i.cognome }}
+                  <br/>
+                </ng-container>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+         
+      
+      
+
+        </div>
+      </div>
+      
+    </div>
+    <div *ngIf="click == 2">
+      <div class="spazio">
+    
+       <button class="button"id="scaricaRisButton"(click)="scaricaVistarisulati()" >
+        <span class="button-content">Scarica Vista Risultati </span>
+      </button>
+      </div>
+      <div *ngFor="let ris of visualRisAtt">
+       
+        <div>
+          <mat-expansion-panel
+            [ngStyle]="{
+              background: ris.universitarii.length > 0 ? 'ligthgreen' : 'coral'
+            }"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+               Attività: {{ ris.attivita  }} Tipo:{{ris.tipo}}  Anno {{ annoVisual }}
+              </mat-panel-title>
+              <mat-panel-description class="right-aligned">
+                Totale iscritti : {{ ris.universitarii.length }}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p *ngIf="ris.universitarii.length > 0">
+              <ng-container *ngFor="let i of ris.universitarii">
+                {{ i.nome }} {{ i.cognome }}
+                <br />
+              </ng-container>
+            </p>
+          </mat-expansion-panel>
+       
+  
+
+        
+        </div>
+      </div>
+    </div>
+    <div *ngIf="click == 3">
+      <div class="spazio">
+              
+       <button class="button"id="scaricaProfButton"(click)="scaricaVistaProfessori()" >
+        <span class="button-content">Scarica Vista Professori </span>
+      </button>
+
+      </div>
+      <div *ngFor="let p of profVisual">
+        
+        <mat-card>
+          <mat-card-header>
+           <h1>{{ p.professore.nome }} {{ p.professore.cognome }}</h1>
+          </mat-card-header>
+          <mat-card-content>
+            email: {{ p.professore.email }}
+            <br />
+            scuola: {{ p.scuola.nome }}
+            <br />
+            città : {{ p.scuola.citta }}
+            <br />
+            regione : {{ p.scuola.regione }}
+          </mat-card-content>
+        </mat-card>
+ 
+      </div>
+    </div>
+    <div *ngIf="click == 4">
+      <div class="spazio">
+                  
+       <button class="button"id="scaricaProfUnicamButton"(click)="scaricaVistaProfessoriUnicam()" >
+        <span class="button-content">Scarica Vista Professori Unicam </span>
+      </button>
+      </div>
+      <div *ngFor="let p of profUnicamVisual">
+        
+        <mat-card>
+          <mat-card-header>
+           <h1>{{ p.professore.nome }} {{ p.professore.cognome }}  {{ p.professore.email }}</h1>
+          </mat-card-header>
+          <mat-card-content>
+            email: {{ p.professore.email }}
+            <br />
+           nome:{{ p.professore.nome }}
+            <br />
+            cognome : {{ p.professore.email }}
+          </mat-card-content>
+        </mat-card>
+   
+      </div>
+    </div>
+  </div>
+</div>

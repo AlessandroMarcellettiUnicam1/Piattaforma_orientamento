@@ -1,0 +1,16 @@
+<div>
+    <h1>Calcolatore dell'Intero Successivo</h1>
+    
+    <div class="form-container">
+      <form>
+        <label for="leftNumber">Inserisci un numero intero:</label>
+        <input type="number" id="leftNumber" [(ngModel)]="leftNumber" name="leftNumber" (input)="calculateNextNumber()" required>
+      </form>
+      
+      <form>
+        <label for="rightNumber">Intero successivo:</label>
+        <input type="number" id="rightNumber" [(ngModel)]="nextNumber" name="nextNumber" readonly>
+      </form>
+    </div>
+  </div>
+  

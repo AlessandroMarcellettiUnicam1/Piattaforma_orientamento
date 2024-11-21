@@ -1,0 +1,185 @@
+
+
+
+/* Stile generale per il body */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+ 
+}
+
+.container {
+  height: 800px; 
+  width: 80%;
+  max-width: 800px;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto; 
+  
+}
+
+.containerp {
+  height: 200px; 
+  width: 80%;
+  max-width: 800px;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto; 
+  
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+
+.select-container {
+  width: 100%;
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* Stile per i campi di input e i selettori */
+input[type="text"],
+input[type="number"],
+input[type="datetime-local"],
+select {
+  width: 150%;
+  max-width: 400px;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+
+
+
+/* Stile per le etichette */
+label {
+  font-weight: bold;
+  margin-top: 10px;
+  display: block;
+  width: 150%;
+  text-align: center;
+}
+
+/* Stile per i pulsanti */
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Stile per i pulsanti di ricerca */
+button.btn {
+  background-color: #008CBA;
+  margin-left: 10px;
+  width: auto;
+}
+
+/* Stile per i contenitori delle immagini */
+.image-container {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Stile per le immagini di esempio */
+.image-container img {
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Stile per le descrizioni delle immagini */
+.image-container h2,
+.image-container h3 {
+  color: #555;
+  text-align: center;
+}
+
+/* Stile per i campi obbligatori */
+input[required],
+select[required] {
+  border-left: 5px solid red;
+}
+
+/* Stile per i moduli */
+.upload {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upload > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* Stile per contenitore di campi accanto */
+.field-group {
+  display: flex;
+  justify-content: space-between;
+  width: 150%;
+  max-width: 800px;
+}
+
+.field-group > div {
+  width: 48%;
+}
+
+.field-group > div > input,
+.field-group > div > label {
+  width: 100%;
+  max-width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,39 @@
+/*
+questa classe riguarda le tre componenti a sinistra cioè statistiche mappe e upload
+*/
+
+.example-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #eeeb;
+}
+
+.sd-lst{
+  background-color: lightgray;
+}
+
+
+.lst{
+  background-color: lightgray;
+}
+/*
+se passi sopra a statistiche diventa blu
+*/
+.lst1:hover{
+  background-color: blue; 
+}
+/*
+se passi sopra a statistiche mappa diventa rosso
+*/
+.lst2:hover{
+  background-color: red;
+}
+.lst3:hover{
+  background-color: green;
+}
+.lst4:hover{
+  background-color: yellow;
+}
