@@ -1,15 +1,19 @@
-<mat-sidenav-container class="example-container">
-  <mat-sidenav mode="side" opened class="sd-lst">
-    <mat-list role="list">
-      <mat-list-item role="listitem" routerLink="stats" class="lst lst1">Statistiche</mat-list-item>
-      <mat-list-item role="listitem" routerLink="map" class="lst lst2">Mappa</mat-list-item>
-      <mat-list-item role="listitem" routerLink="upload" class="lst lst3">Upload</mat-list-item>
-      <mat-list-item role="listitem" routerLink="form" class="lst lst4">Iscrizone</mat-list-item>
-      
-    </mat-list>
+<div class="dashboard">
+  <img class="logo" src="assets/immagini/logo_unicam.png" routerLink="home">
+  <mat-sidenav-container class="nav-container">
+    <mat-sidenav mode="side" opened class="sd-lst">
+      <mat-list role="list">
+        <mat-list-item role="listitem" routerLink="home" class="lst lst0">Home</mat-list-item>
+        <mat-list-item role="listitem" routerLink="stats" class="lst lst1">Statistiche</mat-list-item>
+        <mat-list-item role="listitem" routerLink="map" class="lst lst2">Mappa</mat-list-item>
+        <mat-list-item role="listitem" routerLink="upload" class="lst lst3">Upload</mat-list-item>
+        <mat-list-item role="listitem" routerLink="form" class="lst lst4">Iscrizione</mat-list-item>
+        
+      </mat-list>
 
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <router-outlet></router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
