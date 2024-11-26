@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="logo-container">
+    <img class="logo" src="assets/immagini/logo_unicam_full.jpg">
+  </div>
+
+  <div class="nav-button">
+    <button mat-button class="btn1" id="btn1" [routerLink]="['/stats']">Statistiche</button>
+    <button mat-button class="btn2" id="btn2" [routerLink]="['/map']">Mappa</button>
+    <button mat-button class="btn3" id="btn3" [routerLink]="['/upload']">Upload</button>
+    <button mat-button class="btn4" id="btn4" [routerLink]="['/form']">Iscrizione</button>
+  </div>
+  <router-outlet></router-outlet>
+
+</div>

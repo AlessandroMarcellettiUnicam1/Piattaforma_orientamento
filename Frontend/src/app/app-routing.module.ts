@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { HomeComponent } from './componenti/home/home.component';
 import { StatsComponent } from './componenti/stats/stats.component';
 import { DashboardComponent } from './componenti/dashboard/dashboard.component';
 import { MappaComponent } from './componenti/mappa/mappa.component';
@@ -9,7 +10,7 @@ import { AdminComponent } from './componenti/form/form.admin.component';
 import { CommonModule } from '@angular/common';
 const routes: Routes = [
   { path: '', component: DashboardComponent, children: [
-    { path: '' , component: StatsComponent },
+    { path: 'home' , component: HomeComponent },
     { path: 'stats' , component: StatsComponent },
     { path: 'map' , component: MappaComponent },
     { path: 'upload' , component : UploadatComponent},
