@@ -1,63 +1,66 @@
 
 
 <div class="container">
+  <div class="title-container">
+    <h2 class="title">Statistiche</h2>
+  </div>
   <div class="wrapper">
     <div class="bottoni">
-      <button mat-raised-button class="btn1" id="btn1" (click)="onClick1()">
+      <button mat-button class="btn1" id="btn1" (click)="onClick1()">
         Vista scuole
       </button>
-      <button mat-raised-button class="btn2" id="btn2" (click)="onClick2()">
+      <button mat-button class="btn2" id="btn2" (click)="onClick2()">
         Vista attività
       </button>
-      <button mat-raised-button class="btn3" id="btn3" (click)="onClick3()">
+      <button mat-button class="btn3" id="btn3" (click)="onClick3()">
         Vista Professori Scuole
       </button>
-      <button mat-raised-button class="btn4" id="btn4" (click)="onClick4()">
+      <button mat-button class="btn4" id="btn4" (click)="onClick4()">
         Vista Professori Unicam
       </button>
+    </div>
 
-
-
-
-      <mat-form-field *ngIf="click < 3">
+    <div class="filter" *ngIf="isFilterOpened">
+      <mat-form-field class="year-filter" *ngIf="click < 3">
         <mat-label>Seleziona anno </mat-label>
         <mat-select (selectionChange)="cambioRisultati($event.value)">
-          <mat-option *ngFor="let an of anni" [value]="an.value">
+          <mat-option>-</mat-option>
+          <mat-option class="year-filter-option" *ngFor="let an of anni" [value]="an.value">
             {{ an.viewValue }}
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field *ngIf="click == 0 || click == 1">
+      <mat-form-field class="view-filter" *ngIf="click == 0 || click == 1">
         <mat-label>Ordinamento vista</mat-label>
-        <mat-select (selectionChange)="cambioOrdinamento($event.value)">
+        <mat-select class="view-filter-option" (selectionChange)="cambioOrdinamento($event.value)">
+          <mat-option>-</mat-option>
           <mat-option value="ISCRITTI">Per numero di iscritti</mat-option>
           <mat-option value="REGIONI">Alfabetico per regione</mat-option>
           <mat-option value="SCUOLE">Alfabetico per le scuole</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field *ngIf="click == 2">
-        <mat-label>Selziona ordinamento vista</mat-label>
-        <mat-select (selectionChange)="cambioOrdinamentoAtt($event.value)">
+        <mat-label>Ordinamento vista</mat-label>
+        <mat-select class="view-filter-option" (selectionChange)="cambioOrdinamentoAtt($event.value)">
+          <mat-option>-</mat-option>
           <mat-option value="ISCRITTI">Per numero di iscritti</mat-option>
           <mat-option value="NOME">Alfabetico per attività</mat-option>
         </mat-select>
       </mat-form-field>
-
-
-
     </div>
-  </div>
-  <div class="generato">
-    <div *ngIf="click == 1" class="pannelli">
-      <div class="spazio">
-        
-        <button class="button"id="scaricaScuoleButton"(click)="scaricaVistaScuole()" >
-          <span class="button-content">Scarica Vista Scuole </span>
-        </button>
 
-      </div>
+  </div>
+
+  <div>
+    <div class="generato">
+      <div *ngIf="click == 1" class="pannelli">
+        <div class="spazio">
+          <button class="button-download" id="scaricaScuoleButton"(click)="scaricaVistaScuole()" >
+            <span class="button-content">Scarica Vista Scuole </span>
+          </button>
+        </div>
+
       <div *ngFor="let ris of visualRis">
-        
         <div>
           <mat-accordion class="header-align">
             <mat-expansion-panel
@@ -110,7 +113,7 @@
     <div *ngIf="click == 2">
       <div class="spazio">
     
-       <button class="button"id="scaricaRisButton"(click)="scaricaVistarisulati()" >
+       <button class="button-download" id="scaricaRisButton"(click)="scaricaVistarisulati()" >
         <span class="button-content">Scarica Vista Risultati </span>
       </button>
       </div>
@@ -124,7 +127,7 @@
           >
             <mat-expansion-panel-header>
               <mat-panel-title>
-               Attività: {{ ris.attivita  }} Tipo:{{ris.tipo}}  Anno {{ annoVisual }}
+                Attività: {{ ris.attivita  }} Tipo:{{ris.tipo}}  Anno {{ annoVisual }}
               </mat-panel-title>
               <mat-panel-description class="right-aligned">
                 Totale iscritti : {{ ris.universitarii.length }}
@@ -147,7 +150,7 @@
     <div *ngIf="click == 3">
       <div class="spazio">
               
-       <button class="button"id="scaricaProfButton"(click)="scaricaVistaProfessori()" >
+       <button class="button-download" id="scaricaProfButton"(click)="scaricaVistaProfessori()" >
         <span class="button-content">Scarica Vista Professori </span>
       </button>
 
@@ -174,7 +177,7 @@
     <div *ngIf="click == 4">
       <div class="spazio">
                   
-       <button class="button"id="scaricaProfUnicamButton"(click)="scaricaVistaProfessoriUnicam()" >
+       <button class="button-download" id="scaricaProfUnicamButton"(click)="scaricaVistaProfessoriUnicam()" >
         <span class="button-content">Scarica Vista Professori Unicam </span>
       </button>
       </div>
@@ -189,11 +192,10 @@
             <br />
            nome:{{ p.professore.nome }}
             <br />
-            cognome : {{ p.professore.email }}
-          </mat-card-content>
-        </mat-card>
+          cognome : {{ p.professore.email }}
+        </mat-card-content>
+      </mat-card>
    
-      </div>
     </div>
   </div>
 </div>

@@ -1,137 +1,145 @@
 
 
 
-.container{
- 
+.container {
   display: block;
-  max-width:1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-
-  
 }
 
+.lst1 {
+  background-color: #fff;
+}
 
+.title-container {
+  display: flex;
+  justify-content: center;
+  height: 150px;
+}
+
+.title {
+  margin-top: 50px;
+  width: 300px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 64px;
+  z-index: 1000;
+  color: #E2001A;
+}
 
 .wrapper {
   display: block;
-  max-width: 100%;
-  margin: 0 auto;
-
 }
 
-.bottoni {
-  width: 100%;
-  max-width: 100%;
-  justify-content: space-between;
+.generato {
   display: flex;
-  flex-direction: row;
-  gap: 12px;
-  padding-bottom: 32px;
+  justify-content: center;
 }
 
-.bottoni>button{
-  width: 170px;
+.pannelli {
+  display: flex;
 }
 
-.generato > div {
-  display: grid;
+.spazio {
+  display: flex;
+  padding-top: 200px;
 }
 
-.btn1:hover{
-  background-color: blue;
-}
-.btn2:hover{
-  background-color: red;
-}
-.btn3:hover{
-  background-color: green;
-}
-.btn4:hover{
-  background-color: yellow;
- 
-}
-
-
-
-mat-panel-description.right-aligned {
-  flex-grow: 0;
-  gap: 10px;
-
-}
-
-#scaricaProfButton {
-  position: absolute;
-  top: 65px; 
-  right: 600px; 
-  background-color: green;
-  color: white;
-}
-#scaricaScuoleButton {
-  position: absolute;
-  top: 75px; 
-  right: 600px; 
-  background-color: green;
-  color: white;
-
-}
-#scaricaRisButton{
-  position: absolute;
-  top: 75px; 
-  right: 600px;
-  background-color: green;
-  color: white;
-}
-#scaricaProfUnicamButton {
-  position: absolute;
-  top: 65px; 
-  right: 600px; 
-  background-color: green;
-  color: white;
-}
-
-
-
-.button {
-  position: relative;
+.button-download {
   overflow: hidden;
   height: 3rem;
   padding: 0 2rem;
   border-radius: 1.5rem;
-  background: #3d3a4e;
+  background: green;
   background-size: 400%;
   color: #fff;
   border: none;
   cursor: pointer;
 }
 
-.button:hover::before {
-  transform: scaleX(1);
+.button-download:hover {
+  background-color: rgb(84, 59, 123);
 }
 
-.button-content {
-  position: relative;
-  z-index: 1;
+#scaricaScuoleButton {
+  width: 250px;
+
+}
+#scaricaRisButton{
+  width: 250px;
+}
+#scaricaProfButton {
+  width: 250px;
+}
+#scaricaProfUnicamButton {
+  width: 275px;
 }
 
-.button::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: scaleX(0);
-  transform-origin: 0 50%;
-  width: 100%;
-  height: inherit;
-  border-radius: inherit;
-  background: linear-gradient(
-    82.3deg,
-    rgba(150, 93, 233, 1) 10.8%,
-    rgba(99, 88, 238, 1) 94.3%
-  );
-  transition: all 0.475s;
+.bottoni {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  height: 75px;
+  border: none;
+  background-color: #7FBD32;
 }
 
-.spazio {
-  margin-top: 50px; 
+.btn1, .btn2, .btn3, .btn4 {
+  width: 200px;
+  font-size: 15px;
+}
+
+.btn1:hover, .btn2:hover, .btn3:hover, .btn4:hover {
+  height: auto;
+  background-color: white;
+}
+
+.filter {
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+  gap: 15px;
+}
+
+.dropdown-menu {
+  display: none;
+}
+
+.dropdown-button {
+  display: none;
+}
+  
+::ng-deep .mat-menu-panel {
+  display: none;
+}
+
+.dropdown-view {
+  display: none;
+}
+
+@media(max-width: 1000px) {
+  
+  .filter {
+    display: flex;
+    gap: 15px;
+    padding-left: 25px;
+    padding-top: 10px;
+  }
+
+}
+
+@media (max-width: 710px) {
+
+  .filter {
+    width: 180px;
+    flex-direction: column;
+  }
+
+  .button-download {
+    margin-bottom: 100px;
+  }
+}
+
+@media (max-width: 550px) {
+
+  .bottoni {
+    height: auto;
+  }
 }
