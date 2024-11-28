@@ -11,6 +11,7 @@
 
 .title-container {
   display: flex;
+  text-align: center;
   justify-content: center;
   height: 150px;
 }
@@ -29,8 +30,7 @@
 }
 
 .generato {
-  display: flex;
-  justify-content: center;
+  display: block;
 }
 
 .pannelli {
@@ -39,7 +39,41 @@
 
 .spazio {
   display: flex;
-  padding-top: 200px;
+  padding-top: 20px;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+.school-button, .activity-button, .school-prof-button, .unicam-prof-button {
+  padding-bottom: 20px;
+}
+
+.school-results, .activity-results {
+  width: 90%;
+  padding-bottom: 10px;
+}
+
+.school-prof-results, .unicam-prof-results {
+  width: 450px;
+  padding-bottom: 10px;
+}
+
+.school-prof-name {
+  display: block;
+  text-align: center;
+}
+
+.unicam-prof-name {
+  display: block;
+  flex-direction: column;
+  text-align: center;
+}
+
+.school-results-subscription, .activty-results-subscription {
+  display: block;
+  text-align: right;
 }
 
 .button-download {
@@ -95,45 +129,29 @@
   display: flex;
   justify-content: center;
   padding-top: 10px;
+}
+
+.filter-view {
+  display: flex;
   gap: 15px;
 }
 
-.dropdown-menu {
-  display: none;
-}
-
-.dropdown-button {
-  display: none;
-}
-  
-::ng-deep .mat-menu-panel {
-  display: none;
-}
-
-.dropdown-view {
-  display: none;
-}
-
-@media(max-width: 1000px) {
-  
-  .filter {
-    display: flex;
-    gap: 15px;
-    padding-left: 25px;
-    padding-top: 10px;
-  }
-
+.year-filter, .view-filter {
+  width: 250px;
 }
 
 @media (max-width: 710px) {
 
   .filter {
-    width: 180px;
+    justify-content: center;
+  }
+
+  .filter-view {
     flex-direction: column;
   }
 
-  .button-download {
-    margin-bottom: 100px;
+  .school-prof-results, .unicam-prof-results {
+    width: 75%;
   }
 }
 
@@ -142,4 +160,15 @@
   .bottoni {
     height: auto;
   }
+
+  .school-results-accordion, .activty-results-accordion {
+    margin-bottom: 50px;
+  }
+
+  .school-results-panel-header, .activity-results-panel-header {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    height: auto;
+  }
+
 }
