@@ -8,9 +8,10 @@ import { UploadatComponent } from './componenti/uploadat/uploadat.component';
 import { FormdatComponent } from './componenti/form/form.component';
 import { AdminComponent } from './componenti/form/form.admin.component';
 import { CommonModule } from '@angular/common';
+
 const routes: Routes = [
   { path: '', component: DashboardComponent, children: [
-    { path: 'home' , component: HomeComponent },
+    { path: '' , component: HomeComponent },
     { path: 'stats' , component: StatsComponent },
     { path: 'map' , component: MappaComponent },
     { path: 'upload' , component : UploadatComponent},

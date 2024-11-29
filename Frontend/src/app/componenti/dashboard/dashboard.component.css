@@ -44,7 +44,7 @@ questa classe riguarda le tre componenti a sinistra cioè statistiche mappe e up
 /*
 se passi sopra a statistiche diventa blu
 */
-.lst0:hover, .lst1:hover, .lst2:hover, .lst3:hover, .lst4:hover{
+.lst0:hover, .lst1:hover, .lst2:hover, .lst3:hover, .lst4:hover, .lst5:hover {
   background-color: white;
   cursor: pointer;
 }
