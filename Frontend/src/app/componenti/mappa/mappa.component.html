@@ -17,9 +17,12 @@
  -->
 
 <div class="page-container">
+  <div class="title-container">
+    <h2 class="title">Mappa</h2>
+  </div>
   <div class="page-content">
-    <div class="selezione-risultati">
-      <mat-form-field>
+    <div class="selezione-filtro">
+      <mat-form-field class="map-filter">
         <mat-label>Seleziona anno Accademico</mat-label>
         <mat-select (selectionChange)="cambioSel($event.value)">
           <mat-option *ngFor="let an of a" [value]="an.value">
@@ -27,7 +30,10 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <div>
+    </div>
+      
+    <div class="selezione-risultati">
+      <div class="page-results">
         <div class="risultati" *ngIf="visualizza">
           <ng-container *ngIf="visualRis.length == 0">
            <p>Nessun risultato per questa regione</p>

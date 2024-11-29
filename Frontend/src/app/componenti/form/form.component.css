@@ -22,6 +22,22 @@
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
+
+  .title-container {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    height: 150px;
+  }
+  
+  .title {
+    margin-top: 50px;
+    width: 300px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 64px;
+    z-index: 1000;
+    color: #E2001A;
+  }
   
   button {
     padding: 10px 20px;

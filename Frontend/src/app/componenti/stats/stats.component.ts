@@ -31,7 +31,8 @@ export class StatsComponent implements OnInit {
     private professoriUnicamService: ProfessoriUnicamService
   ) {}
 
-
+  public isMenuOpened: boolean = false;
+  public isFilterOpened: boolean = false;
   public scuole: Scuola[] =[];
   public universi: Universi[] | undefined;
   public risultati: Res[] = [];
@@ -215,15 +216,19 @@ public searchInput = document.getElementById('searchInput') as HTMLInputElement;
 
   onClick1() {
     this.click = 1;
+    this.isFilterOpened = true;
   }
   onClick2() {
     this.click = 2;
+    this.isFilterOpened = true;
   }
   onClick3() {
     this.click = 3;
+    this.isFilterOpened = false;
   }
   onClick4() {
     this.click = 4;
+    this.isFilterOpened = false;
   }
 
   cambioOrdinamento(e: any) {
@@ -408,12 +413,14 @@ let annot =((parseInt(annoi)+2000)*10000)+(parseInt(annof)+2000);
 }
 
 
+/* When the user clicks on the button, 
+toggle between hiding and showing the dropdown content */
+dropdownMenu() : void {
+  this.isMenuOpened = !this.isMenuOpened;
+}
 
-
-
-
-
-
-
+clickOutside() : void {
+  this.isMenuOpened = false;
+}
 
 }

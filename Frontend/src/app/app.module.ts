@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HomeComponent } from './componenti/home/home.component';
 import { StatsComponent } from './componenti/stats/stats.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,7 +24,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete'
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AdminComponent } from './componenti/form/form.admin.component';
 import { FormdatComponent } from './componenti/form/form.component';
-
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 
 
 
@@ -31,6 +33,7 @@ import { FormdatComponent } from './componenti/form/form.component';
 @NgModule({
   declarations: [
     AppComponent,
+    HomeComponent,
     StatsComponent,
     DashboardComponent,
     MappaComponent,
@@ -58,6 +61,8 @@ import { FormdatComponent } from './componenti/form/form.component';
     CdkTreeModule,
     MatSelectModule,
     MatAutocompleteModule,
+    MatIconModule,
+    MatMenuModule,
   ],
 
   providers: [],

@@ -3,6 +3,9 @@
 
 <!DOCTYPE html>
 <html lang="en">
+<div class="title-container">
+  <h2 class="title">Upload</h2>
+</div>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,11 +15,8 @@
 <body>
   <div class="container">
     <div class="wrapper">
-      <div>
-        <h1>Upload Fogli Excel</h1>
-      </div>
       <div class="select-container">
-        <mat-form-field>
+        <mat-form-field class="upload-filter">
           <mat-label>Seleziona tipo Upload</mat-label>
           <mat-select (selectionChange)="cambioSel($event.value)">
             <mat-option value="ATT">Upload Attività</mat-option>

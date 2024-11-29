@@ -1,39 +1,50 @@
 /*
 questa classe riguarda le tre componenti a sinistra cioè statistiche mappe e upload
 */
+.logo {
+  position: absolute;
+  top: 20px;
+  left: 25px;
+  width: 100px;
+  z-index: 1000;
+}
 
-.example-container {
+.logo:hover {
+  cursor: pointer;
+}
+
+.nav-container {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  background: #eeeb;
+  background: white;
 }
 
 .sd-lst{
-  background-color: lightgray;
+  width: 150px;
+  padding-top: 150px;
+  background-color: #222C4A;
 }
-
 
 .lst{
-  background-color: lightgray;
+  color: #E2001A;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 18px;
 }
+
+.titolo {
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 32px;
+  color: #E2001A;
+}
+
 /*
 se passi sopra a statistiche diventa blu
 */
-.lst1:hover{
-  background-color: blue; 
-}
-/*
-se passi sopra a statistiche mappa diventa rosso
-*/
-.lst2:hover{
-  background-color: red;
-}
-.lst3:hover{
-  background-color: green;
-}
-.lst4:hover{
-  background-color: yellow;
+.lst0:hover, .lst1:hover, .lst2:hover, .lst3:hover, .lst4:hover, .lst5:hover {
+  background-color: white;
+  cursor: pointer;
 }

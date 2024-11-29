@@ -8,13 +8,30 @@ agm-map {
 
 
 svg{
-  margin-left: 400px;
+  margin-top: 20px;
+  padding-bottom: 150px;
 }
 
 
 svg path{
   cursor: pointer;
   stroke: black;
+}
+
+.title-container {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  height: 150px;
+}
+
+.title {
+  margin-top: 50px;
+  width: 300px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 64px;
+  z-index: 1000;
+  color: #E2001A;
 }
 
 .page-container{
@@ -24,24 +41,53 @@ svg path{
 
 .page-content{
   width: 100%;
-  display: flex;
-  flex-direction: row;
+  display: block;
 }
 
 
-.selezione-risultati{
-  flex-basis: 40%;
-  flex-direction: column;
+.selezione-filtro {
   width: 100%;
   display: flex;
+  justify-content: center;
+}
+
+.page-results {
+  display: block;
+  padding-top: 20px;
+  padding-right: 50px;
+  justify-content: center;
+}
+
+.map-filter {
+  width: 700px;
+  padding-left: auto;
 }
 
 .mappa{
   flex-basis: 60%;
+  display: block;
+  padding-top: 20px;
+  padding-left: 50px;
+  padding-right: 50px;
+  overflow-x: auto;
 }
-
 
 .risultati{
   max-height: 90vh;
   overflow-y: auto;
+  float: right;
+}
+
+@media (max-width: 900px) {
+  
+  .map-filter {
+    width: 75%;
+  }
+}
+
+@media (max-width: 800px) {
+
+  .page-content {
+    flex-direction: column;
+  }
 }

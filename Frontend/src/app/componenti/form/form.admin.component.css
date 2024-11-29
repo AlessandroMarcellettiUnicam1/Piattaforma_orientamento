@@ -20,6 +20,22 @@ body {
   margin: 20px 0;
 }
 
+.title-container {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  height: 150px;
+}
+
+.title {
+  margin-top: 50px;
+  width: 300px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 64px;
+  z-index: 1000;
+  color: #E2001A;
+}
+
 form {
   background-color: #fff;
   padding: 20px;
