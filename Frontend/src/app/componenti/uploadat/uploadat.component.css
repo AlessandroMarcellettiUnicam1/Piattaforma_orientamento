@@ -11,7 +11,6 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
- 
 }
 
 .container {
@@ -27,7 +26,10 @@ body {
   flex-direction: column;
   align-items: center;
   overflow-y: auto; 
-  
+}
+
+.wrapper {
+  width: 100%;
 }
 
 .containerp {
@@ -67,7 +69,6 @@ h1 {
   color: #333;
 }
 
-
 .select-container {
   width: 100%;
   display: flex;
@@ -76,6 +77,11 @@ h1 {
 
 .upload-filter {
   width: 250px;
+}
+
+.singleProf {
+  text-align: center;
+  align-items: center;
 }
 
 /* Stile per i campi di input e i selettori */
@@ -93,15 +99,12 @@ select {
   text-align: center;
 }
 
-
-
-
 /* Stile per le etichette */
 label {
   font-weight: bold;
   margin-top: 10px;
   display: block;
-  width: 150%;
+  width: 100%;
   text-align: center;
 }
 
@@ -159,49 +162,41 @@ select[required] {
 /* Stile per i moduli */
 .upload {
   width: 100%;
-  display: flex;
+  display: block;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-.upload > div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.iscritti {
   width: 100%;
 }
 
 /* Stile per contenitore di campi accanto */
 .field-group {
-  display: flex;
-  justify-content: space-between;
-  width: 150%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  padding: 10px 20px;
   max-width: 800px;
 }
 
-.field-group > div {
-  width: 48%;
+.field-group input {
+  width: 90%;
 }
 
-.field-group > div > input,
-.field-group > div > label {
-  width: 100%;
-  max-width: 100%;
+.file-input {
+  padding-top: 20px;
 }
 
+.upload-button {
+  margin-top: 20px;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.img-iscr {
+  display: block;
+  text-align: center;
+  width: 75%;
+}
