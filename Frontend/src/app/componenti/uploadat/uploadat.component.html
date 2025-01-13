@@ -32,13 +32,13 @@
         <div class="attivita" *ngIf="visualizza == 'ATT'">
          
           <label>Nome attività</label>
-          <input type="text" id="text" (change)="cambioNome($event)" placeholder="Attività" />
+          <input type="text" id="text" (change)="cambioNome($event)" placeholder="Attività" required />
           <label>Tipo attività</label>
           <input type="text" id="text" (change)="cambioTipo($event)" placeholder="Tipologia" />
 
             <label for="sede">Sede</label>
-            <select id="sede" name="sede" [(ngModel)]="sede" (change)="onSedeChange($event)">
-              <option value="" disabled selected hidden>-</option>
+            <select id="sede" name="sede" [(ngModel)]="sede" (change)="onSedeChange($event)" required >
+              <option value="">-</option>
               <option value="online">Online</option>
               <option value="università">Università</option>
               <option value="scuola">Scuola</option>
@@ -47,11 +47,16 @@
 
          
             <label for="citta">Città della Scuola</label>
-            <input type="text" id="citta" name="citta" [(ngModel)]="citta" (change)="cambioCitta($event)" (change)="toggleDropdownS()" required placeholder="Città">
+            <input type="text" list="cityName" id="citta" name="citta" [(ngModel)]="citta" (change)="cambioCitta($event)" (change)="toggleDropdownS()" autocomplete="off" placeholder="Città" />
+              <datalist class="cities-list" id="cityName">
+                <option [value]="" >-</option>
+                <option *ngFor="let citta of cittaLista" [value]="citta">{{citta}}</option>
+              </datalist>
+
 
               <label>Scuole Presenti</label>
               <select [(ngModel)]="selectedItem" (change)="onSelectionChangeS($event)" value="Scuole Presenti">
-                <option value="" disabled selected hidden>-</option>
+                <option value="">-</option>
                 <option *ngFor="let scuola of scuole" [value]="scuola">{{scuola}}</option>
               </select>
          
@@ -85,17 +90,19 @@
           <label for="descrizione">Descrizione</label>
           <input type="text" id="text" (change)="cambioDescrizione($event)" placeholder="Descrizione"/>
 
-            <label for="prof">Professore Referente</label>
-              <select [(ngModel)]="selectedItem" (selectionchange)="onSelectionChange($event)">
-                <option value="" disabled selected hidden>-</option>
+            <label for="pro">Professore Referente</label>
+            <input type="text" list="profRefName" id="profRef" name="profRef" [(ngModel)]="prof" (change)="cambioProfRef($event)" (change)="toggleDropdownP()" autocomplete="off" placeholder="Professore Referente" />
+              <datalist class="profRef-list" id="profRefName">
+                <option [value]="" >-</option>
                 <option *ngFor="let prof of professori" [value]="prof">{{prof}}</option>
-              </select>
+              </datalist>
 
             <label for="prof">Professore Unicam</label>
-              <select id="profDropdown" [(ngModel)]="selectedProf" (selectionchange)="saveSelections($event)">
-                <option value="" disabled selected hidden>-</option>
+            <input type="text" list="profUniName" id="profUni" name="profUni" [(ngModel)]="profUnicam" (change)="cambioProfUni($event)" (change)="toggleDropdownU()" autocomplete="off" placeholder="Professore Unicam" />
+              <datalist class="profUni-list" id="profUniName">
+                <option [value]="" >-</option>
                 <option *ngFor="let profUnicam of professoriUnicam" [value]="profUnicam">{{profUnicam}}</option>
-              </select>
+              </datalist>
 
           <div class="file-input">
             <input type="file" accept=".xlsx" (change)="onChangeFile($event)" />
@@ -152,9 +159,14 @@
             </div>
             <div>
               <label for="citta">Città della Scuola</label>
-              <input type="text" id="citta" name="citta" [(ngModel)]="citta" (change)="cambioCitta($event)" required>
+              <input type="text" list="cities-prof" id="citta" name="citta" [(ngModel)]="citta" (change)="cambioCitta($event)" (change)="toggleDropdownS()" required autocomplete="off" placeholder="Città">
+              <datalist class="cities-list" id="cities-prof">
+                <option *ngFor="let citta of cittaLista" [value]="citta">{{citta}}</option>
+              </datalist>
+
               <label for="scuola">Scuola</label>
                 <select [(ngModel)]="selectedItem" (change)="onSelectionChangeS($event)">
+                  <option value="">-</option>
                   <option *ngFor="let scuola of scuole" [value]="scuola">{{scuola}}</option>
                 </select>
             </div>

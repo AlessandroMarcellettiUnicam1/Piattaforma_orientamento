@@ -26,6 +26,7 @@ export class UploadatComponent implements OnInit {
   annoAccademicoFine: number = 0;
   private cognome: string = '';
   private email: string = '';
+  cittaLista: string[] = [];
   citta: string = '';
   scuole: string[] = [];
   private attivita: string = '';
@@ -39,12 +40,14 @@ export class UploadatComponent implements OnInit {
   professori: string[] = [];
   professoriUnicam: string[] = [];
   prof: string = '';
+  profUnicam: string = '';
   file: File | null = null;
 
 
   ngOnInit(): void {
     this.setAnni();
     this.toggleDropdownP();
+    this.toggleDropdownC();
     this.toggleDropdownU();
   }
 
@@ -228,6 +231,14 @@ export class UploadatComponent implements OnInit {
     this.citta = event.target.value;
 
   }
+  cambioProfRef(event: any) {
+    this.prof = event.target.value;
+
+  }
+  cambioProfUni(event: any) {
+    this.profUnicam = event.target.value;
+
+  }
   cambioAttivita(event: any) {
     this.attivita = event.target.value;
 
@@ -285,6 +296,25 @@ export class UploadatComponent implements OnInit {
 
     return this.http.get<string[]>('http://localhost:8080/scuola/scuoleCitta/' + this.citta).pipe(
       map((response: any) => response.map((scuola: any) => scuola.toString()))
+    );
+  }
+  
+  toggleDropdownC() {
+    let array = this.getCitta();
+    var c = this.citta;
+
+    array.subscribe(
+      (result: string[]) => {
+        // Qui puoi utilizzare i valori emessi dall'Observable come un array di stringhe
+        this.cittaLista = result; // Stampa i valori su console
+      }
+    );
+  }
+
+  getCitta(): Observable<string[]> {
+
+    return this.http.get<string[]>('http://localhost:8080/scuola/orderCitta').pipe(
+      map((response: any) => response.map((citta: any) => citta.toString()))
     );
   }
 
