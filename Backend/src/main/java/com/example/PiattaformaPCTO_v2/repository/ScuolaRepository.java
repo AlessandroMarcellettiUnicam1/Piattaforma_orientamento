@@ -26,7 +26,7 @@ public interface ScuolaRepository extends MongoRepository<Scuola,String> {
     @Query("{'citta': ?0}")
     List<Scuola> getScuolaByCitta(String citta);
 
-    @Query(value="{'_id' : *}", fields="{'citta' : 1, '_id': 0}")
+    @Query(value="{}", fields="{'citta' : 1, '_id': 0}")
     List<String> getAllCitta();
 
 }
