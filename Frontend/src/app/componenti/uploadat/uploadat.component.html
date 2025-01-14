@@ -49,7 +49,7 @@
             <label for="citta">Città della Scuola</label>
             <input type="text" list="cityName" id="citta" name="citta" [(ngModel)]="citta" (change)="cambioCitta($event)" (change)="toggleDropdownS()" autocomplete="off" placeholder="Città" />
               <datalist class="cities-list" id="cityName">
-                <option [value]="" >-</option>
+                <option value="" >-</option>
                 <option *ngFor="let citta of cittaLista" [value]="citta">{{citta}}</option>
               </datalist>
 
@@ -93,14 +93,14 @@
             <label for="pro">Professore Referente</label>
             <input type="text" list="profRefName" id="profRef" name="profRef" [(ngModel)]="prof" (change)="cambioProfRef($event)" (change)="toggleDropdownP()" autocomplete="off" placeholder="Professore Referente" />
               <datalist class="profRef-list" id="profRefName">
-                <option [value]="" >-</option>
+                <option value="" >-</option>
                 <option *ngFor="let prof of professori" [value]="prof">{{prof}}</option>
               </datalist>
 
             <label for="prof">Professore Unicam</label>
             <input type="text" list="profUniName" id="profUni" name="profUni" [(ngModel)]="profUnicam" (change)="cambioProfUni($event)" (change)="toggleDropdownU()" autocomplete="off" placeholder="Professore Unicam" />
               <datalist class="profUni-list" id="profUniName">
-                <option [value]="" >-</option>
+                <option value="" >-</option>
                 <option *ngFor="let profUnicam of professoriUnicam" [value]="profUnicam">{{profUnicam}}</option>
               </datalist>
 

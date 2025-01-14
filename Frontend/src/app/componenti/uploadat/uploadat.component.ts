@@ -131,7 +131,7 @@ export class UploadatComponent implements OnInit {
     const dataInizio = this.dataInizio;
     const dataFine = this.dataFine;
     const descrizione = this.descrizione;
-    const profUnicam = this.selectedProf;
+    const profUnicam = this.profUnicam;
     const profReferente = this.prof;
 
     const file = this.file;
@@ -406,12 +406,6 @@ export class UploadatComponent implements OnInit {
     return this.http.get<string[]>('http://localhost:8080/professoriUnicam/getProfUnicam').pipe(
       map((response: any) => response.map((profUnicam: any) => profUnicam.toString()))
     );
-  }
-
-  selectedProf: string = "";
-
-  saveSelections(event: any) {
-    this.selectedProf = event.target.value;
   }
 
 }
