@@ -41,6 +41,7 @@ export class UploadatComponent implements OnInit {
   professoriUnicam: string[] = [];
   prof: string = '';
   profUnicam: string = '';
+  annoAccademico: string = '';
   file: File | null = null;
 
 
@@ -49,6 +50,7 @@ export class UploadatComponent implements OnInit {
     this.toggleDropdownP();
     this.toggleDropdownC();
     this.toggleDropdownU();
+    this.getYears();
   }
 
   cambioDescrizione(event: any) {
@@ -104,12 +106,15 @@ export class UploadatComponent implements OnInit {
 
   onClick() {
 
-    const nome: string = this.nome;
+    const attivita: string = this.attivita;
     const tipo: string = this.tipo;
     const scuola: string = this.scuola;
     let sedeA: Sede = Sede.Online;
 
-    const anno: number = this.anno = this.annoAccademicoInizio * 10000 + this.annoAccademicoFine;
+    const [anno1, anno2] = this.annoAccademico.split("/");
+    const annoAccademicoInizio = parseInt(anno1, 10);
+    const annoAccademicoFine = parseInt(anno2, 10);
+    const anno: number = this.anno = annoAccademicoInizio * 10000 + annoAccademicoFine;
 
     switch (this.sede) {
       case "Online":
@@ -126,6 +131,7 @@ export class UploadatComponent implements OnInit {
         break;
     }
 
+    //TODO RIVEDERE COSTANTI
     const nomeScuola: string = this.scuola;
     const cittaScuola: string = this.citta;
     const dataInizio = this.dataInizio;
@@ -138,12 +144,12 @@ export class UploadatComponent implements OnInit {
 
     let param;
     if (scuola == "") {
-      param = nome + "&" + tipo + scuola + " " + this.sede + "-" + dataInizio.toString() + " " + dataFine.toString() + " " + descrizione + "+" + profUnicam + ",+" + profReferente + "-" + anno.toString();
+      param = attivita + "&" + tipo + scuola + " " + this.sede + "-" + dataInizio.toString() + " " + dataFine.toString() + " " + descrizione + "+" + profUnicam + ",+" + profReferente + "-" + anno.toString();
     }
     else {
-      param = nome + "&" + tipo + " " + scuola.toString() + "-" + this.sede + "*" + dataInizio.toString() + " " + dataFine.toString() + " " + descrizione + "+" + profUnicam + ",+" + profReferente + "-" + anno.toString();
+      param = attivita + "&" + tipo + " " + scuola.toString() + "-" + this.sede + "*" + dataInizio.toString() + " " + dataFine.toString() + " " + descrizione + "+" + profUnicam + ",+" + profReferente + "-" + anno.toString();
     }
-    console.log(this.sede);
+    
     this.http
       .post('http://localhost:8080/attivita/uploadConAnno1/' + "" + param, this.data)
       .subscribe({
@@ -248,36 +254,59 @@ export class UploadatComponent implements OnInit {
 
   }
   submitAttForm() {
-    if (this.validateYears()) {
-      // Puoi eseguire qui le operazioni che desideri con i valori degli anni accademici
-
+    let error = false;
+    if(this.attivita=="") {
+      error = true;
+      alert("Il nome dell'attività non è stato inserito");
+    }
+    if(this.sede=="") {
+      error = true;
+      alert("La sede non è stata inserita");
+    }
+    if(this.annoAccademico=="") {
+      error = true;
+      alert("L'anno accademico non è stato inserito");
+    }
+    if(!error) {
       this.onClick();
-    } else {
-      alert("Controlla gli anni accademici inseriti gli anni devono avere 4 cifre e l'anno inserito sotto deve essere quello sopra + 1.");
     }
   }
+
   submitIscrForm() {
-    if (this.validateYears()) {
-      // Puoi eseguire qui le operazioni che desideri con i valori degli anni accademici
-
-      this.onClickIscr()
+    
+    if(this.annoAccademico=="") {
+      alert("L'anno accademico non è stato inserito");
     } else {
-      alert("Controlla gli anni accademici inseriti gli anni devono avere 4 cifre e l'anno inserito sotto deve essere quello sopra + 1.");
+      this.onClickIscr()
     }
   }
 
-
-
-  validateYears(): boolean {
-    if (this.annoAccademicoInizio && this.annoAccademicoFine) {
-      if (this.annoAccademicoFine === this.annoAccademicoInizio + 1) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
+  submitSingleProf() {
+    let error = false;
+    if(this.cognome=="") {
+      error = true;
+      alert("Il cognome del professore non è stato inserito");
     }
+    if(this.attivita=="") {
+      error = true;
+      alert("Il nome dell'attività non è stato inserito");
+    }
+    if(!error) {
+      this.onclickSingleProf();
+    }
+  }
+
+  listaAnni: string[] = [];
+  getYears(): void {
+    let annoAttuale = new Date().getFullYear();
+    for(let i = 0; i < 10; i++) {
+      this.listaAnni[i] = (annoAttuale-1) +"/"+ (annoAttuale--);
+    }
+  }
+
+  onSelectionChangeY(event: any): void {
+    this.annoAccademico = event.target.value;
+
   }
 
   showDropdownS: boolean = false;
@@ -347,6 +376,7 @@ export class UploadatComponent implements OnInit {
       alert("N.B:Tutti i campi devono essere riempiti");
     }
   }
+
   onclickSingleProfUnicam(): void {
     const nome: string = this.nome;
     const cognome: string = this.cognome;

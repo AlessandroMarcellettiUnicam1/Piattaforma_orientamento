@@ -32,7 +32,7 @@
         <div class="attivita" *ngIf="visualizza == 'ATT'">
          
           <label>Nome attività</label>
-          <input type="text" id="text" (change)="cambioNome($event)" placeholder="Attività" required />
+          <input type="text" id="text" (change)="cambioAttivita($event)" placeholder="Attività" required />
           <label>Tipo attività</label>
           <input type="text" id="text" (change)="cambioTipo($event)" placeholder="Tipologia" />
 
@@ -59,20 +59,13 @@
                 <option value="">-</option>
                 <option *ngFor="let scuola of scuole" [value]="scuola">{{scuola}}</option>
               </select>
-         
 
-
-
-          <div class="field-group">
             <div class="field-group1">
-              <div>
-                <label for="annoInizio">Anno Accademico Inizio</label>
-                <input type="number" id="annoInizio" name="annoInizio" [(ngModel)]="annoAccademicoInizio" required minlength="4" maxlength="4">
-              </div>
-              <div>
-                <label for="annoFine">Anno Accademico Fine</label>
-                <input type="number" id="annoFine" name="annoFine" [(ngModel)]="annoAccademicoFine" required minlength="4" maxlength="4">
-              </div>
+                <label for="annoInizio">Anno Accademico</label>
+                <select type="number" id="annoInizio" name="annoInizio" [(ngModel)]="annoAccademicoInizio" (change)="onSelectionChangeY($event)" required>
+                  <option value="">-</option>
+                  <option *ngFor="let anno of listaAnni" [value]="anno">{{anno}}</option>
+                </select>
             </div>
 
             <div class="field-group2">
@@ -85,7 +78,6 @@
                 <input type="datetime-local" id="dataFine" name="dataFine" [(ngModel)]="dataFine" required>
               </div>
             </div>
-          </div>
 
           <label for="descrizione">Descrizione</label>
           <input type="text" id="text" (change)="cambioDescrizione($event)" placeholder="Descrizione"/>
@@ -112,15 +104,13 @@
         </div>
 
         <div class="iscritti" *ngIf="visualizza == 'ISCR'">
-          <div class="field-group">
-            <div>
-              <label for="annoInizio">Anno accademico di inizio:</label>
-              <input type="number" id="annoInizio" name="annoInizio" [(ngModel)]="annoAccademicoInizio" required minlength="4" maxlength="4">
-            </div>
-            <div>
-              <label for="annoFine">Anno accademico di fine:</label>
-              <input type="number" id="annoFine" name="annoFine" [(ngModel)]="annoAccademicoFine" required minlength="4" maxlength="4">
-            </div>
+
+          <div class="field-group1">
+            <label for="annoInizio">Anno Accademico</label>
+            <select type="number" id="annoInizio" name="annoInizio" [(ngModel)]="annoAccademicoInizio" (change)="onSelectionChangeY($event)" required>
+              <option value="">-</option>
+              <option *ngFor="let anno of listaAnni" [value]="anno">{{anno}}</option>
+            </select>
           </div>
 
           <div class="file-input">
@@ -151,7 +141,7 @@
             </div>
             <div>
               <label for="cognome">Cognome</label>
-              <input type="text" id="text" (change)="cambioCognome($event)" placeholder="Cognome" />
+              <input type="text" id="text" (change)="cambioCognome($event)" placeholder="Cognome" required />
             </div>
             <div>
               <label for="email">Email</label>
@@ -159,7 +149,7 @@
             </div>
             <div>
               <label for="citta">Città della Scuola</label>
-              <input type="text" list="cities-prof" id="citta" name="citta" [(ngModel)]="citta" (change)="cambioCitta($event)" (change)="toggleDropdownS()" required autocomplete="off" placeholder="Città">
+              <input type="text" list="cities-prof" id="citta" name="citta" [(ngModel)]="citta" (change)="cambioCitta($event)" (change)="toggleDropdownS()" autocomplete="off" placeholder="Città">
               <datalist class="cities-list" id="cities-prof">
                 <option *ngFor="let citta of cittaLista" [value]="citta">{{citta}}</option>
               </datalist>
@@ -172,10 +162,10 @@
             </div>
             <div>
               <label for="attività">Attività</label>
-              <input type="text" id="text" (change)="cambioAttivita($event)" placeholder="Attività" />
+              <input type="text" id="text" (change)="cambioAttivita($event)" placeholder="Attività" required />
             </div>
           </form>
-          <button class="upload-button" (click)="onclickSingleProf()">Carica!</button>
+          <button class="upload-button" (click)="submitSingleProf()">Carica!</button>
         </div>
 
         <div class="singleProfUnicam" *ngIf="visualizza == 'SINGLEPROFUNICAM'">
