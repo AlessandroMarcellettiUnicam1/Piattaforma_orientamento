@@ -85,7 +85,9 @@ public class SimpleScuolaService implements ScuolaService{
         List<Scuola> scuole = this.scuolaRepository.findAll();
         List<String> citta = new ArrayList<>();
         for (Scuola s : scuole){
-            citta.add(s.getCitta());
+            if (!citta.contains(s.getCitta())) {
+                citta.add(s.getCitta());
+            }
         }
         return citta;
     }

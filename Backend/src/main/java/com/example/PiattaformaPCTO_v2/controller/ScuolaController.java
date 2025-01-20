@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -70,7 +71,16 @@ List<String> scuole=scuolaService.getNomeAndCittaAnnoByScuola(citta);
 
 
     @GetMapping("/c")
-    public void citta(){
-        this.scuolaService.getCitta();
+    public ResponseEntity<List<String>> citta(){
+        List<String> c = this.scuolaService.getCitta();
+        return new ResponseEntity<>(c, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/orderCitta")
+    public ResponseEntity<List<String>> cittaOrdinate(){
+        List<String> c = this.scuolaService.getCitta();
+        Collections.sort(c);
+        return new ResponseEntity<>(c, HttpStatus.OK);
     }
 }
