@@ -148,10 +148,10 @@ export class UploadatComponent implements OnInit {
 
     let param;
     if (scuola == "") {
-      param = attivita + "&" + tipo + scuola + " " + this.sede + "-" + dataInizio.toString() + " " + dataFine.toString() + " " + descrizione + "+" + profUnicam + ",+" + profReferente + "-" + anno.toString();
+      param = attivita + "&" + tipo + "$" + this.sede + "-" + dataInizio.toString() + " " + dataFine.toString() + " " + descrizione + "+" + profUnicam + ",+" + profReferente + "-" + anno.toString();
     }
     else {
-      param = attivita + "&" + tipo + " " + scuola.toString() + "-" + this.sede + "*" + dataInizio.toString() + " " + dataFine.toString() + " " + descrizione + "+" + profUnicam + ",+" + profReferente + "-" + anno.toString();
+      param = attivita + "&" + tipo + "$" + scuola.toString() + "-" + this.sede + "*" + dataInizio.toString() + " " + dataFine.toString() + " " + descrizione + "+" + profUnicam + ",+" + profReferente + "-" + anno.toString();
     }
     
     this.http
@@ -277,14 +277,36 @@ export class UploadatComponent implements OnInit {
     } else {
       this.errorAnno = false;
     }
-    const dataI = parseInt(this.dataInizio.slice(0, 4));
-    const dataF = parseInt(this.dataFine.slice(0, 4));
-    if(dataI == this.annoAccademicoInizio && dataF == this.annoAccademicoInizio
-      || dataI == this.annoAccademicoFine && dataF == this.annoAccademicoFine) {
+    console.log(this.dataInizio)
+    const annoI = parseInt(this.dataInizio.slice(0, 4));
+    const annoF = parseInt(this.dataFine.slice(0, 4));
+    const meseI = parseInt(this.dataInizio.slice(5, 7));
+    const meseF = parseInt(this.dataFine.slice(5, 7));
+    const giornoI = parseInt(this.dataInizio.slice(8, 10));
+    const giornoF = parseInt(this.dataFine.slice(8, 10));
+    const oraI = parseInt(this.dataInizio.slice(11, 13));
+    const oraF = parseInt(this.dataFine.slice(11, 13));
+    if(annoI == this.annoAccademicoInizio && annoF == this.annoAccademicoInizio
+      || annoI == this.annoAccademicoFine && annoF == this.annoAccademicoFine) {
       this.errorData = false;
     } else {
       this.errorData = true;
       error = true;
+    }
+    if(annoI>annoF) {
+      this.errorData = true;
+      error = true;
+    } else if(meseI>meseF) {
+      this.errorData = true;
+      error = true;
+    } else if(meseI==meseF && giornoI>giornoF) {
+      this.errorData = true;
+      error = true;
+    } else if(giornoI==giornoF && oraI>oraF) {
+      this.errorData = true;
+      error = true;
+    } else {
+      this.errorData = false;
     }
     if(!error) {
       this.onClick();
