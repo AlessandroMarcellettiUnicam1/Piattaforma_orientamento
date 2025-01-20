@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, NgModule, OnInit } from '@angular/core';
-import { Anni } from 'src/app/interface/anni';
-import { Observable, toArray } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Anni } from 'src/app/interface/anni';
 import { Sede } from 'src/app/interface/sede';
 @Component({
   selector: 'app-uploadat',
@@ -11,8 +11,8 @@ import { Sede } from 'src/app/interface/sede';
 
 })
 export class UploadatComponent implements OnInit {
-  private tipo: string = ''
-  visualizza: string = '';
+  private tipo: string = '';
+  visualizza: string = 'ATT';
   private nome: string = '';
   private n: string = "";
   private data = new FormData();
@@ -43,6 +43,13 @@ export class UploadatComponent implements OnInit {
   profUnicam: string = '';
   annoAccademico: string = '';
   file: File | null = null;
+  errorAttivita: boolean = false;
+  errorSede: boolean = false;
+  errorAnno: boolean = false;
+  errorData: boolean = false;
+  errorCognome: boolean = false;
+  errorNome: boolean = false;
+  errorEmail: boolean = false;
 
 
   ngOnInit(): void {
@@ -256,17 +263,24 @@ export class UploadatComponent implements OnInit {
   submitAttForm() {
     let error = false;
     if(this.attivita=="") {
+      this.errorAttivita = true;
       error = true;
-      alert("Il nome dell'attività non è stato inserito");
+    } else {
+      this.errorAttivita = false;
     }
     if(this.sede=="") {
+      this.errorSede = true;
       error = true;
-      alert("La sede non è stata inserita");
+    } else {
+      this.errorSede = false;
     }
     if(this.annoAccademico=="") {
+      this.errorAnno = true;
       error = true;
-      alert("L'anno accademico non è stato inserito");
+    } else {
+      this.errorAnno = false;
     }
+    console.log(this.dataInizio.toString+"/"+this.dataFine.toString)
     if(!error) {
       this.onClick();
     }
@@ -275,8 +289,9 @@ export class UploadatComponent implements OnInit {
   submitIscrForm() {
     
     if(this.annoAccademico=="") {
-      alert("L'anno accademico non è stato inserito");
+      this.errorAnno = true;
     } else {
+      this.errorAnno = false;
       this.onClickIscr()
     }
   }
@@ -284,15 +299,44 @@ export class UploadatComponent implements OnInit {
   submitSingleProf() {
     let error = false;
     if(this.cognome=="") {
+      this.errorCognome = true;
       error = true;
-      alert("Il cognome del professore non è stato inserito");
+    } else {
+      this.errorCognome = false;
     }
-    if(this.attivita=="") {
+    if(this.nome=="") {
+      this.errorNome = true;
       error = true;
-      alert("Il nome dell'attività non è stato inserito");
+    } else {
+      this.errorNome = false;
     }
     if(!error) {
       this.onclickSingleProf();
+    }
+  }
+
+  submitSingleProfUnicam() {
+    let error = false;
+    if(this.cognome=="") {
+      this.errorCognome = true;
+      error = true;
+    } else {
+      this.errorCognome = false;
+    }
+    if(this.nome=="") {
+      this.errorNome = true;
+      error = true;
+    } else {
+      this.errorNome = false;
+    }
+    if(this.email=="") {
+      this.errorEmail = true;
+      error = true;
+    } else {
+      this.errorEmail = false;
+    }
+    if(!error) {
+      this.onclickSingleProfUnicam();
     }
   }
 
@@ -438,4 +482,26 @@ export class UploadatComponent implements OnInit {
     );
   }
 
+  public getAttivita(): string {
+    return this.attivita;
+  }
+  public getNome(): string {
+    return this.nome;
+  }
+  public getCognome(): string {
+    return this.cognome;
+  }
+  public getEmail(): string {
+    return this.email;
+  }
+  public getCittaValue(): string {
+    return this.citta;
+  }
+  public getScuola(): string {
+    return this.scuola;
+  }
+  public getAnnoAccademico(): string {
+    return this.annoAccademico;
+  }
+  
 }

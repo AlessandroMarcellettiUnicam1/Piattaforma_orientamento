@@ -89,20 +89,25 @@ input[type="text"],
 input[type="number"],
 input[type="datetime-local"],
 select {
-  width: 150%;
   max-width: 400px;
   padding: 10px;
   margin: 10px 0;
-  border: 1px solid #ccc;
+  border: 1.5px solid rgb(100, 100, 100);
   border-radius: 4px;
   box-sizing: border-box;
   text-align: center;
 }
 
+input[type="text"],
+input[type="number"],
+select {
+  width: 150%;
+}
+
 /* Stile per le etichette */
-label {
+.field-title {
   font-weight: bold;
-  margin-top: 10px;
+  margin-top: 20px;
   display: block;
   width: 100%;
   text-align: center;
@@ -156,7 +161,7 @@ button.btn {
 /* Stile per i campi obbligatori */
 input[required],
 select[required] {
-  border-left: 5px solid red;
+  border-bottom: 3px solid rgb(150, 70, 70);
 }
 
 /* Stile per i moduli */
@@ -174,17 +179,23 @@ select[required] {
 }
 
 /* Stile per contenitore di campi accanto */
-.field-group {
-  display: grid;
+.data-fields {
+  display: inline-grid;
+  justify-content: center;
   grid-template-columns: 1fr 1fr;
+  grid-gap: 50px;
   box-sizing: border-box;
   flex-wrap: wrap;
   padding: 10px 20px;
   max-width: 800px;
 }
 
-.field-group input {
-  width: 90%;
+.data-inizio-field, .data-fine-field {
+  align-content: center;
+}
+
+.data-input {
+  width: 250px;
 }
 
 .file-input {
@@ -199,4 +210,11 @@ select[required] {
   display: block;
   text-align: center;
   width: 75%;
+}
+
+.error-label {
+  color: rgb(230, 78, 78);
+  font-size: small;
+  display: block;
+  text-align: center;
 }
