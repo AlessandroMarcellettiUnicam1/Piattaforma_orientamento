@@ -81,7 +81,7 @@
                 <input class="data-input" type="datetime-local" id="dataFine" name="dataFine" [(ngModel)]="dataFine" required>
               </div>
             </div>
-            <label class="error-label" *ngIf="errorData == true">La data in cui l'attività è stata svolta non è corretta</label>
+            <label class="error-label" *ngIf="errorData == true">L'anno deve esserre lo stesso dell'anno accademico</label>
 
           <label class="field-title" for="descrizione">Descrizione</label>
           <input type="text" id="text" (change)="cambioDescrizione($event)" placeholder="Descrizione"/>

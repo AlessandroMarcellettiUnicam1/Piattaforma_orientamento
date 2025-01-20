@@ -34,8 +34,8 @@ export class UploadatComponent implements OnInit {
   scuola: string = '';
   sede: string = '';
   mostraCampoCitta: boolean = false;
-  dataInizio: Date = new Date();
-  dataFine: Date = new Date();
+  dataInizio: string = '';
+  dataFine: string = '';
   descrizione: string = '';
   professori: string[] = [];
   professoriUnicam: string[] = [];
@@ -118,10 +118,7 @@ export class UploadatComponent implements OnInit {
     const scuola: string = this.scuola;
     let sedeA: Sede = Sede.Online;
 
-    const [anno1, anno2] = this.annoAccademico.split("/");
-    const annoAccademicoInizio = parseInt(anno1, 10);
-    const annoAccademicoFine = parseInt(anno2, 10);
-    const anno: number = this.anno = annoAccademicoInizio * 10000 + annoAccademicoFine;
+    const anno: number = this.anno = this.annoAccademicoInizio * 10000 + this.annoAccademicoFine;
 
     switch (this.sede) {
       case "Online":
@@ -280,7 +277,15 @@ export class UploadatComponent implements OnInit {
     } else {
       this.errorAnno = false;
     }
-    console.log(this.dataInizio.toString+"/"+this.dataFine.toString)
+    const dataI = parseInt(this.dataInizio.slice(0, 4));
+    const dataF = parseInt(this.dataFine.slice(0, 4));
+    if(dataI == this.annoAccademicoInizio && dataF == this.annoAccademicoInizio
+      || dataI == this.annoAccademicoFine && dataF == this.annoAccademicoFine) {
+      this.errorData = false;
+    } else {
+      this.errorData = true;
+      error = true;
+    }
     if(!error) {
       this.onClick();
     }
@@ -350,6 +355,10 @@ export class UploadatComponent implements OnInit {
 
   onSelectionChangeY(event: any): void {
     this.annoAccademico = event.target.value;
+    
+    const [anno1, anno2] = this.annoAccademico.split("/");
+    this.annoAccademicoInizio = parseInt(anno1, 10);
+    this.annoAccademicoFine = parseInt(anno2, 10);
 
   }
 
