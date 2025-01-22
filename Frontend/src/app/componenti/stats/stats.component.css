@@ -46,6 +46,16 @@
   margin-bottom: 50px;
 }
 
+input[type="text"] {
+  width: 300px;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1.5px solid rgb(100, 100, 100);
+  border-radius: 4px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
 .school-button, .activity-button, .school-prof-button, .unicam-prof-button {
   padding-bottom: 20px;
 }
@@ -53,6 +63,23 @@
 .school-results, .activity-results {
   width: 90%;
   padding-bottom: 10px;
+}
+
+.school-results-panel {
+  background-color: #b69999;
+}
+
+.school-results-container {
+  text-align: left;
+}
+
+.school-results-panel-header {
+  text-align: left;
+  height: 120px;
+}
+
+.activity-results-panel-header {
+  height: 80px;
 }
 
 .school-prof-results, .unicam-prof-results {
@@ -129,6 +156,10 @@
   display: flex;
   justify-content: center;
   padding-top: 10px;
+}
+
+.activity-panel-title {
+  text-align: left;
 }
 
 .filter-view {

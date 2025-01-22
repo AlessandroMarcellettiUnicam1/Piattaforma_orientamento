@@ -32,7 +32,7 @@ export class StatsComponent implements OnInit {
   ) {}
 
   public isMenuOpened: boolean = false;
-  public isFilterOpened: boolean = false;
+  public isFilterOpened: boolean = true;
   public scuole: Scuola[] =[];
   public universi: Universi[] | undefined;
   public risultati: Res[] = [];
@@ -40,9 +40,9 @@ export class StatsComponent implements OnInit {
   public anni: Anni[] = [];
   public prof: Professori[] = [];
   public profUnicam: ProfessoriUnicam[] = [];
-  public profVisual : Profvisual[] =[]
-  public profUnicamVisual : ProfUnicamvisual[] =[]
-  public click = 0;
+  public profVisual : Profvisual[] = [];
+  public profUnicamVisual : ProfUnicamvisual[] = [];
+  public click = 1;
   public anno = 0;
   public annoVisual = '';
   public visualRis: Res[] = [];
@@ -50,7 +50,10 @@ export class StatsComponent implements OnInit {
   public ordinamenti = 'ISCRITTI';
   public ordinamentiAtt = 'ISCRITTI';
   public searchButton = document.getElementById('searchButton') as HTMLButtonElement;
-public searchInput = document.getElementById('searchInput') as HTMLInputElement;
+  public searchInput = document.getElementById('searchInput') as HTMLInputElement;
+  public textFilter: string = '';
+  public listaRegioni: string[] = [];
+  public regione: string = "";
 
   ngOnInit(): void {
     this.getRes();
@@ -58,6 +61,10 @@ public searchInput = document.getElementById('searchInput') as HTMLInputElement;
     this.getScuole();
     this.getUniversi();
     this.getProfessoriUnicam();
+  }
+
+  filterApply(event: any): void {
+    this.textFilter = event.target.value;
   }
 
   getProfessori(): void {
@@ -70,7 +77,7 @@ public searchInput = document.getElementById('searchInput') as HTMLInputElement;
     });
   }
 
-  createProfVisual(){
+  createProfVisual() {
     if(this.prof.length>0){
       this.prof.forEach(p=>{
         let nome = p.nome.toUpperCase();
@@ -224,16 +231,18 @@ public searchInput = document.getElementById('searchInput') as HTMLInputElement;
   }
   onClick3() {
     this.click = 3;
-    this.isFilterOpened = false;
   }
   onClick4() {
     this.click = 4;
-    this.isFilterOpened = false;
   }
 
   cambioOrdinamento(e: any) {
     this.ordinamenti = e;
     this.ordina();
+  }
+
+  cambioProfRef(event: any) {
+    this.prof = event.target.value;
   }
 
   ordina() {
@@ -269,6 +278,9 @@ public searchInput = document.getElementById('searchInput') as HTMLInputElement;
       default:
         break;
     }
+  }
+  cambioRegione(e: any) {
+    this.regione = e;
   }
 
 
@@ -421,6 +433,49 @@ dropdownMenu() : void {
 
 clickOutside() : void {
   this.isMenuOpened = false;
+}
+
+getProfList(): Profvisual[] {
+  let filteredProfVisual = this.profVisual;
+  if(this.regione!="") {
+    filteredProfVisual = this.profVisual.filter(p => p.professore.scuolaImp.regione.includes(this.regione));
+    if(this.textFilter!="") {
+      filteredProfVisual = filteredProfVisual.filter(p => p.professore.nome.startsWith(this.textFilter.toUpperCase())
+                                        || p.professore.cognome.startsWith(this.textFilter.toUpperCase())
+                                        || p.professore.email.startsWith(this.textFilter.toUpperCase())
+                                      );
+    }
+  }
+  if(this.regione=="") {
+    filteredProfVisual = this.profVisual.filter(p => p.professore.nome.startsWith(this.textFilter.toUpperCase())
+                                      || p.professore.cognome.startsWith(this.textFilter.toUpperCase())
+                                      || p.professore.email.startsWith(this.textFilter.toUpperCase())
+                                    );
+  }
+
+  return filteredProfVisual;
+}
+
+getListFilteredWithText(list: Profvisual[]) {
+
+}
+
+getProfUnicamList(): ProfUnicamvisual[] {
+  if(this.textFilter=="") {
+    return this.profUnicamVisual;
+  }
+  return this.profUnicamVisual.filter(p => p.professore.nome.startsWith(this.textFilter.toUpperCase())
+                                        || p.professore.cognome.startsWith(this.textFilter.toUpperCase())
+                                        || p.professore.email.startsWith(this.textFilter.toUpperCase())
+                                      );
+}
+
+getListaRegioni(): string[] {
+
+  this.getProfList().forEach(p => {
+    if(!this.listaRegioni.includes(p.scuola.regione)) { this.listaRegioni.push(p.scuola.regione); }
+    });
+  return this.listaRegioni.sort();
 }
 
 }

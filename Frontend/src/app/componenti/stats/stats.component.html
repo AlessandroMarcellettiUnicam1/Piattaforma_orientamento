@@ -21,9 +21,8 @@
     <div class="filter">
       <div class="filter-view" *ngIf="isFilterOpened">
         <mat-form-field class="year-filter" *ngIf="click < 3">
-          <mat-label>Seleziona anno </mat-label>
+          <mat-label>Seleziona anno</mat-label>
           <mat-select (selectionChange)="cambioRisultati($event.value)">
-            <mat-option>-</mat-option>
             <mat-option class="year-filter-option" *ngFor="let an of anni" [value]="an.value">
               {{ an.viewValue }}
             </mat-option>
@@ -32,20 +31,33 @@
         <mat-form-field class="view-filter" *ngIf="click == 0 || click == 1">
           <mat-label>Ordinamento vista</mat-label>
           <mat-select class="view-filter-option" (selectionChange)="cambioOrdinamento($event.value)">
-            <mat-option>-</mat-option>
             <mat-option value="ISCRITTI">Per numero di iscritti</mat-option>
             <mat-option value="REGIONI">Alfabetico per regione</mat-option>
             <mat-option value="SCUOLE">Alfabetico per le scuole</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field *ngIf="click == 2">
+        <mat-form-field class="view-filter" *ngIf="click == 2">
           <mat-label>Ordinamento vista</mat-label>
           <mat-select class="view-filter-option" (selectionChange)="cambioOrdinamentoAtt($event.value)">
-            <mat-option>-</mat-option>
             <mat-option value="ISCRITTI">Per numero di iscritti</mat-option>
             <mat-option value="NOME">Alfabetico per attività</mat-option>
           </mat-select>
         </mat-form-field>
+        
+        <mat-form-field class="view-filter" *ngIf="click == 3">
+          <mat-label>Ordina per regione</mat-label>
+          <mat-select class="view-filter-option" (selectionChange)="cambioRegione($event.value)" >
+            <mat-option *ngFor="let r of getListaRegioni()" [value]="r">{{r}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <div class="input-filter" *ngIf="click == 3">
+          <input type="text" list="text-filter" id="text-filter" name="text-filter" (value)="textFilter" [(ngModel)]="textFilter" (change)="filterApply($event)" autocomplete="off" placeholder="Filtra per professore" />
+        </div>
+        
+        <div class="input-filter" *ngIf="click > 3">
+          <input type="text" list="text-filter" id="text-filter" name="text-filter" (value)="textFilter" [(ngModel)]="textFilter" (change)="filterApply($event)" autocomplete="off" placeholder="Filtra per professore" />
+        </div>
       </div>
     </div>
   </div>
@@ -60,25 +72,25 @@
 
       <div class="school-results" *ngFor="let ris of visualRis">
         <mat-accordion class="school-results-accordion">
-          <mat-expansion-panel hideToggle class="school-results-panel" [ngStyle]="{
-                background: ris.iscritti.length > 0 ? 'ligthgreen' : 'coral'
-              }">
+          <mat-expansion-panel class="school-results-panel" >
             <mat-expansion-panel-header class="school-results-panel-header">
               <mat-panel-title>
-                {{ ris.scuola.nome }}
-                {{ ris.scuola.regione }}
-                {{ ris.scuola.provincia }}
-                {{ ris.scuola.citta }}
-                {{ annoVisual }}
+                Scuola: {{ ris.scuola.nome }}<br>
+                Regione: {{ ris.scuola.regione }}<br>
+                Provincia: {{ ris.scuola.provincia }}<br>
+                Citta: {{ ris.scuola.citta }}<br>
+                Anno: {{ annoVisual }}
               </mat-panel-title>
               <mat-panel-description class="school-results-subscription">
-                Totale iscritti {{ ris.iscritti.length }}
+                <br><br>Totale iscritti: {{ ris.iscritti.length }}
               </mat-panel-description>
             </mat-expansion-panel-header>
-            <div>
-              <ng-container *ngFor="let a of ris.attivita">
-                NomeAttività: {{ a.nomeAttivita }} Tipo: {{a.tipo}}<br />Partecipanti {{ a.partecipanti.length }},
-                Iscritti {{ a.iscritti.length }}
+            <div class="school-results-container">
+              <ng-container class="school-results-container-element" *ngFor="let a of ris.attivita">
+                NomeAttività: {{ a.nomeAttivita }}<br>
+                Tipo: {{a.tipo}}<br/>
+                Partecipanti: {{ a.partecipanti.length }}<br>
+                Iscritti: {{ a.iscritti.length }}
                 <br />
                 <ng-container *ngFor="let i of a.iscritti">
                   {{ i.nome }} {{ i.cognome }}
@@ -111,11 +123,13 @@
               background: ris.universitarii.length > 0 ? 'ligthgreen' : 'coral'
             }">
             <mat-expansion-panel-header class="activity-results-panel-header">
-              <mat-panel-title>
-                Attività: {{ ris.attivita }} Tipo:{{ris.tipo}} Anno {{ annoVisual }}
+              <mat-panel-title class="activity-panel-title">
+                Attività: {{ ris.attivita }}<br>
+                Tipo: {{ris.tipo}}<br>
+                Anno: {{ annoVisual }}
               </mat-panel-title>
               <mat-panel-description class="activty-results-subscription">
-                Totale iscritti : {{ ris.universitarii.length }}
+                <br>Totale iscritti : {{ ris.universitarii.length }}
               </mat-panel-description>
             </mat-expansion-panel-header>
             <p *ngIf="ris.universitarii.length > 0">
@@ -130,13 +144,14 @@
     </div>
 
     <div class="spazio" *ngIf="click == 3">
+
       <div class="school-prof-button">
         <button class="button-download" id="scaricaProfButton" (click)="scaricaVistaProfessori()">
           <span class="button-content">Scarica Vista Professori </span>
         </button>
       </div>
 
-      <div class="school-prof-results" *ngFor="let p of profVisual">
+      <div class="school-prof-results" *ngFor="let p of getProfList()">
 
         <mat-card>
           <mat-card-header class="school-prof-name">
@@ -156,14 +171,14 @@
     </div>
 
     <div class="spazio" *ngIf="click == 4">
+
       <div class="unicam-prof-button">
         <button class="button-download" id="scaricaProfUnicamButton" (click)="scaricaVistaProfessoriUnicam()">
           <span class="button-content">Scarica Vista Professori Unicam </span>
         </button>
       </div>
 
-      <div class="unicam-prof-results" *ngFor="let p of profUnicamVisual">
-
+      <div class="unicam-prof-results" *ngFor="let p of getProfUnicamList()">
         <mat-card>
           <mat-card-header class="unicam-prof-name">
             <h1>{{ p.professore.nome }} {{ p.professore.cognome }}</h1>
