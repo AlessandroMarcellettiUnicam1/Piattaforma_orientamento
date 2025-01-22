@@ -156,31 +156,28 @@ input[type="text"] {
   display: flex;
   justify-content: center;
   padding-top: 10px;
+  flex-wrap: wrap;
+}
+
+.view-prof-filters-div {
+  display: flex;
+  justify-content: center;
 }
 
 .activity-panel-title {
   text-align: left;
 }
 
-.filter-view {
-  display: flex;
-  gap: 15px;
+.year-filter, .view-filter {
+  width: 200px;
 }
 
-.year-filter, .view-filter {
-  width: 250px;
+.year-filter, .view-filter , .input-filter {
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 @media (max-width: 710px) {
-
-  .filter {
-    justify-content: center;
-  }
-
-  .filter-view {
-    flex-direction: column;
-  }
-
   .school-prof-results, .unicam-prof-results {
     width: 75%;
   }

@@ -19,47 +19,71 @@
     </div>
 
     <div class="filter">
-      <div class="filter-view" *ngIf="isFilterOpened">
-        <mat-form-field class="year-filter" *ngIf="click < 3">
-          <mat-label>Seleziona anno</mat-label>
-          <mat-select (selectionChange)="cambioRisultati($event.value)">
-            <mat-option class="year-filter-option" *ngFor="let an of anni" [value]="an.value">
-              {{ an.viewValue }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="view-filter" *ngIf="click == 0 || click == 1">
-          <mat-label>Ordinamento vista</mat-label>
-          <mat-select class="view-filter-option" (selectionChange)="cambioOrdinamento($event.value)">
-            <mat-option value="ISCRITTI">Per numero di iscritti</mat-option>
-            <mat-option value="REGIONI">Alfabetico per regione</mat-option>
-            <mat-option value="SCUOLE">Alfabetico per le scuole</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="view-filter" *ngIf="click == 2">
-          <mat-label>Ordinamento vista</mat-label>
-          <mat-select class="view-filter-option" (selectionChange)="cambioOrdinamentoAtt($event.value)">
-            <mat-option value="ISCRITTI">Per numero di iscritti</mat-option>
-            <mat-option value="NOME">Alfabetico per attività</mat-option>
-          </mat-select>
-        </mat-form-field>
-        
-        <mat-form-field class="view-filter" *ngIf="click == 3">
-          <mat-label>Ordina per regione</mat-label>
-          <mat-select class="view-filter-option" (selectionChange)="cambioRegione($event.value)" >
-            <mat-option *ngFor="let r of getListaRegioni()" [value]="r">{{r}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        
-        <div class="input-filter" *ngIf="click == 3">
-          <input type="text" list="text-filter" id="text-filter" name="text-filter" (value)="textFilter" [(ngModel)]="textFilter" (change)="filterApply($event)" autocomplete="off" placeholder="Filtra per professore" />
+        <div class="view-activity-and-school-filters-div" *ngIf="click < 3">
+          <mat-form-field class="year-filter">
+            <mat-label>Seleziona anno</mat-label>
+            <mat-select (selectionChange)="cambioRisultati($event.value)">
+              <mat-option value="">-</mat-option>
+              <mat-option class="year-filter-option" *ngFor="let an of anni" [value]="an.value">
+                {{ an.viewValue }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="view-filter" *ngIf="click == 1">
+            <mat-label>Ordinamento vista</mat-label>
+            <mat-select class="view-filter-option" (selectionChange)="cambioOrdinamento($event.value)">
+              <mat-option value="">-</mat-option>
+              <mat-option value="ISCRITTI">Per numero di iscritti</mat-option>
+              <mat-option value="REGIONI">Alfabetico per regione</mat-option>
+              <mat-option value="SCUOLE">Alfabetico per le scuole</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="view-filter" *ngIf="click == 2">
+            <mat-label>Ordinamento vista</mat-label>
+            <mat-select class="view-filter-option" (selectionChange)="cambioOrdinamentoAtt($event.value)">
+              <mat-option value="">-</mat-option>
+              <mat-option value="ISCRITTI">Per numero di iscritti</mat-option>
+              <mat-option value="NOME">Alfabetico per attività</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
         
-        <div class="input-filter" *ngIf="click > 3">
-          <input type="text" list="text-filter" id="text-filter" name="text-filter" (value)="textFilter" [(ngModel)]="textFilter" (change)="filterApply($event)" autocomplete="off" placeholder="Filtra per professore" />
+        <div class="view-region-prof-filter" *ngIf="click == 3">
+          <mat-form-field class="view-filter view-region-filter">
+            <mat-label>Ordina per regione</mat-label>
+            <mat-select class="view-filter-option" (selectionChange)="cambioRegione($event.value)" >
+              <mat-option value="">-</mat-option>
+              <mat-option *ngFor="let r of getListaRegioni()" [value]="r">{{r}}</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
+          
+        <div class="view-province-prof-filter" *ngIf="click == 3">
+          <mat-form-field class="view-filter view-province-filter" *ngIf="regione!=''">
+            <mat-label>Ordina per provincia</mat-label>
+            <mat-select class="view-filter-option" (selectionChange)="cambioProvincia($event.value)" >
+              <mat-option value="">-</mat-option>
+              <mat-option *ngFor="let p of getListaProvince()" [value]="p">{{p}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+          
+        <div class="view-city-prof-filter" *ngIf="click == 3">
+          <mat-form-field class="view-filter view-city-filter" *ngIf="provincia!=''">
+            <mat-label>Ordina per citta</mat-label>
+            <mat-select class="view-filter-option" (selectionChange)="cambioCitta($event.value)" >
+              <mat-option value="">-</mat-option>
+              <mat-option *ngFor="let c of getListaCitta()" [value]="c">{{c}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        
+          <div class="input-filter input-prof-unicam-filter" *ngIf="click > 2">
+            <input type="text" list="text-filter" id="text-filter" name="text-filter" (value)="textFilter" [(ngModel)]="textFilter" (change)="filterApply($event)" autocomplete="off" placeholder="Filtra per professore" />
+          </div>
       </div>
-    </div>
   </div>
 
   <div class="generato">
@@ -70,7 +94,7 @@
         </button>
       </div>
 
-      <div class="school-results" *ngFor="let ris of visualRis">
+      <div class="school-results" *ngFor="let ris of getVisualRis()">
         <mat-accordion class="school-results-accordion">
           <mat-expansion-panel class="school-results-panel" >
             <mat-expansion-panel-header class="school-results-panel-header">
