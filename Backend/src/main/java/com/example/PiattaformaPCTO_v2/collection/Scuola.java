@@ -39,8 +39,9 @@ public class Scuola {
         this.tipo = tipo;
     }
 
-    public Scuola(String nome) {
+    public Scuola(String nome, String citta) {
         this.nome = nome;
+        this.citta = citta;
     }
 
     @Override

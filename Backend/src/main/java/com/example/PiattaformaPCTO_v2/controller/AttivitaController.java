@@ -48,10 +48,11 @@ public class AttivitaController {
     @PostMapping("/uploadConAnno1/{param}")
     public void uploadActivity( @PathVariable ("param" ) String create,
                                 @RequestParam("file") MultipartFile file){
+
         String nome=create.substring(0,create.indexOf("&"));
         create=create.substring(create.indexOf("&")+1);
-        String tipo=create.substring(0,create.indexOf(" "));
-        create=create.substring(create.indexOf(" ")+1);
+        String tipo=create.substring(0,create.indexOf("$"));
+        create=create.substring(create.indexOf("$")+1);
         String s=create.substring(0,create.indexOf("-"));
         create=create.substring(create.indexOf("-")+1);
         String sede;
@@ -90,20 +91,17 @@ public class AttivitaController {
         create=create.substring(create.indexOf("+")+1);
         List<String> pUnicam=new ArrayList<>();
 
-       boolean c;
-
         while(create.contains(",")){
-                pUnicam.add(create.substring(0,create.indexOf(",")));
-                create=create.substring(create.indexOf(",")+1);
+            pUnicam.add(create.substring(0,create.indexOf(",")));
+            create=create.substring(create.indexOf(",")+1);
 
         }
 
-String referente=create.substring(1,create.indexOf("-"));
-
+        String referente=create.substring(1,create.indexOf("-"));
         create=create.substring(create.indexOf("2"));
 
-int anno=Integer.parseInt(create);
-Sede sedeA=Sede.Online;
+        int anno=Integer.parseInt(create);
+        Sede sedeA=Sede.Online;
         switch (sede) {
             case "online":
                 sedeA=Sede.Online;
@@ -118,14 +116,15 @@ Sede sedeA=Sede.Online;
                 sedeA=Sede.AltraSede;
                 break;
         }
+        List<ProfessoreUnicam> prof = new ArrayList<>();
+        if (!pUnicam.get(0).isEmpty()) {
+            prof = professoreUnicamService.getProfByString(pUnicam);
+        }
 
-
-
-
-
-
-        List<ProfessoreUnicam> prof=professoreUnicamService.getProfByString(pUnicam);
-        Professore profReferente=professoreService.getProfByString(referente);
+        Professore profReferente = new Professore();
+        if (!referente.isEmpty()) {
+            profReferente = professoreService.getProfByString(referente);
+        }
         attivitaService.uploadSingleActivity(nome,tipo,scuola,anno,
                 sedeA,dataInizio,dataFine,descrizione,prof,profReferente,file);
 

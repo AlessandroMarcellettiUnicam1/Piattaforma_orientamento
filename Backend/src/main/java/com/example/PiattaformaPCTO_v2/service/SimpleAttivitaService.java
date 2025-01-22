@@ -124,27 +124,52 @@ public class SimpleAttivitaService implements AttivitaService {
     }
 
 
-
+    /**
+     * Metodo che carica una singola attività: prende i dati dal file excel e li carica nel database.
+     *
+     * @param nome
+     * @param tipo
+     * @param scuola
+     * @param anno
+     * @param sede
+     * @param dataInizio
+     * @param dataFine
+     * @param descrizione
+     * @param prof
+     * @param profReferente
+     * @param file
+     */
     @Override
     public void uploadSingleActivity(String nome, String tipo, String scuola, int anno, Sede sede, LocalDateTime dataInizio, LocalDateTime dataFine, String descrizione, List<ProfessoreUnicam> prof, Professore profReferente, MultipartFile file) {
 
         Sheet dataSheet = this.fileOpenerHelper(file);
         Iterator<Row> iterator = dataSheet.rowIterator();
         iterator.next();
-        Scuola scuolaP=scuolaRepository.getScuolaByNome(scuola);
+        Scuola scuolaP;
+
         List<Studente> studPartecipanti=new ArrayList<>();
 
         while(iterator.hasNext()){
             Row row = iterator.next();
+            if (row.getCell(0) == null) {
+                break; // Interrompe la lettura del file excel
+            }
             String nomeStud = row.getCell(0).getStringCellValue();
             String cognome = row.getCell(1).getStringCellValue();
-            String email=row.getCell(2).getStringCellValue();
-            Studente stud = new Studente(nomeStud, cognome,email,scuolaP);
-
-          studPartecipanti.add(stud);
-            if(studenteRepository.findByEmail(stud.getEmail())==null) {
-                studenteRepository.save(stud);
+            String email= "";
+            if (scuola.isEmpty()){
+                scuolaP = new Scuola(row.getCell(2).getStringCellValue(), row.getCell(3).getStringCellValue());
+            }else {
+                scuolaP = scuolaRepository.getScuolaByNome(scuola);
             }
+            Studente stud = new Studente(nomeStud, cognome,email,scuolaP);
+            System.out.println("Studente creato: "+stud);
+            try {
+                studenteRepository.save(stud);
+            } catch (Exception e) {
+                System.err.println("Errore durante il salvataggio dello studente: " + e.getMessage());
+            }
+            studPartecipanti.add(stud);
         }
 
         if(attivitaRepository.findByNomeAndAnno(nome,anno)==null){
