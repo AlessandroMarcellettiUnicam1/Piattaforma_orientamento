@@ -22,8 +22,8 @@
         <div class="view-activity-and-school-filters-div" *ngIf="click < 3">
           <mat-form-field class="year-filter">
             <mat-label>Seleziona anno</mat-label>
-            <mat-select (selectionChange)="cambioRisultati($event.value)">
-              <mat-option value="">-</mat-option>
+            <mat-select (selectionChange)="cambioAnno($event.value)">
+              <mat-option value=0>-</mat-option>
               <mat-option class="year-filter-option" *ngFor="let an of anni" [value]="an.value">
                 {{ an.viewValue }}
               </mat-option>
@@ -103,7 +103,7 @@
                 Regione: {{ ris.scuola.regione }}<br>
                 Provincia: {{ ris.scuola.provincia }}<br>
                 Citta: {{ ris.scuola.citta }}<br>
-                Anno: {{ annoVisual }}
+                Anno: {{ creaStringaAnnoAcc(ris.annoAcc) }}
               </mat-panel-title>
               <mat-panel-description class="school-results-subscription">
                 <br><br>Totale iscritti: {{ ris.iscritti.length }}

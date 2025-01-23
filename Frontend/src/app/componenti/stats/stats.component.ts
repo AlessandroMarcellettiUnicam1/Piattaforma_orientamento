@@ -15,7 +15,7 @@ import { ProfUnicamvisual } from 'src/app/interface/profUnicamVisual';
 import { ProfessoriUnicam } from 'src/app/interface/professoriUnicam';
 import { ProfessoriUnicamService } from 'src/app/service/professoriUnicam.service';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable, toArray } from 'rxjs';
+import { filter, Observable, toArray } from 'rxjs';
 @Component({
   selector: 'app-stats',
   templateUrl: './stats.component.html',
@@ -32,7 +32,6 @@ export class StatsComponent implements OnInit {
   ) {}
 
   public isMenuOpened: boolean = false;
-  public isFilterOpened: boolean = true;
   public scuole: Scuola[] =[];
   public universi: Universi[] | undefined;
   public risultati: Res[] = [];
@@ -47,8 +46,8 @@ export class StatsComponent implements OnInit {
   public annoVisual = '';
   public visualRis: Res[] = [];
   public visualRisAtt: Risatt[] = [];
-  public ordinamenti = 'ISCRITTI';
-  public ordinamentiAtt = 'ISCRITTI';
+  public ordinamenti = '';
+  public ordinamentiAtt = '';
   public searchButton = document.getElementById('searchButton') as HTMLButtonElement;
   public searchInput = document.getElementById('searchInput') as HTMLInputElement;
   public textFilter: string = '';
@@ -136,29 +135,75 @@ export class StatsComponent implements OnInit {
 
   getRes(): void {
     this.resService.getRes().subscribe({
-      next: (response) => (this.risultati = response),
-      complete: () => {
-        this.anno = this.risultati[this.risultati.length - 1].annoAcc;
-        
-        this.creaAnnoVisual(this.anno);
-
-        this.createAnni(this.risultati[0].annoAcc, this.anno);
-        this.setRisultati();
-        this.ordina();
-        this.getResatt();
-      },
+      next: (response) => (this.visualRis = response),
+      complete: () => this.creaAnniLista(),
       error: (error) => console.log(error),
     });
   }
 
-  creaAnnoVisual(a: number) {
+  getVisualRis(): Res[] {
+    let filteredVisualRis = this.visualRis;
+    if(this.anno!=0) {
+      filteredVisualRis = filteredVisualRis.filter(res => res.annoAcc==this.anno);
+    }
+    
+    if(this.visualRis.length > 0) {
+      switch(this.ordinamenti) {
+       
+        case 'REGIONI':
+          filteredVisualRis.sort((a, b) =>
+            a.scuola.regione.localeCompare(b.scuola.regione)
+          );
+          break;
+        case 'SCUOLE':
+          filteredVisualRis.sort((a, b) =>
+            a.scuola.nome.localeCompare(b.scuola.nome)
+          );
+          break;
+          case 'ISCRITTI':
+            filteredVisualRis.sort((a, b) =>
+              b.iscritti.length - a.iscritti.length
+            );
+            break;
+        default:
+          break;
+      }
+    }
+
+    return filteredVisualRis;
+  }
+
+  creaAnniLista() {
+    let listaAnni: Anni[]= [];
+    let listValori: number[]= [];
+    this.visualRis.forEach(r => listaAnni.push(this.creaDatoAnni(r.annoAcc)));
+    listaAnni.forEach(a => {
+      if(!listValori.includes(a.value)) {
+        this.anni.push(a);
+        listValori.push(a.value);
+      }
+    });
+    this.anni.sort((a, b) => b.value - a.value);
+  }
+
+  creaDatoAnni(anno: number): Anni {
+    let stringaAnno = anno.toString();
+    let a: Anni = {
+      value: anno,
+      viewValue: stringaAnno.slice(2,4)+"/"+stringaAnno.slice(6),
+    }
+    return a;
+  }
+  
+  creaStringaAnnoAcc(a: number) {
     let aI=  Math.floor(a/10000);
     let aF=a%10000
     let ain = (aI%100);
     let afin = (aF%100);
     
-    this.annoVisual = ain + '/' + afin;
+    return ain + '/' + afin;
   }
+
   setRisultati() {
     this.risultati.forEach((r) => {
       if (r.annoAcc == this.anno) {
@@ -187,8 +232,11 @@ export class StatsComponent implements OnInit {
     });
   }
 
+  cambioAnno(e: any) {
+    this.anno = e;
+  }
+
   cambioRisultati(e: any) {
-    this.creaAnnoVisual(e);
     while (this.visualRis.length > 0) {
       this.visualRis.pop();
     }
@@ -197,7 +245,6 @@ export class StatsComponent implements OnInit {
         this.visualRis.push(r);
       }
     });
-    this.ordina();
     while (this.visualRisAtt.length > 0) {
       this.visualRisAtt.pop();
     }
@@ -211,63 +258,39 @@ export class StatsComponent implements OnInit {
     this.cambioOrdinamentoAtt(this.ordinamentiAtt)
   }
 
-  createAnni(i: number, f: number) {
-   
-
-    let ann: Anni = { value: 20212022, viewValue: 21 + '/' + 22 };
-    this.anni.push(ann);
-    let ann1: Anni = { value: 20222023, viewValue: 22 + '/' + 23 };
-    this.anni.push(ann1);
-    let ann2: Anni = { value: 20232024, viewValue: 23 + '/' + 24 };
-    this.anni.push(ann2);
-    let ann3: Anni = { value: 20242025, viewValue: 24 + '/' + 25 };
-    this.anni.push(ann3);
-
-  }
-
   onClick1() {
     this.click = 1;
-    this.isFilterOpened = true;
+    this.onClickResetFilter();
   }
   onClick2() {
     this.click = 2;
-    this.isFilterOpened = true;
+    this.onClickResetFilter();
   }
   onClick3() {
     this.click = 3;
+    this.onClickResetFilter();
   }
   onClick4() {
     this.click = 4;
+    this.onClickResetFilter();
+  }
+  onClickResetFilter() {
+    this.ordinamenti='';
+    this.ordinamentiAtt='';
+    this.regione='';
+    this.provincia='';
+    this.citta='';
+    this.textFilter='';
   }
 
   cambioOrdinamento(e: any) {
     this.ordinamenti = e;
-    this.ordina();
   }
 
   cambioProfRef(event: any) {
     this.prof = event.target.value;
   }
 
-  ordina() {
-    if (this.visualRis.length > 0) {
-      switch (this.ordinamenti) {
-       
-        case 'REGIONI':
-          this.visualRis.sort((a, b) =>
-            a.scuola.regione.localeCompare(b.scuola.regione)
-          );
-          break;
-        case 'SCUOLE':
-          this.visualRis.sort((a, b) =>
-            a.scuola.nome.localeCompare(b.scuola.nome)
-          );
-          break;
-        default:
-          break;
-      }
-    }
-  }
   cambioOrdinamentoAtt(e: any) {
     this.ordinamentiAtt=e
     switch (this.ordinamentiAtt) {
@@ -442,17 +465,6 @@ export class StatsComponent implements OnInit {
 
   }
 
-
-/* When the user clicks on the button, 
-toggle between hiding and showing the dropdown content */
-dropdownMenu() : void {
-  this.isMenuOpened = !this.isMenuOpened;
-}
-
-clickOutside() : void {
-  this.isMenuOpened = false;
-}
-
   getProfList(): Profvisual[] {
     let filteredProfVisual = this.profVisual;
     if(this.regione!='') {
@@ -494,7 +506,9 @@ clickOutside() : void {
     }
 
     this.getProfList().forEach(p => {
-      if(!this.listaRegioni.includes(p.scuola.regione)) { this.listaRegioni.push(p.scuola.regione); }
+      if(!this.listaRegioni.includes(p.scuola.regione)) {
+        this.listaRegioni.push(p.scuola.regione);
+      }
       });
     return this.listaRegioni.sort();
   }
