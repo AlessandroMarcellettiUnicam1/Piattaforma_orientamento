@@ -60,7 +60,7 @@ export class StatsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getRes();
-    this.getResatt();
+    this.getResAtt();
     this.getScuole();
     this.getUniversi();
     this.getProfessoriUnicam();
@@ -141,10 +141,20 @@ export class StatsComponent implements OnInit {
     });
   }
 
-  getVisualRis(): Res[] {
+  getResVisualRis(): Res[] {
     let filteredVisualRis = this.visualRis;
     if(this.anno!=0) {
       filteredVisualRis = filteredVisualRis.filter(res => res.annoAcc==this.anno);
+    }
+
+    if(this.regione!='') {
+      filteredVisualRis = filteredVisualRis.filter(res => res.scuola.regione==this.regione);
+      if(this.provincia!='') {
+        filteredVisualRis = filteredVisualRis.filter(res => res.scuola.provincia.includes(this.provincia));
+        if(this.citta!='') {
+          filteredVisualRis = filteredVisualRis.filter(res => res.scuola.citta.includes(this.citta));
+        }
+      }
     }
     
     if(this.visualRis.length > 0) {
@@ -220,13 +230,11 @@ export class StatsComponent implements OnInit {
     });
   }
 
-  getResatt(): void {
+  getResAtt(): void {
     this.resatService.getRes().subscribe({
-      next: (response) => (this.risatt = response),
+      next: (response) => (this.visualRisAtt = response),
       complete: () => {
-        this.anno = this.risultati[this.risultati.length - 1].annoAcc;
-        this.setRisultatiAtt();
-        this.cambioOrdinamentoAtt('ISCRITTI');
+        
       },
       error: (error) => console.log(error),
     });
@@ -275,6 +283,7 @@ export class StatsComponent implements OnInit {
     this.onClickResetFilter();
   }
   onClickResetFilter() {
+    this.anno=0;
     this.ordinamenti='';
     this.ordinamentiAtt='';
     this.regione='';
@@ -308,16 +317,12 @@ export class StatsComponent implements OnInit {
   }
   cambioRegione(e: any) {
     this.regione = e;
-    if(this.regione=='') {
-      this.provincia='';
-      this.citta=''
-    }
+    this.provincia='';
+    this.citta=''
   }
   cambioProvincia(e: any) {
     this.provincia = e;
-    if(this.provincia=='') {
-      this.citta=''
-    }
+    this.citta=''
   }
   cambioCitta(e: any) {
     this.citta = e;
@@ -468,11 +473,11 @@ export class StatsComponent implements OnInit {
   getProfList(): Profvisual[] {
     let filteredProfVisual = this.profVisual;
     if(this.regione!='') {
-      filteredProfVisual = this.profVisual.filter(p => p.professore.scuolaImp.regione.includes(this.regione));
+      filteredProfVisual = filteredProfVisual.filter(p => p.professore.scuolaImp.regione.includes(this.regione));
       if(this.provincia!='') {
-        filteredProfVisual = this.profVisual.filter(p => p.professore.scuolaImp.provincia.includes(this.provincia));
+        filteredProfVisual = filteredProfVisual.filter(p => p.professore.scuolaImp.provincia.includes(this.provincia));
         if(this.citta!='') {
-          filteredProfVisual = this.profVisual.filter(p => p.professore.scuolaImp.citta.includes(this.citta));
+          filteredProfVisual = filteredProfVisual.filter(p => p.professore.scuolaImp.citta.includes(this.citta));
         }
       }
     }
@@ -484,10 +489,6 @@ export class StatsComponent implements OnInit {
     }
 
     return filteredProfVisual;
-  }
-
-  getListFilteredWithText(list: Profvisual[]) {
-
   }
 
   getProfUnicamList(): ProfUnicamvisual[] {
@@ -504,12 +505,23 @@ export class StatsComponent implements OnInit {
     if(this.regione=='') {
       this.listaRegioni = [];
     }
+    if(this.click==1) {
 
-    this.getProfList().forEach(p => {
-      if(!this.listaRegioni.includes(p.scuola.regione)) {
-        this.listaRegioni.push(p.scuola.regione);
-      }
+      this.visualRis.forEach(res => {
+        if(!this.listaRegioni.includes(res.scuola.regione)) {
+          this.listaRegioni.push(res.scuola.regione);
+        }
       });
+    }
+    if(this.click==3) {
+
+      this.getProfList().forEach(p => {
+        if(!this.listaRegioni.includes(p.scuola.regione)) {
+          this.listaRegioni.push(p.scuola.regione);
+        }
+      });
+    }
+
     return this.listaRegioni.sort();
   }
 
@@ -517,10 +529,22 @@ export class StatsComponent implements OnInit {
     if(this.provincia=='') {
       this.listaProvince = [];
     }
+    if(this.click==1) {
 
-    this.getProfList().forEach(p => {
-      if(!this.listaProvince.includes(p.scuola.provincia) && p.scuola.regione==this.regione) { this.listaProvince.push(p.scuola.provincia); }
+      this.visualRis.forEach(res => {
+        if(!this.listaProvince.includes(res.scuola.provincia) && res.scuola.regione==this.regione) {
+          this.listaProvince.push(res.scuola.provincia);
+        }
       });
+    }
+    if(this.click==3) {
+
+      this.getProfList().forEach(p => {
+        if(!this.listaProvince.includes(p.scuola.provincia) && p.scuola.regione==this.regione) {
+          this.listaProvince.push(p.scuola.provincia);
+        }
+      });
+    }
     return this.listaProvince.sort();
   }
 
@@ -528,10 +552,23 @@ export class StatsComponent implements OnInit {
     if(this.citta=='') {
       this.listaCitta = [];
     }
+    if(this.click==1) {
 
-    this.getProfList().forEach(p => {
-      if(!this.listaCitta.includes(p.scuola.citta) && p.scuola.provincia==this.provincia) { this.listaCitta.push(p.scuola.citta); }
+      this.visualRis.forEach(res => {
+        if(!this.listaCitta.includes(res.scuola.citta) && res.scuola.provincia==this.provincia) {
+          this.listaCitta.push(res.scuola.citta);
+        }
       });
+    }
+    if(this.click==3) {
+
+      this.getProfList().forEach(p => {
+        if(!this.listaCitta.includes(p.scuola.citta) && p.scuola.provincia==this.provincia) {
+          this.listaCitta.push(p.scuola.citta);
+        }
+      });
+    }
+
     return this.listaCitta.sort();
   }
 
