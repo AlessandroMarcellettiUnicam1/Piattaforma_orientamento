@@ -30,6 +30,7 @@ public class Professore {
         this.scuolaImp = scuolaImp;
         this.attivita = attivita;
     }
+    public Professore(){}
 
     public String toString(){
         return "Nome:"+this.nome+"; Email: "+this.email+"; Scuola: "+this.scuolaImp;

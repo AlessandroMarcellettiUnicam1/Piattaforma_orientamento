@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -33,7 +34,7 @@ public class Attivita {
 
 
     private Sede sede;
-//dd-MM-yyyy HH:mm
+    //dd-MM-yyyy HH:mm
     private LocalDateTime dataInizio;
     private LocalDateTime dataFine;
     private String descrizione;
@@ -42,13 +43,14 @@ public class Attivita {
      */
     private List<ProfessoreUnicam> profUnicam;
     /**
-     * proffessore della scuola
+     * professore della scuola
      */
     private Professore profReferente;
 
-  private boolean iscrizionePossibile;
+    private boolean iscrizionePossibile;
   //la scuola potrebbe non esserci
-private String scuola;
+    @Nullable
+    private String scuola;
     public Attivita(String nome,String tipo, int annoAcc, List<Studente> studPartecipanti) {
         this.nome = nome;
         this.tipo= tipo;

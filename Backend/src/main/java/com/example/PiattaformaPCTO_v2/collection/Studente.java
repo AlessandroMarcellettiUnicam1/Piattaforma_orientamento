@@ -28,6 +28,8 @@ public class Studente {
         this.email=email;
     }
 
+    public Studente() {}
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

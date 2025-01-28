@@ -22,6 +22,7 @@ public class ProfessoreUnicam {
         this.cognome = cognome;
         this.email = email;
     }
+    public ProfessoreUnicam(){}
 
     public String getNome() {
         return nome;
