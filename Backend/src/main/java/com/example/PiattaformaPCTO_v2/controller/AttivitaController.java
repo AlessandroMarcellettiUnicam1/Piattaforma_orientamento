@@ -48,24 +48,27 @@ public class AttivitaController {
     @PostMapping("/uploadConAnno1/{param}")
     public void uploadActivity( @PathVariable ("param" ) String create,
                                 @RequestParam("file") MultipartFile file){
-
+        System.out.println("Param: "+create);
         String nome=create.substring(0,create.indexOf("&"));
         create=create.substring(create.indexOf("&")+1);
         String tipo=create.substring(0,create.indexOf("$"));
         create=create.substring(create.indexOf("$")+1);
         String s=create.substring(0,create.indexOf("-"));
         create=create.substring(create.indexOf("-")+1);
-        String sede;
+        String sede="";
         String scuola="";
-        if(s.length()<7){
-         sede=s;
+        String cittàScuola="";
+        if(s.contentEquals("online")||s.contentEquals("università")||s.contentEquals("scuola")||s.contentEquals("altro")){
+            sede = s;
+        }else {
+            scuola = s;
+            cittàScuola=create.substring(0,create.indexOf("-"));
+            create=create.substring(create.indexOf("-")+1);
+            sede = create.substring(0, create.indexOf("*"));
+            create = create.substring(create.indexOf("*") + 1);
         }
-        else{
 
-            scuola=s;
-            sede=create.substring(0,create.indexOf("*"));
-            create=create.substring(create.indexOf("*")+1);
-        }
+
 
         String dataI=create.substring(0,create.indexOf(" "));
 
@@ -125,9 +128,8 @@ public class AttivitaController {
         if (!referente.isEmpty()) {
             profReferente = professoreService.getProfByString(referente);
         }
-        attivitaService.uploadSingleActivity(nome,tipo,scuola,anno,
-                sedeA,dataInizio,dataFine,descrizione,prof,profReferente,file);
 
+        attivitaService.uploadSingleActivity(nome,tipo,scuola,cittàScuola,anno,sedeA,dataInizio,dataFine,descrizione,prof,profReferente,file);
     }
 
 

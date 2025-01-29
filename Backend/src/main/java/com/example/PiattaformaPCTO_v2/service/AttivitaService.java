@@ -35,7 +35,7 @@ Sheet fileOpenerHelper(MultipartFile file);
      * metodo che crea l'attività singola
 
      */
-    void uploadSingleActivity(String nome, String tipo, String scuola, int anno, Sede sede,
+    void uploadSingleActivity(String nome, String tipo, String scuola, String cittàScuola, int anno, Sede sede,
                               LocalDateTime dataInizio, LocalDateTime dataFine, String descrizione,
                               List<ProfessoreUnicam> prof, Professore profReferente, MultipartFile file);
 

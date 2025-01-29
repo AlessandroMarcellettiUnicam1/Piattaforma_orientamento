@@ -56,6 +56,7 @@ public class SimpleAttivitaService implements AttivitaService {
     @Autowired
     private RisultatiRepository risultatiRepository;
 
+    private static String citySchool;
 
     @Override
     public String save(Attivita attivita) {
@@ -130,6 +131,7 @@ public class SimpleAttivitaService implements AttivitaService {
      * @param nome
      * @param tipo
      * @param scuola
+     * @param cittàScuola
      * @param anno
      * @param sede
      * @param dataInizio
@@ -140,7 +142,7 @@ public class SimpleAttivitaService implements AttivitaService {
      * @param file
      */
     @Override
-    public void uploadSingleActivity(String nome, String tipo, String scuola, int anno, Sede sede, LocalDateTime dataInizio, LocalDateTime dataFine, String descrizione, List<ProfessoreUnicam> prof, Professore profReferente, MultipartFile file) {
+    public void uploadSingleActivity(String nome, String tipo, String scuola, String cittàScuola, int anno, Sede sede, LocalDateTime dataInizio, LocalDateTime dataFine, String descrizione, List<ProfessoreUnicam> prof, Professore profReferente, MultipartFile file) {
 
         Sheet dataSheet = this.fileOpenerHelper(file);
         Iterator<Row> iterator = dataSheet.rowIterator();
@@ -151,37 +153,46 @@ public class SimpleAttivitaService implements AttivitaService {
 
         while(iterator.hasNext()){
             Row row = iterator.next();
-            if (row.getCell(0) == null) {
-                break; // Interrompe la lettura del file excel
+            boolean isRowCorrect = row.getCell(0) != null && row.getCell(1) != null && row.getCell(2) != null && row.getCell(3) != null;
+            if (!isRowCorrect) {
+                break; // Interrompe se la riga è vuota o con valori errati
             }
             String nomeStud = row.getCell(0).getStringCellValue();
             String cognome = row.getCell(1).getStringCellValue();
-            String email= "";
-            if (scuola.isEmpty()){
+            String email;
+            if (scuola.isEmpty() && cittàScuola.isEmpty()){
                 scuolaP = new Scuola(row.getCell(2).getStringCellValue(), row.getCell(3).getStringCellValue());
             }else {
-                scuolaP = scuolaRepository.getScuolaByNome(scuola);
+                scuolaP = scuolaRepository.getScuolaByCittaAndNome(cittàScuola, scuola);
             }
+            if (row.getCell(4) != null) {
+                email = row.getCell(4).getStringCellValue();
+            }else email = "";
+
             Studente stud = new Studente(nomeStud, cognome,email,scuolaP);
             System.out.println("Studente creato: "+stud);
-            try {
-                studenteRepository.save(stud);
-            } catch (Exception e) {
-                System.err.println("Errore durante il salvataggio dello studente: " + e.getMessage());
+            if (studenteRepository.findByNomeAndCognomeAndEmail(nomeStud,cognome, email) == null) { // Verifica se lo studente è già presente nel database
+                try {
+                    studenteRepository.save(stud);
+                } catch (Exception e) {
+                    System.err.println("Errore durante il salvataggio dello studente: " + e.getMessage());
+                }
             }
+
             studPartecipanti.add(stud);
         }
 
-        if(attivitaRepository.findByNomeAndAnno(nome,anno)==null){
-            Attivita attivita=new Attivita(nome,tipo,anno,studPartecipanti,sede,dataInizio,dataFine,descrizione,prof,profReferente,false);
-            attivita.setScuola(scuola);
+        if (attivitaRepository.findByNomeAndAnno(nome, anno) == null) {
+            Attivita attivita = new Attivita(nome, tipo, anno, studPartecipanti, sede, dataInizio, dataFine, descrizione, prof, profReferente, false);
+            citySchool = cittàScuola;
+            if (scuola != null && !scuola.isEmpty()) {
+                attivita.setScuola(scuola);
+            }
+
             attivitaRepository.save(attivita);
             createRisulataiAtt(attivita);
-            attivita.setScuola(scuola);
 
-
-            if(!scuola.isEmpty()) {
-                attivita.setScuola(scuola);
+            if (scuola != null && !scuola.isEmpty()) {
                 createRisultati(attivita);
             }
         }
@@ -202,7 +213,7 @@ public class SimpleAttivitaService implements AttivitaService {
 
         //se l'attività ha una scuola in cui si è svolta
         if(!attivita.getScuola().equals("")){
-            Scuola scuola=scuolaRepository.getScuolaByNome(attivita.getScuola());
+            Scuola scuola=scuolaRepository.getScuolaByCittaAndNome(citySchool , attivita.getScuola());
             Query query = new Query();
             query.addCriteria(Criteria.where("scuola").is(scuola));
             Scuola scuola1=null;
