@@ -16,6 +16,7 @@ import { ProfessoriUnicam } from 'src/app/interface/professoriUnicam';
 import { ProfessoriUnicamService } from 'src/app/service/professoriUnicam.service';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { filter, Observable, toArray } from 'rxjs';
+import { Activity } from 'src/app/interface/activity';
 @Component({
   selector: 'app-stats',
   templateUrl: './stats.component.html',
@@ -36,7 +37,8 @@ export class StatsComponent implements OnInit {
   public universi: Universi[] | undefined;
   public risultati: Res[] = [];
   public risatt: Risatt[] = [];
-  public anni: Anni[] = [];
+  public anniRes: Anni[] = [];
+  public anniRisAtt: Anni[] = [];
   public prof: Professori[] = [];
   public profUnicam: ProfessoriUnicam[] = [];
   public profVisual : Profvisual[] = [];
@@ -50,7 +52,9 @@ export class StatsComponent implements OnInit {
   public ordinamentiAtt = '';
   public searchButton = document.getElementById('searchButton') as HTMLButtonElement;
   public searchInput = document.getElementById('searchInput') as HTMLInputElement;
-  public textFilter: string = '';
+  public textFilterC: string = '';
+  public textFilterA: string = '';
+  public textFilterP: string = '';
   public listaRegioni: string[] = [];
   public listaProvince: string[] = [];
   public listaCitta: string[] = [];
@@ -60,14 +64,22 @@ export class StatsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getRes();
-    this.getResAtt();
+    this.getRisAtt();
     this.getScuole();
     this.getUniversi();
     this.getProfessoriUnicam();
   }
 
-  filterApply(event: any): void {
-    this.textFilter = event.target.value;
+  textFilterCityApply(event: any): void {
+    this.textFilterC = event.target.value;
+  }
+
+  textFilterActivityApply(event: any): void {
+    this.textFilterA = event.target.value;
+  }
+
+  textFilterProfApply(event: any): void {
+    this.textFilterP = event.target.value;
   }
 
   getProfessori(): void {
@@ -136,12 +148,12 @@ export class StatsComponent implements OnInit {
   getRes(): void {
     this.resService.getRes().subscribe({
       next: (response) => (this.visualRis = response),
-      complete: () => this.creaAnniLista(),
+      complete: () => this.creaAnniListaRes(),
       error: (error) => console.log(error),
     });
   }
 
-  getResVisualRis(): Res[] {
+  getVisualRis(): Res[] {
     let filteredVisualRis = this.visualRis;
     if(this.anno!=0) {
       filteredVisualRis = filteredVisualRis.filter(res => res.annoAcc==this.anno);
@@ -151,10 +163,11 @@ export class StatsComponent implements OnInit {
       filteredVisualRis = filteredVisualRis.filter(res => res.scuola.regione==this.regione);
       if(this.provincia!='') {
         filteredVisualRis = filteredVisualRis.filter(res => res.scuola.provincia.includes(this.provincia));
-        if(this.citta!='') {
-          filteredVisualRis = filteredVisualRis.filter(res => res.scuola.citta.includes(this.citta));
-        }
+        
       }
+    }
+    if(this.citta!='') {
+      filteredVisualRis = filteredVisualRis.filter(res => res.scuola.citta.includes(this.citta));
     }
     
     if(this.visualRis.length > 0) {
@@ -183,17 +196,30 @@ export class StatsComponent implements OnInit {
     return filteredVisualRis;
   }
 
-  creaAnniLista() {
+  creaAnniListaRes() {
     let listaAnni: Anni[]= [];
     let listValori: number[]= [];
     this.visualRis.forEach(r => listaAnni.push(this.creaDatoAnni(r.annoAcc)));
     listaAnni.forEach(a => {
       if(!listValori.includes(a.value)) {
-        this.anni.push(a);
+        this.anniRes.push(a);
         listValori.push(a.value);
       }
     });
-    this.anni.sort((a, b) => b.value - a.value);
+    this.anniRes.sort((a, b) => b.value - a.value);
+  }
+
+  creaAnniListaRisAtt() {
+    let listaAnni: Anni[]= [];
+    let listValori: number[]= [];
+    this.visualRisAtt.forEach(r => listaAnni.push(this.creaDatoAnni(r.annoAcc)));
+    listaAnni.forEach(a => {
+      if(!listValori.includes(a.value)) {
+        this.anniRisAtt.push(a);
+        listValori.push(a.value);
+      }
+    });
+    this.anniRisAtt.sort((a, b) => b.value - a.value);
   }
 
   creaDatoAnni(anno: number): Anni {
@@ -230,14 +256,43 @@ export class StatsComponent implements OnInit {
     });
   }
 
-  getResAtt(): void {
+  getRisAtt(): void {
     this.resatService.getRes().subscribe({
       next: (response) => (this.visualRisAtt = response),
-      complete: () => {
-        
-      },
+      complete: () => this.creaAnniListaRisAtt(),
       error: (error) => console.log(error),
     });
+  }
+
+  getVisualRisAtt(): Risatt[] {
+    let filteredVisualRisAtt = this.visualRisAtt;
+    if(this.anno!=0) {
+      filteredVisualRisAtt = filteredVisualRisAtt.filter(res => res.annoAcc==this.anno);
+    }
+    
+    if(this.visualRis.length > 0) {
+      switch(this.ordinamenti) {
+
+        case 'NOME':
+          filteredVisualRisAtt.sort((a, b) =>
+            a.attivita.localeCompare(b.attivita)
+          );
+          break;
+          case 'ISCRITTI':
+            filteredVisualRisAtt.sort((a, b) =>
+              b.universitarii.length - a.universitarii.length
+            );
+            break;
+        default:
+          break;
+      }
+    }
+
+    if(this.textFilterA!='') {
+      filteredVisualRisAtt = filteredVisualRisAtt.filter( res => res.attivita.toLowerCase().startsWith(this.textFilterA.toLowerCase()) );
+    }
+
+    return filteredVisualRisAtt;
   }
 
   cambioAnno(e: any) {
@@ -257,7 +312,6 @@ export class StatsComponent implements OnInit {
       this.visualRisAtt.pop();
     }
 
-    console.log(this.ordinamentiAtt)
     this.risatt.forEach((r) => {
       if (r.annoAcc == e) {
         this.visualRisAtt.push(r);
@@ -289,7 +343,8 @@ export class StatsComponent implements OnInit {
     this.regione='';
     this.provincia='';
     this.citta='';
-    this.textFilter='';
+    this.textFilterA='';
+    this.textFilterP='';
   }
 
   cambioOrdinamento(e: any) {
@@ -303,6 +358,7 @@ export class StatsComponent implements OnInit {
   cambioOrdinamentoAtt(e: any) {
     this.ordinamentiAtt=e
     switch (this.ordinamentiAtt) {
+
       case 'ISCRITTI':
         this.visualRisAtt.sort(
           (a, b) => b.universitarii.length - a.universitarii.length
@@ -481,10 +537,10 @@ export class StatsComponent implements OnInit {
         }
       }
     }
-    if(this.textFilter!='') {
-      filteredProfVisual = filteredProfVisual.filter(p => p.professore.nome.startsWith(this.textFilter.toUpperCase())
-                                        || p.professore.cognome.startsWith(this.textFilter.toUpperCase())
-                                        || p.professore.email.startsWith(this.textFilter.toUpperCase())
+    if(this.textFilterP!='') {
+      filteredProfVisual = filteredProfVisual.filter(p => p.professore.nome.startsWith(this.textFilterP.toUpperCase())
+                                        || p.professore.cognome.startsWith(this.textFilterP.toUpperCase())
+                                        || p.professore.email.startsWith(this.textFilterP.toUpperCase())
                                       );
     }
 
@@ -492,12 +548,12 @@ export class StatsComponent implements OnInit {
   }
 
   getProfUnicamList(): ProfUnicamvisual[] {
-    if(this.textFilter=='') {
+    if(this.textFilterP=='') {
       return this.profUnicamVisual;
     }
-    return this.profUnicamVisual.filter(p => p.professore.nome.startsWith(this.textFilter.toUpperCase())
-                                          || p.professore.cognome.startsWith(this.textFilter.toUpperCase())
-                                          || p.professore.email.startsWith(this.textFilter.toUpperCase())
+    return this.profUnicamVisual.filter(p => p.professore.nome.startsWith(this.textFilterP.toUpperCase())
+                                          || p.professore.cognome.startsWith(this.textFilterP.toUpperCase())
+                                          || p.professore.email.startsWith(this.textFilterP.toUpperCase())
                                         );
   }
 
@@ -555,7 +611,7 @@ export class StatsComponent implements OnInit {
     if(this.click==1) {
 
       this.visualRis.forEach(res => {
-        if(!this.listaCitta.includes(res.scuola.citta) && res.scuola.provincia==this.provincia) {
+        if(!this.listaCitta.includes(res.scuola.citta) && res.scuola.provincia==this.provincia && res.scuola.citta != null) {
           this.listaCitta.push(res.scuola.citta);
         }
       });
