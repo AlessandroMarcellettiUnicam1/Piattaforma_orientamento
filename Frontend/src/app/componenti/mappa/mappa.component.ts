@@ -1,4 +1,3 @@
-import { InfoWindowManager } from '@agm/core';
 import { Component, ComponentFactoryResolver, Inject, Input, OnChanges, OnInit, SimpleChanges, ViewContainerRef } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Coords, LatLngLiteral } from 'leaflet';
