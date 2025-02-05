@@ -15,7 +15,9 @@ import { ProfUnicamvisual } from 'src/app/interface/profUnicamVisual';
 import { ProfessoriUnicam } from 'src/app/interface/professoriUnicam';
 import { ProfessoriUnicamService } from 'src/app/service/professoriUnicam.service';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable, toArray } from 'rxjs';
+import { filter, Observable, toArray } from 'rxjs';
+import { Activity } from 'src/app/interface/activity';
+
 @Component({
   selector: 'app-stats',
   templateUrl: './stats.component.html',
@@ -32,32 +34,53 @@ export class StatsComponent implements OnInit {
   ) {}
 
   public isMenuOpened: boolean = false;
-  public isFilterOpened: boolean = false;
   public scuole: Scuola[] =[];
   public universi: Universi[] | undefined;
   public risultati: Res[] = [];
   public risatt: Risatt[] = [];
-  public anni: Anni[] = [];
+  public anniRes: Anni[] = [];
+  public anniRisAtt: Anni[] = [];
   public prof: Professori[] = [];
   public profUnicam: ProfessoriUnicam[] = [];
-  public profVisual : Profvisual[] =[]
-  public profUnicamVisual : ProfUnicamvisual[] =[]
-  public click = 0;
+  public profVisual : Profvisual[] = [];
+  public profUnicamVisual : ProfUnicamvisual[] = [];
+  public click = 1;
   public anno = 0;
   public annoVisual = '';
   public visualRis: Res[] = [];
   public visualRisAtt: Risatt[] = [];
-  public ordinamenti = 'ISCRITTI';
-  public ordinamentiAtt = 'ISCRITTI';
+  public ordinamenti = '';
+  public ordinamentiAtt = '';
   public searchButton = document.getElementById('searchButton') as HTMLButtonElement;
-public searchInput = document.getElementById('searchInput') as HTMLInputElement;
+  public searchInput = document.getElementById('searchInput') as HTMLInputElement;
+  public textFilterC: string = '';
+  public textFilterA: string = '';
+  public textFilterP: string = '';
+  public listaRegioni: string[] = [];
+  public listaProvince: string[] = [];
+  public listaCitta: string[] = [];
+  public regione: string = '';
+  public provincia: string = '';
+  public citta: string = '';
 
   ngOnInit(): void {
     this.getRes();
-    this.getResatt();
+    this.getRisAtt();
     this.getScuole();
     this.getUniversi();
     this.getProfessoriUnicam();
+  }
+
+  textFilterCityApply(event: any): void {
+    this.textFilterC = event.target.value;
+  }
+
+  textFilterActivityApply(event: any): void {
+    this.textFilterA = event.target.value;
+  }
+
+  textFilterProfApply(event: any): void {
+    this.textFilterP = event.target.value;
   }
 
   getProfessori(): void {
@@ -70,7 +93,7 @@ public searchInput = document.getElementById('searchInput') as HTMLInputElement;
     });
   }
 
-  createProfVisual(){
+  createProfVisual() {
     if(this.prof.length>0){
       this.prof.forEach(p=>{
         let nome = p.nome.toUpperCase();
@@ -125,29 +148,99 @@ public searchInput = document.getElementById('searchInput') as HTMLInputElement;
 
   getRes(): void {
     this.resService.getRes().subscribe({
-      next: (response) => (this.risultati = response),
-      complete: () => {
-        this.anno = this.risultati[this.risultati.length - 1].annoAcc;
-        
-        this.creaAnnoVisual(this.anno);
-
-        this.createAnni(this.risultati[0].annoAcc, this.anno);
-        this.setRisultati();
-        this.ordina();
-        this.getResatt();
-      },
+      next: (response) => (this.visualRis = response),
+      complete: () => this.creaAnniListaRes(),
       error: (error) => console.log(error),
     });
   }
 
-  creaAnnoVisual(a: number) {
+  getVisualRis(): Res[] {
+    let filteredVisualRis = this.visualRis;
+    if(this.anno!=0) {
+      filteredVisualRis = filteredVisualRis.filter(res => res.annoAcc==this.anno);
+    }
+
+    if(this.regione!='') {
+      filteredVisualRis = filteredVisualRis.filter(res => res.scuola.regione==this.regione);
+      if(this.provincia!='') {
+        filteredVisualRis = filteredVisualRis.filter(res => res.scuola.provincia.includes(this.provincia));
+        
+      }
+    }
+    if(this.citta!='') {
+      filteredVisualRis = filteredVisualRis.filter(res => res.scuola.citta.includes(this.citta));
+    }
+    
+    if(this.visualRis.length > 0) {
+      switch(this.ordinamenti) {
+       
+        case 'REGIONI':
+          filteredVisualRis.sort((a, b) =>
+            a.scuola.regione.localeCompare(b.scuola.regione)
+          );
+          break;
+        case 'SCUOLE':
+          filteredVisualRis.sort((a, b) =>
+            a.scuola.nome.localeCompare(b.scuola.nome)
+          );
+          break;
+          case 'ISCRITTI':
+            filteredVisualRis.sort((a, b) =>
+              b.iscritti.length - a.iscritti.length
+            );
+            break;
+        default:
+          break;
+      }
+    }
+
+    return filteredVisualRis;
+  }
+
+  creaAnniListaRes() {
+    let listaAnni: Anni[]= [];
+    let listValori: number[]= [];
+    this.visualRis.forEach(r => listaAnni.push(this.creaDatoAnni(r.annoAcc)));
+    listaAnni.forEach(a => {
+      if(!listValori.includes(a.value)) {
+        this.anniRes.push(a);
+        listValori.push(a.value);
+      }
+    });
+    this.anniRes.sort((a, b) => b.value - a.value);
+  }
+
+  creaAnniListaRisAtt() {
+    let listaAnni: Anni[]= [];
+    let listValori: number[]= [];
+    this.visualRisAtt.forEach(r => listaAnni.push(this.creaDatoAnni(r.annoAcc)));
+    listaAnni.forEach(a => {
+      if(!listValori.includes(a.value)) {
+        this.anniRisAtt.push(a);
+        listValori.push(a.value);
+      }
+    });
+    this.anniRisAtt.sort((a, b) => b.value - a.value);
+  }
+
+  creaDatoAnni(anno: number): Anni {
+    let stringaAnno = anno.toString();
+    let a: Anni = {
+      value: anno,
+      viewValue: stringaAnno.slice(2,4)+"/"+stringaAnno.slice(6),
+    }
+    return a;
+  }
+  
+  creaStringaAnnoAcc(a: number) {
     let aI=  Math.floor(a/10000);
     let aF=a%10000
     let ain = (aI%100);
     let afin = (aF%100);
     
-    this.annoVisual = ain + '/' + afin;
+    return ain + '/' + afin;
   }
+
   setRisultati() {
     this.risultati.forEach((r) => {
       if (r.annoAcc == this.anno) {
@@ -164,20 +257,50 @@ public searchInput = document.getElementById('searchInput') as HTMLInputElement;
     });
   }
 
-  getResatt(): void {
+  getRisAtt(): void {
     this.resatService.getRes().subscribe({
-      next: (response) => (this.risatt = response),
-      complete: () => {
-        this.anno = this.risultati[this.risultati.length - 1].annoAcc;
-        this.setRisultatiAtt();
-        this.cambioOrdinamentoAtt('ISCRITTI');
-      },
+      next: (response) => (this.visualRisAtt = response),
+      complete: () => this.creaAnniListaRisAtt(),
       error: (error) => console.log(error),
     });
   }
 
+  getVisualRisAtt(): Risatt[] {
+    let filteredVisualRisAtt = this.visualRisAtt;
+    if(this.anno!=0) {
+      filteredVisualRisAtt = filteredVisualRisAtt.filter(res => res.annoAcc==this.anno);
+    }
+    
+    if(this.visualRis.length > 0) {
+      switch(this.ordinamenti) {
+
+        case 'NOME':
+          filteredVisualRisAtt.sort((a, b) =>
+            a.attivita.localeCompare(b.attivita)
+          );
+          break;
+          case 'ISCRITTI':
+            filteredVisualRisAtt.sort((a, b) =>
+              b.universitarii.length - a.universitarii.length
+            );
+            break;
+        default:
+          break;
+      }
+    }
+
+    if(this.textFilterA!='') {
+      filteredVisualRisAtt = filteredVisualRisAtt.filter( res => res.attivita.toLowerCase().startsWith(this.textFilterA.toLowerCase()) );
+    }
+
+    return filteredVisualRisAtt;
+  }
+
+  cambioAnno(e: any) {
+    this.anno = e;
+  }
+
   cambioRisultati(e: any) {
-    this.creaAnnoVisual(e);
     while (this.visualRis.length > 0) {
       this.visualRis.pop();
     }
@@ -186,12 +309,10 @@ public searchInput = document.getElementById('searchInput') as HTMLInputElement;
         this.visualRis.push(r);
       }
     });
-    this.ordina();
     while (this.visualRisAtt.length > 0) {
       this.visualRisAtt.pop();
     }
 
-    console.log(this.ordinamentiAtt)
     this.risatt.forEach((r) => {
       if (r.annoAcc == e) {
         this.visualRisAtt.push(r);
@@ -200,64 +321,45 @@ public searchInput = document.getElementById('searchInput') as HTMLInputElement;
     this.cambioOrdinamentoAtt(this.ordinamentiAtt)
   }
 
-  createAnni(i: number, f: number) {
-   
-
-    let ann: Anni = { value: 20212022, viewValue: 21 + '/' + 22 };
-    this.anni.push(ann);
-    let ann1: Anni = { value: 20222023, viewValue: 22 + '/' + 23 };
-    this.anni.push(ann1);
-    let ann2: Anni = { value: 20232024, viewValue: 23 + '/' + 24 };
-    this.anni.push(ann2);
-    let ann3: Anni = { value: 20242025, viewValue: 24 + '/' + 25 };
-    this.anni.push(ann3);
-
-  }
-
   onClick1() {
     this.click = 1;
-    this.isFilterOpened = true;
+    this.onClickResetFilter();
   }
   onClick2() {
     this.click = 2;
-    this.isFilterOpened = true;
+    this.onClickResetFilter();
   }
   onClick3() {
     this.click = 3;
-    this.isFilterOpened = false;
+    this.onClickResetFilter();
   }
   onClick4() {
     this.click = 4;
-    this.isFilterOpened = false;
+    this.onClickResetFilter();
+  }
+  onClickResetFilter() {
+    this.anno=0;
+    this.ordinamenti='';
+    this.ordinamentiAtt='';
+    this.regione='';
+    this.provincia='';
+    this.citta='';
+    this.textFilterA='';
+    this.textFilterP='';
   }
 
   cambioOrdinamento(e: any) {
     this.ordinamenti = e;
-    this.ordina();
   }
 
-  ordina() {
-    if (this.visualRis.length > 0) {
-      switch (this.ordinamenti) {
-       
-        case 'REGIONI':
-          this.visualRis.sort((a, b) =>
-            a.scuola.regione.localeCompare(b.scuola.regione)
-          );
-          break;
-        case 'SCUOLE':
-          this.visualRis.sort((a, b) =>
-            a.scuola.nome.localeCompare(b.scuola.nome)
-          );
-          break;
-        default:
-          break;
-      }
-    }
+  cambioProfRef(event: any) {
+    this.prof = event.target.value;
   }
+
   cambioOrdinamentoAtt(e: any) {
     this.ordinamentiAtt=e
     switch (this.ordinamentiAtt) {
+
       case 'ISCRITTI':
         this.visualRisAtt.sort(
           (a, b) => b.universitarii.length - a.universitarii.length
@@ -270,157 +372,261 @@ public searchInput = document.getElementById('searchInput') as HTMLInputElement;
         break;
     }
   }
+  cambioRegione(e: any) {
+    this.regione = e;
+    this.provincia='';
+    this.citta=''
+  }
+  cambioProvincia(e: any) {
+    this.provincia = e;
+    this.citta=''
+  }
+  cambioCitta(e: any) {
+    this.citta = e;
+  }
 
 
  // Metodo per avviare il download del file
- scaricaVistaProfessori():void  {
-  this.downloadProfFile().subscribe(
-    (blob: Blob) => {
-      // Creare un oggetto URL per il blob scaricato
-      const url = window.URL.createObjectURL(blob);
+  scaricaVistaProfessori():void  {
+    this.downloadProfFile().subscribe(
+      (blob: Blob) => {
+        // Creare un oggetto URL per il blob scaricato
+        const url = window.URL.createObjectURL(blob);
 
-      // Creare un link temporaneo e avviare il download
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'professori.xlsx'; 
-      document.body.appendChild(link);
-      link.click();
+        // Creare un link temporaneo e avviare il download
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'professori.xlsx'; 
+        document.body.appendChild(link);
+        link.click();
 
-      // Pulire l'URL creato per il blob
-      window.URL.revokeObjectURL(url);
-    },
-    (error) => {
-      console.error('Errore durante il download del file:', error);
-    }
-  );
-}
-downloadProfFile(): Observable<Blob> {
-  const url = 'http://localhost:8080/professori/download';
-  let body = {name:"professori.xlsx" };
- 
+        // Pulire l'URL creato per il blob
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        console.error('Errore durante il download del file:', error);
+      }
+    );
+  }
+  downloadProfFile(): Observable<Blob> {
+    const url = 'http://localhost:8080/professori/download';
+    let body = {name:"professori.xlsx" };
   
- return this.http.post<Blob>(url, body, {
-  responseType: 'blob' as 'json', 
-});
+    
+  return this.http.post<Blob>(url, body, {
+    responseType: 'blob' as 'json', 
+  });
 
-}
+  }
 
 
 
 
  // Metodo per avviare il download del file
- scaricaVistaProfessoriUnicam():void  {
-  this.downloadProfUnicamFile().subscribe(
-    (blob: Blob) => {
-      // Creare un oggetto URL per il blob scaricato
-      const url = window.URL.createObjectURL(blob);
+  scaricaVistaProfessoriUnicam():void  {
+    this.downloadProfUnicamFile().subscribe(
+      (blob: Blob) => {
+        // Creare un oggetto URL per il blob scaricato
+        const url = window.URL.createObjectURL(blob);
 
-      // Creare un link temporaneo e avviare il download
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'professoriUnicam.xlsx'; 
-      document.body.appendChild(link);
-      link.click();
+        // Creare un link temporaneo e avviare il download
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'professoriUnicam.xlsx'; 
+        document.body.appendChild(link);
+        link.click();
 
-      // Pulire l'URL creato per il blob
-      window.URL.revokeObjectURL(url);
-    },
-    (error) => {
-      console.error('Errore durante il download del file:', error);
-    }
-  );
-}
-downloadProfUnicamFile(): Observable<Blob> {
-  const url = 'http://localhost:8080/professoriUnicam/download';
-  let body = {name:"professoriUnicam.xlsx" };
+        // Pulire l'URL creato per il blob
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        console.error('Errore durante il download del file:', error);
+      }
+    );
+  }
 
- 
- return this.http.post<Blob>(url, body, {
-  responseType: 'blob' as 'json', 
-});
+  downloadProfUnicamFile(): Observable<Blob> {
+    const url = 'http://localhost:8080/professoriUnicam/download';
+    let body = {name:"professoriUnicam.xlsx" };
 
-}
-// Metodo per avviare il download del file
-scaricaVistarisulati():void  {
-  this.downloadRisFile().subscribe(
-    (blob: Blob) => {
-      // Creare un oggetto URL per il blob scaricato
-      const url = window.URL.createObjectURL(blob);
-
-      // Creare un link temporaneo e avviare il download
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'risultati.xlsx'; 
-      document.body.appendChild(link);
-      link.click();
-
-      // Pulire l'URL creato per il blob
-      window.URL.revokeObjectURL(url);
-    },
-    (error) => {
-      console.error('Errore durante il download del file:', error);
-    }
-  );
-}
-downloadRisFile(): Observable<Blob> {
-
-let  annoi=this.annoVisual.substring(0,this.annoVisual.indexOf("/"));
-let  annof=this.annoVisual.substring(this.annoVisual.indexOf("/")+1,this.annoVisual.length);
-let annot = ((parseInt(annoi)+2000)*10000)+(parseInt(annof)+2000);
-
-
-  const url = 'http://localhost:8080/risultati/download';
-  let body = {name:"risultati.xlsx",anno:annot};
-
- return this.http.post<Blob>(url, body, {
-  responseType: 'blob' as 'json', // Indica al server che ci aspettiamo un blob come risposta
-});
-}
-// Metodo per avviare il download del file
-scaricaVistaScuole():void  {
-  this.downloadScuoleFile().subscribe(
-    (blob: Blob) => {
-      // Creare un oggetto URL per il blob scaricato
-      const url = window.URL.createObjectURL(blob);
-
-      // Creare un link temporaneo e avviare il download
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'scuole.xlsx'; 
-      document.body.appendChild(link);
-      link.click();
-
-      // Pulire l'URL creato per il blob
-      window.URL.revokeObjectURL(url);
-    },
-    (error) => {
-      console.error('Errore durante il download del file:', error);
-    }
-  );
-}
-downloadScuoleFile(): Observable<Blob> {
-  let  annoi=this.annoVisual.substring(0,this.annoVisual.indexOf("/"));
-let  annof=this.annoVisual.substring(this.annoVisual.indexOf("/")+1,this.annoVisual.length);
-let annot =((parseInt(annoi)+2000)*10000)+(parseInt(annof)+2000);
-  const url = 'http://localhost:8080/scuola/download';
-  let body = {name:"scuole.xlsx",anno:annot };
   
+    return this.http.post<Blob>(url, body, {
+      responseType: 'blob' as 'json', 
+    });
+  }
 
- return this.http.post<Blob>(url, body, {
-  responseType: 'blob' as 'json', // Indica al server che ci aspettiamo un blob come risposta
-});
+  // Metodo per avviare il download del file
+  scaricaVistarisulati():void  {
+    this.downloadRisFile().subscribe(
+      (blob: Blob) => {
+        // Creare un oggetto URL per il blob scaricato
+        const url = window.URL.createObjectURL(blob);
 
-}
+        // Creare un link temporaneo e avviare il download
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'risultati.xlsx'; 
+        document.body.appendChild(link);
+        link.click();
+
+        // Pulire l'URL creato per il blob
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        console.error('Errore durante il download del file:', error);
+      }
+    );
+  }
+  downloadRisFile(): Observable<Blob> {
+
+  let annoi=this.annoVisual.substring(0,this.annoVisual.indexOf("/"));
+  let annof=this.annoVisual.substring(this.annoVisual.indexOf("/")+1,this.annoVisual.length);
+  let annot = ((parseInt(annoi)+2000)*10000)+(parseInt(annof)+2000);
 
 
-/* When the user clicks on the button, 
-toggle between hiding and showing the dropdown content */
-dropdownMenu() : void {
-  this.isMenuOpened = !this.isMenuOpened;
-}
+    const url = 'http://localhost:8080/risultati/download';
+    let body = {name:"risultati.xlsx",anno:annot};
 
-clickOutside() : void {
-  this.isMenuOpened = false;
-}
+  return this.http.post<Blob>(url, body, {
+    responseType: 'blob' as 'json', // Indica al server che ci aspettiamo un blob come risposta
+  });
+  }
+  // Metodo per avviare il download del file
+  scaricaVistaScuole():void  {
+    this.downloadScuoleFile().subscribe(
+      (blob: Blob) => {
+        // Creare un oggetto URL per il blob scaricato
+        const url = window.URL.createObjectURL(blob);
+
+        // Creare un link temporaneo e avviare il download
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'scuole.xlsx'; 
+        document.body.appendChild(link);
+        link.click();
+
+        // Pulire l'URL creato per il blob
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        console.error('Errore durante il download del file:', error);
+      }
+    );
+  }
+  downloadScuoleFile(): Observable<Blob> {
+    let annoi=this.annoVisual.substring(0,this.annoVisual.indexOf("/"));
+    let annof=this.annoVisual.substring(this.annoVisual.indexOf("/")+1,this.annoVisual.length);
+    let annot =((parseInt(annoi)+2000)*10000)+(parseInt(annof)+2000);
+    const url = 'http://localhost:8080/scuola/download';
+    let body = {name:"scuole.xlsx",anno:annot };
+    
+
+  return this.http.post<Blob>(url, body, {
+    responseType: 'blob' as 'json', // Indica al server che ci aspettiamo un blob come risposta
+  });
+
+  }
+
+  getProfList(): Profvisual[] {
+    let filteredProfVisual = this.profVisual;
+    if(this.regione!='') {
+      filteredProfVisual = filteredProfVisual.filter(p => p.professore.scuolaImp.regione.includes(this.regione));
+      if(this.provincia!='') {
+        filteredProfVisual = filteredProfVisual.filter(p => p.professore.scuolaImp.provincia.includes(this.provincia));
+        if(this.citta!='') {
+          filteredProfVisual = filteredProfVisual.filter(p => p.professore.scuolaImp.citta.includes(this.citta));
+        }
+      }
+    }
+    if(this.textFilterP!='') {
+      filteredProfVisual = filteredProfVisual.filter(p => p.professore.nome.startsWith(this.textFilterP.toUpperCase())
+                                        || p.professore.cognome.startsWith(this.textFilterP.toUpperCase())
+                                        || p.professore.email.startsWith(this.textFilterP.toUpperCase())
+                                      );
+    }
+
+    return filteredProfVisual;
+  }
+
+  getProfUnicamList(): ProfUnicamvisual[] {
+    if(this.textFilterP=='') {
+      return this.profUnicamVisual;
+    }
+    return this.profUnicamVisual.filter(p => p.professore.nome.startsWith(this.textFilterP.toUpperCase())
+                                          || p.professore.cognome.startsWith(this.textFilterP.toUpperCase())
+                                          || p.professore.email.startsWith(this.textFilterP.toUpperCase())
+                                        );
+  }
+
+  getListaRegioni(): string[] {
+    if(this.regione=='') {
+      this.listaRegioni = [];
+    }
+    if(this.click==1) {
+
+      this.visualRis.forEach(res => {
+        if(!this.listaRegioni.includes(res.scuola.regione)) {
+          this.listaRegioni.push(res.scuola.regione);
+        }
+      });
+    }
+    if(this.click==3) {
+
+      this.getProfList().forEach(p => {
+        if(!this.listaRegioni.includes(p.scuola.regione)) {
+          this.listaRegioni.push(p.scuola.regione);
+        }
+      });
+    }
+
+    return this.listaRegioni.sort();
+  }
+
+  getListaProvince(): string[] {
+    if(this.provincia=='') {
+      this.listaProvince = [];
+    }
+    if(this.click==1) {
+
+      this.visualRis.forEach(res => {
+        if(!this.listaProvince.includes(res.scuola.provincia) && res.scuola.regione==this.regione) {
+          this.listaProvince.push(res.scuola.provincia);
+        }
+      });
+    }
+    if(this.click==3) {
+
+      this.getProfList().forEach(p => {
+        if(!this.listaProvince.includes(p.scuola.provincia) && p.scuola.regione==this.regione) {
+          this.listaProvince.push(p.scuola.provincia);
+        }
+      });
+    }
+    return this.listaProvince.sort();
+  }
+
+  getListaCitta(): string[] {
+    if(this.citta=='') {
+      this.listaCitta = [];
+    }
+    if(this.click==1) {
+
+      this.visualRis.forEach(res => {
+        if(!this.listaCitta.includes(res.scuola.citta) && res.scuola.provincia==this.provincia && res.scuola.citta != null) {
+          this.listaCitta.push(res.scuola.citta);
+        }
+      });
+    }
+    if(this.click==3) {
+
+      this.getProfList().forEach(p => {
+        if(!this.listaCitta.includes(p.scuola.citta) && p.scuola.provincia==this.provincia) {
+          this.listaCitta.push(p.scuola.citta);
+        }
+      });
+    }
+
+    return this.listaCitta.sort();
+  }
 
 }
