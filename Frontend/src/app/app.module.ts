@@ -16,7 +16,6 @@ import { MappaComponent } from './componenti/mappa/mappa.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { UploadatComponent } from './componenti/uploadat/uploadat.component';
-import { AgmCoreModule } from '@agm/core';
 import {MatDialogModule} from '@angular/material/dialog';
 import {CdkTreeModule} from '@angular/cdk/tree';
 import {MatSelectModule} from '@angular/material/select';
@@ -51,9 +50,6 @@ import { MatMenuModule } from '@angular/material/menu';
     MatCardModule,
     MatSidenavModule,
     MatListModule,
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyCFZPxTAQfa8DZt1LdOibDLhI3jfTgJFr4'
-    }),
     MatDialogModule,
     CdkTreeModule,
     MatSelectModule,

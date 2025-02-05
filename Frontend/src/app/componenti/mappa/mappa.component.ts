@@ -1,4 +1,3 @@
-import { InfoWindowManager } from '@agm/core';
 import { Component, ComponentFactoryResolver, Inject, Input, OnChanges, OnInit, SimpleChanges, ViewContainerRef } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Coords, LatLngLiteral } from 'leaflet';
@@ -7,7 +6,6 @@ import { Anni } from 'src/app/interface/anni';
 import { Res } from 'src/app/interface/res';
 import { Risreg } from 'src/app/interface/risreg';
 import { ResService } from 'src/app/service/res.service';
-import Swal from 'sweetalert2';
 
 
 
