@@ -27,9 +27,6 @@ import { FormdatComponent } from './componenti/form/form.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 
-
-
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +36,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MappaComponent,
     UploadatComponent,
     AdminComponent,
-    FormdatComponent
+    FormdatComponent,
   ],
   imports: [
     BrowserModule,
