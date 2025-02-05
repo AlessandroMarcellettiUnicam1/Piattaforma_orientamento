@@ -6,14 +6,13 @@
 <div class="title-container">
   <h2 class="title">Upload</h2>
 </div>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Forms</title>
-
-</head>
-<body>
-  <div class="container">
+<div class="line" *ngIf="visualizza=='ATT'">Caricamento attività</div>
+<div class="line" *ngIf="visualizza=='ISCR'">Caricamento immatricolazioni</div>
+<div class="line" *ngIf="visualizza=='PROF'">Caricamento professori scolastici</div>
+<div class="line" *ngIf="visualizza=='PROFUNICAM'">Caricamento professori unicam</div>
+<div class="line" *ngIf="visualizza=='SINGLEPROF'">Caricamento singolo professore scolastico</div>
+<div class="line" *ngIf="visualizza=='SINGLEPROFUNICAM'">Caricamento singolo professore unicam</div>
+<div class="container">
     <div class="wrapper">
       <div class="select-container">
         <mat-form-field class="upload-filter">
@@ -242,5 +241,4 @@
       </div>
     </div>
   </div>
-</body>
 </html>
