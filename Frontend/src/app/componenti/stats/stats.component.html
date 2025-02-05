@@ -4,16 +4,24 @@
   </div>
   <div class="wrapper">
     <div class="bottoni">
-      <button mat-button class="btn1" id="btn1" (click)="onClick1()">
+      <button mat-button class="btn1" id="btn1" (click)="onClick1()" [ngStyle]="{
+        background: click==1 ? '#d4eab9' : '#7FBD32'
+      }">
         Vista scuole
       </button>
-      <button mat-button class="btn2" id="btn2" (click)="onClick2()">
+      <button mat-button class="btn2" id="btn2" (click)="onClick2()" [ngStyle]="{
+        background: click==2 ? '#d4eab9' : '#7FBD32'
+      }">
         Vista attività
       </button>
-      <button mat-button class="btn3" id="btn3" (click)="onClick3()">
+      <button mat-button class="btn3" id="btn3" (click)="onClick3()" [ngStyle]="{
+        background: click==3 ? '#d4eab9' : '#7FBD32'
+      }">
         Vista Professori Scuole
       </button>
-      <button mat-button class="btn4" id="btn4" (click)="onClick4()">
+      <button mat-button class="btn4" id="btn4" (click)="onClick4()" [ngStyle]="{
+        background: click==4 ? '#d4eab9' : '#7FBD32'
+      }">
         Vista Professori Unicam
       </button>
     </div>
@@ -109,7 +117,7 @@
   </div>
 
   <div class="generato">
-    <div class="spazio" *ngIf="click == 1">
+    <div class="spazio schools-view" *ngIf="click == 1">
       <div class="school-button">
         <button class="button-download" id="scaricaScuoleButton" (click)="scaricaVistaScuole()">
           <span class="button-content">Scarica Vista Scuole </span>
@@ -118,7 +126,7 @@
 
       <div class="school-results" *ngFor="let ris of getVisualRis()">
         <mat-accordion class="school-results-accordion">
-          <mat-expansion-panel class="school-results-panel" >
+          <mat-expansion-panel class="school-results-panel">
             <mat-expansion-panel-header class="school-results-panel-header">
               <mat-panel-title *ngIf="ris.scuola!=null">
                 Scuola: {{ ris.scuola.nome }}<br>
@@ -157,40 +165,51 @@
       </div>
     </div>
 
-    <div class="spazio" *ngIf="click == 2">
+    <div class="spazio activities-view" *ngIf="click == 2">
       <div class="activity-button">
         <button class="button-download" id="scaricaRisButton" (click)="scaricaVistarisulati()">
           <span class="button-content">Scarica Vista Risultati </span>
         </button>
       </div>
-
-      <div class="activity-results" *ngFor="let ris of getVisualRisAtt()">
-        <mat-accordion class="activity-results-accordion">
-          <mat-expansion-panel class="activity-results-panel" [ngStyle]="{
-              background: ris.universitarii.length > 0 ? 'ligthgreen' : 'coral'
-            }">
-            <mat-expansion-panel-header class="activity-results-panel-header">
-              <mat-panel-title class="activity-panel-title">
-                Attività: {{ ris.attivita }}<br>
-                Tipo: {{ris.tipo}}<br>
-                Anno: {{ creaStringaAnnoAcc(ris.annoAcc) }}
-              </mat-panel-title>
-              <mat-panel-description class="activty-results-subscription">
-                <br>Totale iscritti : {{ ris.universitarii.length }}
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <p *ngIf="ris.universitarii.length > 0">
-              <ng-container *ngFor="let i of ris.universitarii">
-                {{ i.nome }} {{ i.cognome }}
-                <br />
-              </ng-container>
-            </p>
-          </mat-expansion-panel>
-        </mat-accordion>
+      <div class="activity-div">
+        <div class="activity-results">
+          <div class="activity-card" *ngFor="let ris of getVisualRisAtt()">
+            <mat-accordion class="activity-results-accordion">
+              <mat-expansion-panel class="activity-results-panel" [hidden]="ris.universitarii.length == 0" [hideToggle]="ris.universitarii.length == 0" [ngStyle]="{
+                  background: ris.universitarii.length > 0 ? '#a0c4e0' : '#c9b6b6'
+                }">
+                <mat-expansion-panel-header class="activity-results-panel-header">
+                  <mat-panel-title class="activity-panel-title">
+                    Attività: {{ ris.attivita }}<br>
+                    Anno: {{ creaStringaAnnoAcc(ris.annoAcc) }}
+                  </mat-panel-title>
+                  <mat-panel-description class="activity-results-subscription">
+                    Totale iscritti: {{ ris.universitarii.length }}
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <ng-container *ngIf="ris.universitarii.length == 0">
+                  NESSUN DATO DA SEGNALARE
+                </ng-container>
+                <ng-container *ngIf="ris.universitarii.length > 0">
+                  <div class="activity-container-type" *ngIf="ris.tipo==''">
+                      Tipo: {{ris.tipo}}
+                  </div>
+                  <div *ngFor="let i of ris.universitarii">
+                    {{ i.nome }} {{ i.cognome }}
+                    <br />
+                  </div>
+                </ng-container>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        </div>
+        <div class="activity-chart">
+         
+        </div>
       </div>
     </div>
 
-    <div class="spazio" *ngIf="click == 3">
+    <div class="spazio school-prof-view" *ngIf="click == 3">
 
       <div class="school-prof-button">
         <button class="button-download" id="scaricaProfButton" (click)="scaricaVistaProfessori()">
@@ -217,7 +236,7 @@
       </div>
     </div>
 
-    <div class="spazio" *ngIf="click == 4">
+    <div class="spazio unicam-prof-view" *ngIf="click == 4">
 
       <div class="unicam-prof-button">
         <button class="button-download" id="scaricaProfUnicamButton" (click)="scaricaVistaProfessoriUnicam()">

@@ -1,6 +1,3 @@
-
-
-
 .container {
   display: block;
 }
@@ -42,8 +39,11 @@
   padding-top: 20px;
   flex-direction: column;
   text-align: center;
-  align-items: center;
   margin-bottom: 50px;
+}
+
+.unicam-prof-view, .school-prof-view {
+  align-items: center;
 }
 
 input[type="text"] {
@@ -60,9 +60,28 @@ input[type="text"] {
   padding-bottom: 20px;
 }
 
-.school-results, .activity-results {
-  width: 90%;
+.activity-div {
+  display: flex;
+}
+
+.activity-results, .activity-chart {
+  flex: 1;
+}
+
+.activity-chart {
+  display: block;
+}
+
+.activity-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.school-results, .activity-card {
+  width: 500px;
   padding-bottom: 10px;
+  padding-left: 10px;
 }
 
 .school-results-panel {
@@ -85,6 +104,15 @@ input[type="text"] {
 .school-prof-results, .unicam-prof-results {
   width: 450px;
   padding-bottom: 10px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.school-results-subscription, .activity-results-subscription {
+  display: block;
+  text-align: right;
+  align-self: center;
 }
 
 .school-prof-name {
@@ -96,11 +124,6 @@ input[type="text"] {
   display: block;
   flex-direction: column;
   text-align: center;
-}
-
-.school-results-subscription, .activty-results-subscription {
-  display: block;
-  text-align: right;
 }
 
 .button-download {
@@ -164,7 +187,7 @@ input[type="text"] {
   justify-content: center;
 }
 
-.activity-panel-title {
+.activity-panel-title, .activity-container-type {
   text-align: left;
 }
 
@@ -181,6 +204,12 @@ input[type="text"] {
   .school-prof-results, .unicam-prof-results {
     width: 75%;
   }
+
+  .view-activity-and-school-filters-div{
+    display: flex;
+    flex-direction: column;
+  }
+
 }
 
 @media (max-width: 550px) {

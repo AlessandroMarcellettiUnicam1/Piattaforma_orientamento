@@ -17,6 +17,7 @@ import { ProfessoriUnicamService } from 'src/app/service/professoriUnicam.servic
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { filter, Observable, toArray } from 'rxjs';
 import { Activity } from 'src/app/interface/activity';
+
 @Component({
   selector: 'app-stats',
   templateUrl: './stats.component.html',
