@@ -33,7 +33,7 @@
          
           <label class="field-title">Nome attività</label>
           <input [value]="getAttivita()" type="text" id="text" (change)="cambioAttivita($event)" placeholder="Attività" required />
-          <label class="error-label" *ngIf="errorAttivita == true">Inserire il nome dell'attività</label>
+          <label class="error-label" *ngIf="errorAttivita">Inserire il nome dell'attività</label>
           <label class="field-title">Tipo attività</label>
           <input type="text" id="text" (change)="cambioTipo($event)" placeholder="Tipologia" />
 
@@ -45,22 +45,26 @@
               <option value="scuola">Scuola</option>
               <option value="altro">Altro</option>
             </select>
-            <label class="error-label" *ngIf="errorSede == true">Inserire la sede dell'attività</label>
+            <label class="error-label" *ngIf="errorSede">Inserire la sede dell'attività</label>
 
          
-            <label class="field-title" for="citta">Città della Scuola</label>
-            <input [value]="citta" type="text" list="cityName" id="citta" name="citta" [(ngModel)]="citta" (change)="cambioCitta($event)" (change)="toggleDropdownS()" autocomplete="off" placeholder="Città" />
+            <div class="city-field">
+              <label class="field-title" for="citta">Città della Scuola</label>
+              <input [value]="citta" type="text" list="cityName" id="citta" name="citta" [(ngModel)]="citta" (change)="cambioCitta($event)" (change)="toggleDropdownS()" autocomplete="off" placeholder="Città" />
               <datalist class="cities-list" id="cityName">
                 <option value="" >-</option>
-                <option *ngFor="let citta of cittaLista" [value]="citta">{{citta}}</option>
+                <option *ngFor="let c of getListaCitta()" [value]="c">{{c}}</option>
               </datalist>
+              <label class="error-label" *ngIf="errorCitta">Inserire correttamente il nome della città</label>
+            </div>
 
-
-              <label class="field-title">Scuole Presenti</label>
-              <select [value]="scuola" type="text" [(ngModel)]="selectedItem" (change)="onSelectionChangeS($event)" value="Scuole Presenti">
+            <div class="school-field" *ngIf="scuole.length > 0">
+              <label class="field-title" >Scuole Presenti</label>
+              <select [value]="scuola" type="text" [(ngModel)]="scuola" (change)="onSelectionChangeS($event)">
                 <option value="">-</option>
-                <option *ngFor="let scuola of scuole" [value]="scuola">{{scuola}}</option>
+                <option *ngFor="let s of scuole" [value]="s">{{s}}</option>
               </select>
+            </div>
 
             <div class="year-field">
                 <label class="field-title" for="annoInizio">Anno Accademico</label>
@@ -68,7 +72,7 @@
                   <option value="">-</option>
                   <option *ngFor="let anno of listaAnni" [value]="anno">{{anno}}</option>
                 </select>
-                <label class="error-label" *ngIf="errorAnno == true">Inserire l'anno accademico dell'attività</label>
+                <label class="error-label" *ngIf="errorAnno">Inserire l'anno accademico dell'attività</label>
             </div>
 
             <div class="data-fields">
@@ -81,8 +85,10 @@
                 <input class="data-input" type="datetime-local" id="dataFine" name="dataFine" [(ngModel)]="dataFine" required>
               </div>
             </div>
-            <label class="error-label" *ngIf="errorData == true">Controllare se la data inserita è corretta</label>
-            <label class="error-label" *ngIf="errorData == true">L'anno deve esserre lo stesso dell'anno accademico</label>
+            <label class="error-label" *ngIf="errorData">
+              Controllare se la data inserita è corretta<br>
+              L'anno deve esserre lo stesso dell'anno accademico
+            </label>
 
           <label class="field-title" for="descrizione">Descrizione</label>
           <input type="text" id="text" (change)="cambioDescrizione($event)" placeholder="Descrizione"/>
@@ -104,8 +110,12 @@
           <div class="file-input">
             <input type="file" accept=".xlsx" (change)="onChangeFile($event)" />
           </div>
-          <button class="upload-button" (click)="submitAttForm()">Carica!</button>
-        
+
+          <div class="submit-field">
+            <button class="upload-button" (click)="submitAttForm()">Carica!</button>
+            <label class="error-label" *ngIf="errorAttivita || errorSede || errorCitta || errorAnno || errorData">ERRORE NELLA COMPILAZIONE DELL'ATTIVITA'!</label>
+          </div>
+          
         </div>
 
         <div class="iscritti" *ngIf="visualizza == 'ISCR'">
@@ -116,13 +126,16 @@
               <option value="">-</option>
               <option *ngFor="let anno of listaAnni" [value]="anno">{{anno}}</option>
             </select>
-            <label class="error-label" *ngIf="errorAnno == true">Inserire l'anno accademico</label>
+            <label class="error-label" *ngIf="errorAnno">Inserire l'anno accademico</label>
           </div>
 
           <div class="file-input">
             <input type="file" accept=".xlsx" (change)="onChangeFileIscr($event)" />
           </div>
-          <button class="upload-button" (click)="submitIscrForm()">Carica!</button>
+          <div class="submit-field">
+            <button class="upload-button" (click)="submitIscrForm()">Carica!</button>
+            <label class="error-label" *ngIf="errorAnno">INSERIRE L'ANNO ACCADEMICO!</label>
+          </div>
         </div>
 
         <div class="prof" *ngIf="visualizza == 'PROF'">
@@ -144,36 +157,43 @@
             <div>
               <label class="field-title" for="nome">Nome</label>
               <input [value]="getNome()" type="text" id="text" (change)="cambioNome($event)" placeholder="Nome" required />
-              <label class="error-label" *ngIf="errorNome == true">Inserire il nome del Professore</label>
+              <label class="error-label" *ngIf="errorNome">Inserire il nome del Professore</label>
             </div>
             <div>
               <label class="field-title" for="cognome">Cognome</label>
               <input [value]="getCognome()" type="text" id="text" (change)="cambioCognome($event)" placeholder="Cognome" required />
-              <label class="error-label" *ngIf="errorCognome == true">Inserire il cognome del Professore</label>
+              <label class="error-label" *ngIf="errorCognome">Inserire il cognome del Professore</label>
             </div>
             <div>
               <label class="field-title" for="email">Email</label>
               <input [value]="getEmail()" type="text" id="text" (change)="cambioEmail($event)" placeholder="Email" />
             </div>
-            <div>
+              
+            <div class="city-field">
               <label class="field-title" for="citta">Città della Scuola</label>
               <input [value]="citta" type="text" list="cities-prof" id="citta" name="citta" [(ngModel)]="citta" (change)="cambioCitta($event)" (change)="toggleDropdownS()" autocomplete="off" placeholder="Città">
               <datalist class="cities-list" id="cities-prof">
-                <option *ngFor="let citta of cittaLista" [value]="citta">{{citta}}</option>
+                <option *ngFor="let c of getListaCitta()" [value]="c">{{c}}</option>
               </datalist>
+              <label class="error-label" *ngIf="errorCitta">Inserire correttamente il nome della città</label>
+            </div>
 
+            <div class="school-field" *ngIf="scuole.length > 0">
               <label class="field-title" for="scuola">Scuola</label>
-                <select [value]="scuola" type="text" [(ngModel)]="selectedItem" (change)="onSelectionChangeS($event)">
-                  <option value="">-</option>
-                  <option *ngFor="let scuola of scuole" [value]="scuola">{{scuola}}</option>
-                </select>
+              <select [value]="scuola" type="text" [(ngModel)]="scuola" (change)="onSelectionChangeS($event)">
+                <option value="">-</option>
+                <option *ngFor="let s of scuole" [value]="s">{{s}}</option>
+              </select>
             </div>
             <div>
               <label class="field-title" for="attività">Attività</label>
               <input [value]="getAttivita()" type="text" id="text" (change)="cambioAttivita($event)" placeholder="Attività" />
             </div>
           </form>
-          <button class="upload-button" (click)="submitSingleProf()">Carica!</button>
+          <div class="submit-field">
+            <button class="upload-button" (click)="submitSingleProf()">Carica!</button>
+            <label class="error-label" *ngIf="errorNome || errorCognome || errorCitta">ERRORE NELLA COMPILAZIONE DEL PROFESSORE REFERENTE!</label>
+          </div>
         </div>
 
         <div class="singleProfUnicam" *ngIf="visualizza == 'SINGLEPROFUNICAM'">
@@ -181,20 +201,24 @@
             <div>
               <label class="field-title" for="nome">Nome</label>
               <input [value]="getNome()" type="text" id="text" (change)="cambioNome($event)" required placeholder="Nome" />
-              <label class="error-label" *ngIf="errorNome == true">Inserire il nome del Professore</label>
+              <label class="error-label" *ngIf="errorNome">Inserire il nome del Professore</label>
             </div>
             <div>
               <label class="field-title" for="cognome">Cognome</label>
               <input [value]="getCognome()" type="text" id="text" (change)="cambioCognome($event)" required placeholder="Cognome" />
-              <label class="error-label" *ngIf="errorCognome == true">Inserire il cognome del Professore</label>
+              <label class="error-label" *ngIf="errorCognome">Inserire il cognome del Professore</label>
             </div>
             <div>
               <label class="field-title" for="email">Email</label>
               <input [value]="getEmail()" type="text" id="text" (change)="cambioEmail($event)" required placeholder="Email" />
-              <label class="error-label" *ngIf="errorEmail == true">Inserire l'email del Professore</label>
+              <label class="error-label" *ngIf="errorEmail">Inserire l'email del Professore</label>
             </div>
           </form>
-          <button class="upload-button" (click)="submitSingleProfUnicam()">Carica!</button>
+          
+          <div class="submit-field">
+            <button class="upload-button" (click)="submitSingleProfUnicam()">Carica!</button>
+            <label class="error-label" *ngIf="errorNome || errorCognome || errorEmail">ERRORE NELLA COMPILAZIONE DEL PROFESSORE UNICAM!</label>
+          </div>
         </div>
       </div>
     </div>

@@ -29,7 +29,6 @@ export class UploadatComponent implements OnInit {
   citta: string = '';
   scuole: string[] = [];
   private attivita: string = '';
-  selectedItem: string = '';
   scuola: string = '';
   sede: string = '';
   mostraCampoCitta: boolean = false;
@@ -49,6 +48,7 @@ export class UploadatComponent implements OnInit {
   errorCognome: boolean = false;
   errorNome: boolean = false;
   errorEmail: boolean = false;
+  errorCitta: boolean = false;
 
   ngOnInit(): void {
     this.setAnni();
@@ -298,7 +298,6 @@ export class UploadatComponent implements OnInit {
     } else {
       this.errorAnno = false;
     }
-    console.log(this.dataInizio);
     const annoI = parseInt(this.dataInizio.slice(0, 4));
     const annoF = parseInt(this.dataFine.slice(0, 4));
     const meseI = parseInt(this.dataInizio.slice(5, 7));
@@ -307,38 +306,46 @@ export class UploadatComponent implements OnInit {
     const giornoF = parseInt(this.dataFine.slice(8, 10));
     const oraI = parseInt(this.dataInizio.slice(11, 13));
     const oraF = parseInt(this.dataFine.slice(11, 13));
-    if (
-      (annoI == this.annoAccademicoInizio &&
-        annoF == this.annoAccademicoInizio) ||
-      (annoI == this.annoAccademicoFine && annoF == this.annoAccademicoFine)
-    ) {
-      this.errorData = false;
+    if(annoI == this.annoAccademicoInizio && annoF == this.annoAccademicoInizio
+      || annoI == this.annoAccademicoFine && annoF == this.annoAccademicoFine) {
+      
+        if(annoI>annoF) {
+        this.errorData = true;
+        error = true;
+      } else if(meseI>meseF) {
+        this.errorData = true;
+        error = true;
+      } else if(meseI==meseF && giornoI>giornoF) {
+        this.errorData = true;
+        error = true;
+      } else if(giornoI==giornoF && oraI>oraF) {
+        this.errorData = true;
+        error = true;
+      } else if(this.errorData) {
+        this.errorData = false;
+      }
+
     } else {
       this.errorData = true;
       error = true;
     }
-    if (annoI > annoF) {
-      this.errorData = true;
-      error = true;
-    } else if (meseI > meseF) {
-      this.errorData = true;
-      error = true;
-    } else if (meseI == meseF && giornoI > giornoF) {
-      this.errorData = true;
-      error = true;
-    } else if (giornoI == giornoF && oraI > oraF) {
-      this.errorData = true;
+
+    if(this.citta!="" && this.scuole.length==0) {
+      this.errorCitta = true;
       error = true;
     } else {
-      this.errorData = false;
+      this.errorCitta = false;
     }
-    if (!error) {
+
+    console.log("Citta ("+this.citta+") - Scuole ("+this.scuole+") - Scuola ("+this.scuola+")")
+    
+    if(!error) {
       this.onClick();
     }
   }
 
   submitIscrForm() {
-    if (this.annoAccademico == '') {
+    if(this.annoAccademico=="") {
       this.errorAnno = true;
     } else {
       this.errorAnno = false;
@@ -409,10 +416,15 @@ export class UploadatComponent implements OnInit {
   showDropdownS: boolean = false;
   toggleDropdownS() {
     let array = this.getScuole();
-    array.subscribe((result: string[]) => {
-      // Qui puoi utilizzare i valori emessi dall'Observable come un array di stringhe
-      this.scuole = result; // Stampa i valori su console
-    });
+    array.subscribe(
+      (result: string[]) => {
+        // Qui puoi utilizzare i valori emessi dall'Observable come un array di stringhe
+        this.scuole = result;
+        if(this.scuole.length==0) {
+          this.scuola="";
+        }
+      }
+    );
     this.showDropdownS = !this.showDropdownS;
   }
 
@@ -547,6 +559,12 @@ export class UploadatComponent implements OnInit {
   }
   public getCittaValue(): string {
     return this.citta;
+  }
+  public getListaCitta(): string[] {
+    if(this.citta=="") {
+      return this.cittaLista;
+    }
+    return this.cittaLista.filter(c => c.startsWith(this.citta.toUpperCase()));
   }
   public getScuola(): string {
     return this.scuola;
