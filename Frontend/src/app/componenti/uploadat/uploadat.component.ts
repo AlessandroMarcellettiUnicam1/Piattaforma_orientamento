@@ -136,15 +136,12 @@ export class UploadatComponent implements OnInit {
     }
 
     //TODO RIVEDERE COSTANTI
-    const nomeScuola: string = this.scuola;
     const cittaScuola: string = this.citta;
     const dataInizio = this.dataInizio;
     const dataFine = this.dataFine;
     const descrizione = this.descrizione;
     const profUnicam = this.profUnicam;
     const profReferente = this.prof;
-
-    const file = this.file;
 
     let param;
     if (scuola == '') {
