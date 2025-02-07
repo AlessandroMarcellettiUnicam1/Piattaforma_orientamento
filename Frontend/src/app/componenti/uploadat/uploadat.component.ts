@@ -112,82 +112,54 @@ export class UploadatComponent implements OnInit {
   }
 
   onClick() {
-    const attivita: string = this.attivita;
-    const tipo: string = this.tipo;
-    const scuola: string = this.scuola;
-    let sedeA: Sede = Sede.Online;
 
     const anno: number = (this.anno =
       this.annoAccademicoInizio * 10000 + this.annoAccademicoFine);
 
-    switch (this.sede) {
-      case 'Online':
-        sedeA = Sede.Online;
-        break;
-      case 'Università':
-        sedeA = Sede.Università;
-        break;
-      case 'Scuola':
-        sedeA = Sede.Scuola;
-        break;
-      case 'Altro':
-        sedeA = Sede.Altro;
-        break;
-    }
-
-    //TODO RIVEDERE COSTANTI
-    const cittaScuola: string = this.citta;
-    const dataInizio = this.dataInizio;
-    const dataFine = this.dataFine;
-    const descrizione = this.descrizione;
-    const profUnicam = this.profUnicam;
-    const profReferente = this.prof;
-
     let param;
-    if (scuola == '') {
+    if (this.scuola == '') {
       param =
-        attivita +
+        this.attivita +
         '&' +
-        tipo +
+        this.tipo +
         '$' +
         this.sede +
         '-' +
-        dataInizio.toString() +
+        this.dataInizio.toString() +
         ' ' +
-        dataFine.toString() +
+        this.dataFine.toString() +
         ' ' +
-        descrizione +
+        this.descrizione +
         '+' +
-        profUnicam +
+        this.profUnicam +
         ',+' +
-        profReferente +
+        this.prof +
         '-' +
         anno.toString();
     } else {
       param =
-        attivita +
+      this.attivita +
         '&' +
-        tipo +
+        this.tipo +
         '$' +
-        scuola.toString() +
+        this.scuola.toString() +
         '-' +
-        cittaScuola.toString() +
+        this.citta.toString() +
         '-' +
         this.sede +
         '*' +
-        dataInizio.toString() +
+        this.dataInizio.toString() +
         ' ' +
-        dataFine.toString() +
+        this.dataFine.toString() +
         ' ' +
-        descrizione +
+        this.descrizione +
         '+' +
-        profUnicam +
+        this.profUnicam +
         ',+' +
-        profReferente +
+        this.prof +
         '-' +
         anno.toString();
     }
-    console.log(param);
 
     this.http
       .post(
@@ -333,8 +305,6 @@ export class UploadatComponent implements OnInit {
     } else {
       this.errorCitta = false;
     }
-
-    console.log("Citta ("+this.citta+") - Scuole ("+this.scuole+") - Scuola ("+this.scuola+")")
     
     if(!error) {
       this.onClick();

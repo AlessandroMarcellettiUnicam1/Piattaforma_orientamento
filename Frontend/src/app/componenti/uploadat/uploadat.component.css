@@ -33,9 +33,9 @@
   height: 75px;
   line-height: 75px;
   text-align: center;
-  font-size: 30px;
-  font-family: 'Times New Roman', Times, serif;
+  font-size: 25px;
   font-weight: bold;
+  color: #222C4A;
   background-color: #7FBD32;
 }
 
@@ -203,10 +203,18 @@ select[required] {
   text-align: center;
 }
 
-@media (max-width: 750px) {
+@media (max-width: 900px) {
 
   .line {
     font-size: 17px;
+  }
+  
+}
+
+@media (max-width: 600px) {
+
+  .line {
+    font-size: 13px;
   }
   
 }
