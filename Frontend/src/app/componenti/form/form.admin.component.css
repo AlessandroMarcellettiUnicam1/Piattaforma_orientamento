@@ -127,3 +127,15 @@ label {
   text-align: center;
 }
 
+.manage-activities {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.activity-card {
+  width: 500px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+}
+

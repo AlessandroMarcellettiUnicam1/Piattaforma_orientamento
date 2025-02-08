@@ -1,10 +1,12 @@
 
 
 import { HttpClient } from '@angular/common/http';
-import { Component, NgModule, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Observable, toArray } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import { ResService } from 'src/app/service/res.service';
+import { Presenza } from 'src/app/interface/presenza';
+import { Res } from 'src/app/interface/res';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Sede } from 'src/app/interface/sede';
 @Component({
   selector: 'app-Admin',
@@ -16,10 +18,13 @@ import { Sede } from 'src/app/interface/sede';
 
 
 export class AdminComponent implements OnInit {
+  constructor(private http: HttpClient,
+      private resService: ResService,
+    ) {}
 
   click = 1;
   anno: number = 0;
-  constructor(private http: HttpClient) { }
+  res: Res[] = [];
   annoAccademicoInizio: number = 0;
   annoAccademicoFine: number = 0;
   private attivita: string = '';
@@ -62,6 +67,7 @@ export class AdminComponent implements OnInit {
     this.click = 1;
   }
   onClick2() {
+    this.toggleDropdowAtt();
     this.click = 2;
   }
 
@@ -117,14 +123,14 @@ export class AdminComponent implements OnInit {
 
   checkData() : boolean {
     let error = false;
-    const annoI = this.dataInizio.getFullYear();
-    const annoF = this.dataFine.getFullYear();
-    const meseI = this.dataInizio.getMonth();
-    const meseF = this.dataFine.getMonth();;
-    const giornoI = this.dataInizio.getDay();
-    const giornoF = this.dataFine.getDay();
-    const oraI = this.dataInizio.getHours();
-    const oraF = this.dataFine.getHours();
+    const annoI = parseInt(this.dataInizio.toString().slice(0,4));
+    const annoF = parseInt(this.dataFine.toString().slice(0,4));
+    const meseI = parseInt(this.dataInizio.toString().slice(5,7));
+    const meseF = parseInt(this.dataFine.toString().slice(5,7));
+    const giornoI = parseInt(this.dataInizio.toString().slice(8,10));
+    const giornoF = parseInt(this.dataFine.toString().slice(8,10));
+    const oraI = parseInt(this.dataInizio.toString().slice(11,13));
+    const oraF = parseInt(this.dataFine.toString().slice(11,13));
     if(annoI == this.annoAccademicoInizio && annoF == this.annoAccademicoInizio
       || annoI == this.annoAccademicoFine && annoF == this.annoAccademicoFine) {
       
@@ -180,14 +186,13 @@ export class AdminComponent implements OnInit {
         break;
     }
 
-    const nomeScuola: string = this.scuola;
-    const cittaScuola: string = this.citta;
     const dataInizio = this.dataInizio;
     const dataFine = this.dataFine;
     const descrizione = this.descrizione;
-    const profUnicam = this.selectedProf;
+    const profUnicam = this.profUnicam;
     const profReferente = this.prof;
 
+    console.log("Nome:"+nome+"\nTipo:"+tipo+"\nScuola:"+scuola+"\nAnno:"+anno+"\nSede:"+this.sede+"\nDataInizio:"+dataInizio+"\nDataFine:"+dataFine+"\nDescrizione:"+descrizione+"\nProfUnicam:"+profUnicam+"\nProfReferente:"+profReferente)
 
     let body = { nome, tipo, scuola, anno, sedeA, dataInizio, dataFine, descrizione, profUnicam, profReferente };
     this.http
@@ -218,13 +223,10 @@ export class AdminComponent implements OnInit {
   }
 
   toggleDropdowAtt() {
-    let array = this.getPendingActivities();
-    array.subscribe(
-      (result: string[]) => {
-
-        this.items = result; // Stampa i valori su console
-      }
-    );
+    this.resService.getResAttActive().subscribe({
+      next: (response) => (this.res = response),
+      error: (error) => console.log(error),
+    });
   }
 
   toggleDropdownS() {
@@ -275,15 +277,6 @@ export class AdminComponent implements OnInit {
       );
   }
 
-  getPendingActivities(): Observable<string[]> {
-
-    return this.http.get<string[]>('http://localhost:8080/professori/getPendingActivities').pipe(
-      map((response: any) => response.map((item: any) => item.toString()))
-    );
-    return this.http.get<string[]>('http://localhost:8080/professori/getPendingActivities');
-  }
-
-
   getScuole(): Observable<string[]> {
 
     return this.http.get<string[]>('http://localhost:8080/scuola/scuoleCitta/' + this.citta).pipe(
@@ -303,11 +296,8 @@ export class AdminComponent implements OnInit {
     );
   }
 
-  handleButtonClick(): void {
-    const nomeAttivitaAnno: string = this.visualizzaAtt;
-
-    const nomeAttivita = nomeAttivitaAnno.substring(0, nomeAttivitaAnno.indexOf("4") - 1);
-    const nome: string = this.visualizzaAtt;
+  handleButtonClick(event: any): void {
+    const nome: string = event.target;
 
     let body = { nome };
     if (nome != "") {
@@ -344,18 +334,21 @@ export class AdminComponent implements OnInit {
     this.annoAccademicoFine = parseInt(anno2, 10);
   }
 
-  selectedProf: string[] = [];
-  saveSelections() {
-    this.selectedProf;
-  }
-
-
   listaAnni: string[] = [];
   getYears(): void {
     let annoAttuale = new Date().getFullYear();
     for (let i = 0; i < 10; i++) {
       this.listaAnni[i] = annoAttuale - 1 + '/' + annoAttuale--;
     }
+  }
+  
+  creaStringaAnnoAcc(a: number) {
+    let aI=  Math.floor(a/10000);
+    let aF=a%10000
+    let ain = (aI%100);
+    let afin = (aF%100);
+    
+    return ain + '/' + afin;
   }
 
   public getAttivita(): string {

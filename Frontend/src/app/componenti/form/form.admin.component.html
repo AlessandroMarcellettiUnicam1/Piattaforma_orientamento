@@ -117,22 +117,48 @@
 
 
   <div class="manage-activities" *ngIf="click==2">
-    <div class="centered-title">
-      <h2>Termina Possibilità Iscrizione </h2>
-    </div>
-
-    <div>
-      <div>
-        <h3>Attività Presenti</h3>
-
-        <select [(ngModel)]="selectedItem" (change)="onSelectionChangeAtt($event)">
-          <option *ngFor="let item of items" [value]="item">{{item}}</option>
-        </select>
-
-      </div>
-    </div>
-    <div>
-      <button class="activity-off-button" (click)="handleButtonClick()">Termina Iscrizione</button>
+    <div class="activity-card" *ngFor="let ris of res">
+      <mat-accordion class="activity-results-accordion" *ngFor="let a of ris.attivita">
+        <mat-expansion-panel class="activity-results-panel" [ngStyle]="{
+          background: ris.iscritti.length > 0 ? '#a0c4e0' : '#c9b6b6'
+        }">
+          <mat-expansion-panel-header class="activity-results-panel-header">
+            <mat-panel-title *ngIf="ris.scuola!=null">
+              Scuola: {{ ris.scuola.nome }}<br>
+              Regione: {{ ris.scuola.regione }}<br>
+              Provincia: {{ ris.scuola.provincia }}<br>
+              Citta: {{ ris.scuola.citta }}<br>
+              Anno: {{ creaStringaAnnoAcc(ris.annoAcc) }}
+            </mat-panel-title>
+            <mat-panel-description class="activity-results-subscription">
+              <br>
+              Totale iscritti: {{ ris.iscritti.length }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="activity-results-container">
+            <ng-container class="activity-results-container-element">
+              NomeAttività: {{ a.nomeAttivita }}<br>
+              Tipo: {{a.tipo}}<br />
+              Partecipanti: {{ a.partecipanti.length }}<br>
+              Iscritti: {{ a.iscritti.length }}
+              <br />
+              <ng-container *ngFor="let i of a.iscritti">
+                {{ i.nome }} {{ i.cognome }}
+              </ng-container>
+              <br />
+            </ng-container>
+          </div>
+          <div *ngIf="ris.iscritti.length > 0">
+            Elenco Iscritti:<br>
+            <ng-container *ngFor="let i of ris.iscritti">
+              {{ i.nome }} {{ i.cognome }}
+              <br />
+            </ng-container>
+          </div>
+        </mat-expansion-panel>
+        <button class="activity-off-button" [value]="a.nomeAttivita" (click)="handleButtonClick($event)">Termina
+          Iscrizione</button>
+      </mat-accordion>
     </div>
 
   </div>
