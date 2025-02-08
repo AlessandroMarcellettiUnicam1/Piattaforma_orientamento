@@ -5,6 +5,7 @@ import com.example.PiattaformaPCTO_v2.Request.ActivityRequest;
 import com.example.PiattaformaPCTO_v2.Request.DeleteFileRequest;
 import com.example.PiattaformaPCTO_v2.Request.UploadDefinitively;
 import com.example.PiattaformaPCTO_v2.Request.UploadProfRequest;
+import com.example.PiattaformaPCTO_v2.collection.Attivita;
 import com.example.PiattaformaPCTO_v2.collection.Professore;
 import com.example.PiattaformaPCTO_v2.collection.ProfessoreUnicam;
 import com.example.PiattaformaPCTO_v2.service.ProfessoreService;
@@ -73,8 +74,8 @@ Professore profReferente=professoreService.getProfByString(create.getProfReferen
 
 
     @GetMapping("/getPendingActivities")
-        public ResponseEntity<List<String>> getActivities(){
-        List<String> activities=professoreService.getAllPendingActivities();
+        public ResponseEntity<List<Attivita>> getActivities(){
+        List<Attivita> activities=professoreService.getAllPendingActivities();
 
         return new ResponseEntity<>(activities, HttpStatus.OK);
     }

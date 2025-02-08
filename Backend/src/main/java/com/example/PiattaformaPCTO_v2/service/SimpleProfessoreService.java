@@ -226,14 +226,11 @@ risultatiAttRepository.save(risultatiAtt);
     }
 
 
-    public List<String> getAllPendingActivities() {
+    public List<Attivita> getAllPendingActivities() {
         // Recupera la lista delle attività pendenti
         List<String> activity = new ArrayList<>();
         List<Attivita> activityPending=attivitaRepository.findByIscrizione(true);
-        for(int i=0;i<activityPending.size();i++){
-            activity.add(activityPending.get(i).getNome()+" "+activityPending.get(i).getAnnoAcc());
-        }
-   return activity;
+        return activityPending;
 
     }
 

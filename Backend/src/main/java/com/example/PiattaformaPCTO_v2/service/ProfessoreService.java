@@ -1,5 +1,6 @@
 package com.example.PiattaformaPCTO_v2.service;
 
+import com.example.PiattaformaPCTO_v2.collection.Attivita;
 import com.example.PiattaformaPCTO_v2.collection.Professore;
 import com.example.PiattaformaPCTO_v2.collection.ProfessoreUnicam;
 import com.example.PiattaformaPCTO_v2.collection.Scuola;
@@ -52,7 +53,7 @@ public interface ProfessoreService {
      * metodo che ritorna tutti i nomi delle attività a cui è ancora possibile iscriversi
      * @return
      */
-    List<String> getAllPendingActivities();
+    List<Attivita> getAllPendingActivities();
 
     /**
      * metodo che scarica un file excel in cui mette tutti i prof presenti
