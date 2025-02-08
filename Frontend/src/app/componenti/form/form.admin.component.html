@@ -1,160 +1,142 @@
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> Forms</title>
-</head>
-<body>
-
-  <div class="title-container">
-    <h2 class="title">Admin</h2>
+<div class="title-container">
+  <h2 class="title">Admin</h2>
+</div>
+<div class="container">
+  <div class="bottoni">
+    <button mat-button class="btn1" id="btn1" (click)="onClick1()" [ngStyle]="{
+      background: click==1 ? '#d4eab9' : '#7FBD32'
+    }">
+      Creazione Attività
+    </button>
+    <button mat-button class="btn2" id="btn2" (click)="onClick2()" [ngStyle]="{
+      background: click==2 ? '#d4eab9' : '#7FBD32'
+    }">
+      Lista attività create
+    </button>
   </div>
-<form>
-  <div class="centered-title">
-    <h2>Creazione attività vuota</h2>
-  </div>
-
-<input
-          type="text"
-          id="text"
-          (change)="cambioNome($event)"
-          placeholder="Nome attività"
-        />
-        <input
-        type="text"
-        id="text"
-        (change)="cambioTipo($event)"
-        placeholder="Tipo attività"
-      />
-
- 
-
-
-
-  <div>
-      <label for="sede">Sede</label>
-      <select id="sede" name="sede" [(ngModel)]="sede" (change)="onSedeChange($event)">
-          <option value="online">Online</option>
-          <option value="università">Università</option>
-          <option value="scuola">Scuola</option>
-          <option value="altro">Altro</option>
+  <div class="admin-form" *ngIf="click==1">
+    <div class="activity-name-field">
+      <label class="field-title">Nome attività</label>
+      <input [value]="getAttivita()" type="text" id="text" (change)="cambioAttivita($event)" placeholder="Attività"
+        required />
+    </div>
+    <label class="error-label" *ngIf="errorAttivita">Inserire il nome dell'attività</label>
+    <div class="activity-type-field">
+      <label class="field-title">Tipo attività</label>
+      <input type="text" id="text" (change)="cambioTipo($event)" placeholder="Tipologia" />
+    </div>
+    <div class="sede-field">
+      <label class="field-title" for="sede">Sede</label>
+      <select type="text" id="sede" name="sede" [(ngModel)]="sede" (change)="onSedeChange($event)" required>
+        <option value="">-</option>
+        <option value="online">Online</option>
+        <option value="università">Università</option>
+        <option value="scuola">Scuola</option>
+        <option value="altro">Altro</option>
       </select>
-  </div>
+    </div>
+    <label class="error-label" *ngIf="errorSede">Inserire la sede dell'attività</label>
 
+    <div class="city-field">
+      <label class="field-title" for="citta">Città della Scuola</label>
+      <input [value]="citta" type="text" list="cityName" id="citta" name="citta" [(ngModel)]="citta"
+        (change)="cambioCitta($event)" (change)="toggleDropdownS()" autocomplete="off" placeholder="Città" />
+      <datalist class="cities-list" id="cityName">
+        <option value="">-</option>
+        <option *ngFor="let c of getListaCitta()" [value]="c">{{c}}</option>
+      </datalist>
+    </div>
+    <label class="error-label" *ngIf="errorCitta">Inserire correttamente il nome della città</label>
 
+    <div class="school-field" *ngIf="scuole.length > 0">
+      <label class="field-title">Scuole Presenti</label>
+      <select [value]="scuola" type="text" [(ngModel)]="scuola" (change)="onSelectionChangeS($event)">
+        <option value="">-</option>
+        <option *ngFor="let s of scuole" [value]="s">{{s}}</option>
+      </select>
+    </div>
 
+    <div class="year-field">
+      <label class="field-title" for="annoInizio">Anno Accademico</label>
+      <select type="number" id="annoInizio" name="annoInizio" [(ngModel)]="annoAccademico"
+        (change)="onSelectionChangeY($event)" required>
+        <option value="">-</option>
+        <option *ngFor="let anno of listaAnni" [value]="anno">{{anno}}</option>
+      </select>
+    </div>
+    <label class="error-label" *ngIf="errorAnno">Inserire l'anno accademico dell'attività</label>
 
-      <label for="citta">Città</label>
-      <input type="text" id="citta" name="citta" [(ngModel)]="citta" (change)="cambioCitta($event)" required>
-      <button (click)="toggleDropdownS()"class="btn">Cerca Scuola!</button>
-      
-      <div *ngIf="showDropdownS">
-     
-        <h3>ScuolePresenti</h3>
-        
-        <select [(ngModel)]="selectedItem" (change)="onSelectionChangeS($event)">
-          <option *ngFor="let scuola of scuole" [value]="scuola">{{scuola}}</option>
-        </select>
+    <div class="data-fields">
+      <div class="data-inizio-field">
+        <label class="field-title" for="dataInizio">Data Inizio</label>
+        <input class="data-input" type="datetime-local" id="dataInizio" name="dataInizio" [(ngModel)]="dataInizio"
+          required>
       </div>
- 
-
-
-
-  
-  <div class="flex-container">
-    <div class="flex-item">
-      <label for="annoInizio">Anno accademico di inizio:</label>
-      <input type="number" id="annoInizio" name="annoInizio" [(ngModel)]="annoAccademicoInizio" required minlength="4" maxlength="4">
+      <div class="data-fine-field">
+        <label class="field-title" for="dataFine">Data Fine</label>
+        <input class="data-input" type="datetime-local" id="dataFine" name="dataFine" [(ngModel)]="dataFine" required>
+      </div>
     </div>
-    <div class="flex-item">
-      <label for="annoFine">Anno accademico di fine:</label>
-      <input type="number" id="annoFine" name="annoFine" [(ngModel)]="annoAccademicoFine" required minlength="4" maxlength="4">
+    <label class="error-label" *ngIf="errorData">
+      Controllare se la data inserita è corretta<br>
+      L'anno deve esserre lo stesso dell'anno accademico
+    </label>
+
+    <div class="description-field">
+      <label class="field-title" for="descrizione">Descrizione</label>
+      <input type="text" id="text" (change)="cambioDescrizione($event)" placeholder="Descrizione" />
     </div>
+
+    <div class="school-prof-field">
+      <label class="field-title" for="pro">Professore Referente</label>
+      <input type="text" list="profRefName" id="profRef" name="profRef" [(ngModel)]="prof"
+        (change)="cambioProfRef($event)" (change)="toggleDropdownP()" autocomplete="off"
+        placeholder="Professore Referente" />
+      <datalist class="profRef-list" id="profRefName">
+        <option value="">-</option>
+        <option *ngFor="let prof of professori" [value]="prof">{{prof}}</option>
+      </datalist>
+    </div>
+
+    <div class="unicam-prof-field">
+      <label class="field-title" for="prof">Professore Unicam</label>
+      <input type="text" list="profUniName" id="profUni" name="profUni" [(ngModel)]="profUnicam"
+        (change)="cambioProfUni($event)" (change)="toggleDropdownU()" autocomplete="off"
+        placeholder="Professore Unicam" />
+      <datalist class="profUni-list" id="profUniName">
+        <option value="">-</option>
+        <option *ngFor="let profUnicam of professoriUnicam" [value]="profUnicam">{{profUnicam}}</option>
+      </datalist>
+    </div>
+
+    <button class="submit-button" type="button" (click)="inviaForm()">Carica!</button>
+
   </div>
 
-  <div class="flex-container">
-    <div class="flex-item">
-      <label for="dataInizio">Data Inizio</label>
-      <input type="datetime-local" id="dataInizio" name="dataInizio" required>
+
+
+  <div class="manage-activities" *ngIf="click==2">
+    <div class="centered-title">
+      <h2>Termina Possibilità Iscrizione </h2>
     </div>
-    <div class="flex-item">
-      <label for="dataFine">Data Fine</label>
-      <input type="datetime-local" id="dataFine" name="dataFine" required>
-    </div>
-  </div>
-  
 
-  <input
-  type="text"
-  id="text"
-  (change)="cambioDescrizione($event)"
-  placeholder="Descrizione"
-/>
-
-<div>
-  <label for="prof">Professore Referente</label>
-
-  <button (click)="toggleDropdownP()"class="btn">Cerca Professore Referente!</button>
-      
-  <div *ngIf="showDropdownP">
- 
-    <h3>Professori Presenti</h3>
-    
-    <select [(ngModel)]="selectedItem" (change)="onSelectionChange($event)">
-      <option *ngFor="let prof of professori" [value]="prof">{{prof}}</option>
-    </select>
-  </div>
-
-</div>
-
-<div>
-  <label for="prof">Professore Unicam</label>
-
-  <button (click)="toggleDropdownU()"class="btn">Cerca Professore Unicam!</button>
-      
-
-<div class="container" *ngIf="showDropdownU">
-  <h3>Professori Unicam Presenti</h3>
-  <label for="profDropdown"></label>
-  <select id="profDropdown" [(ngModel)]="selectedProf" multiple>
-      <option *ngFor="let profUnicam of professoriUnicam" [value]="profUnicam">{{profUnicam}}</option>
-  </select>
-  <button (click)="saveSelections()">Salva Selezioni</button>
-</div>
-
-</div>
-
-
-<button type="button" (click)="inviaForm()">Carica!</button>
-
-</form>
-
-
-
- <form>
-  <div class="centered-title">
-    <h2>Termina Possibilità Iscrizione </h2>
-  </div>
- 
     <div>
-      <button (click)="toggleDropdown()"class="btn">Mostra Attività</button>
-      <div *ngIf="showDropdown">
+      <div>
         <h3>Attività Presenti</h3>
-        
+
         <select [(ngModel)]="selectedItem" (change)="onSelectionChangeAtt($event)">
           <option *ngFor="let item of items" [value]="item">{{item}}</option>
         </select>
-      
+
       </div>
     </div>
     <div>
-      <button (click)="handleButtonClick()" class="btn">Termina Iscrizione </button>
+      <button class="activity-off-button" (click)="handleButtonClick()">Termina Iscrizione</button>
     </div>
 
-</form>
+  </div>
 
-</body>
+</div>
+
 </html>
-
-
-
