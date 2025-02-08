@@ -1,29 +1,10 @@
-# Usare una base image di node per il build
-FROM node:20 AS build
+# Use an official Node.js runtime as a parent image
+FROM node:18
 
-# Imposta la directory di lavoro
-WORKDIR /app
+WORKDIR /usr/src/app
 
-# Copia il file package.json e package-lock.json
-COPY package*.json ./
-
-# Installa le dipendenze
-RUN npm install
-
-# Copia il resto del codice sorgente
 COPY . .
-
-# Costruisci l'applicazione Angular
-RUN npm run build --prod
-
-# Usare una base image di nginx per servire l'applicazione
-FROM nginx:alpine
-
-# Copia i file buildati nella directory di nginx
-COPY --from=build /app/dist/<PiattaformaPCTO> /usr/share/nginx/html
-
-# Esporre la porta 80
-EXPOSE 80
-
-# Avviare nginx
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 4200
+RUN npm install -g @angular/cli
+RUN yarn install
+CMD ["ng", "serve", "--host", "0.0.0.0"]

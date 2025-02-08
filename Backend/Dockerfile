@@ -1,12 +1,6 @@
-# Usare una base image di Java
-FROM openjdk:17-jdk-alpine
-
-# Aggiungi il jar del progetto alla image
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
-
-# Esporre la porta 8080
+FROM openjdk:17-jdk-slim
+LABEL authors="Lorenzo Paolucci"
 EXPOSE 8080
-
-# Comando per avviare l'applicazione
+ARG JAR_FILE=target/*.jar
+COPY target/PiattaformaPCTO_v2-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java", "-jar", "/app.jar"]

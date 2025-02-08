@@ -1,0 +1,16 @@
+# Ignore node_modules
+node_modules
+
+# Ignore temporary files
+tmp
+temp
+*.tmp
+*.temp
+
+# Ignore IDE specific files
+.vscode
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
