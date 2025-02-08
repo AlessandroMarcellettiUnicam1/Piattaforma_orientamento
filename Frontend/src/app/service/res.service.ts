@@ -19,4 +19,8 @@ export class ResService {
   getResAnno(a:number): Observable<Res[]>{
     return this.http.get<Res[]>('http://localhost:8080/risultati/res/'+a)
   }
+
+  getResAttActive() : Observable<Res[]>{
+    return this.http.get<Res[]>('http://localhost:8080/professori/getPendingActivities');
+  }
 }
