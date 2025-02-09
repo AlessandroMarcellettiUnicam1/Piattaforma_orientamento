@@ -1,25 +1,23 @@
 
 
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { ResService } from 'src/app/service/res.service';
 import { ActivityAvailable } from 'src/app/interface/activityAvailable';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Sede } from 'src/app/interface/sede';
+
 @Component({
   selector: 'app-Admin',
   templateUrl: './form.admin.component.html',
   styleUrls: ['./form.admin.component.css'],
 })
 
-
-
-
 export class AdminComponent implements OnInit {
   constructor(private http: HttpClient,
-      private resService: ResService,
-    ) {}
+    private resService: ResService,
+  ) { }
 
   click = 1;
   anno: number = 0;
@@ -94,7 +92,7 @@ export class AdminComponent implements OnInit {
 
   }
 
-  checkAttivita() : boolean {
+  checkAttivita(): boolean {
     if (this.attivita == '') {
       this.errorAttivita = true;
       return true;
@@ -103,7 +101,7 @@ export class AdminComponent implements OnInit {
     return false;
   }
 
-  checkSede() : boolean {
+  checkSede(): boolean {
     if (this.sede == '') {
       this.errorSede = true;
       return true;
@@ -112,8 +110,8 @@ export class AdminComponent implements OnInit {
     return false;
   }
 
-  checkCitta() : boolean {
-    if(this.citta!="" && this.scuole.length==0) {
+  checkCitta(): boolean {
+    if (this.citta != "" && this.scuole.length == 0) {
       this.errorCitta = true;
       return true;
     }
@@ -121,35 +119,35 @@ export class AdminComponent implements OnInit {
     return false;
   }
 
-  checkData() : boolean {
+  checkData(): boolean {
     let error = false;
-    const annoI = parseInt(this.dataI.toString().slice(0,4));
-    const annoF = parseInt(this.dataF.toString().slice(0,4));
-    const meseI = parseInt(this.dataI.toString().slice(5,7));
-    const meseF = parseInt(this.dataF.toString().slice(5,7));
-    const giornoI = parseInt(this.dataI.toString().slice(8,10));
-    const giornoF = parseInt(this.dataF.toString().slice(8,10));
-    const oraI = parseInt(this.dataI.toString().slice(11,13));
-    const oraF = parseInt(this.dataF.toString().slice(11,13));
+    const annoI = parseInt(this.dataI.toString().slice(0, 4));
+    const annoF = parseInt(this.dataF.toString().slice(0, 4));
+    const meseI = parseInt(this.dataI.toString().slice(5, 7));
+    const meseF = parseInt(this.dataF.toString().slice(5, 7));
+    const giornoI = parseInt(this.dataI.toString().slice(8, 10));
+    const giornoF = parseInt(this.dataF.toString().slice(8, 10));
+    const oraI = parseInt(this.dataI.toString().slice(11, 13));
+    const oraF = parseInt(this.dataF.toString().slice(11, 13));
 
-    console.log(this.dataI.toString().slice(0,4)+", "+this.dataI.toString().slice(5,7)+", "+this.dataI.toString().slice(8,10)+", "+this.dataI.toString().slice(11,13));
+    console.log(this.dataI.toString().slice(0, 4) + ", " + this.dataI.toString().slice(5, 7) + ", " + this.dataI.toString().slice(8, 10) + ", " + this.dataI.toString().slice(11, 13));
 
-    if(annoI == this.annoAccademicoInizio && annoF == this.annoAccademicoInizio
+    if (annoI == this.annoAccademicoInizio && annoF == this.annoAccademicoInizio
       || annoI == this.annoAccademicoFine && annoF == this.annoAccademicoFine) {
-      
-        if(annoI>annoF) {
+
+      if (annoI > annoF) {
         this.errorData = true;
         error = true;
-      } else if(meseI>meseF) {
+      } else if (meseI > meseF) {
         this.errorData = true;
         error = true;
-      } else if(meseI==meseF && giornoI>giornoF) {
+      } else if (meseI == meseF && giornoI > giornoF) {
         this.errorData = true;
         error = true;
-      } else if(giornoI==giornoF && oraI>oraF) {
+      } else if (giornoI == giornoF && oraI > oraF) {
         this.errorData = true;
         error = true;
-      } else if(this.errorData) {
+      } else if (this.errorData) {
         this.errorData = false;
       }
 
@@ -160,8 +158,8 @@ export class AdminComponent implements OnInit {
     return error;
   }
 
-  checkAnnoAccademico() : boolean {
-    if(this.annoAccademico=="") {
+  checkAnnoAccademico(): boolean {
+    if (this.annoAccademico == "") {
       this.errorAnno = true;
     }
     this.errorAnno = false;
@@ -195,7 +193,7 @@ export class AdminComponent implements OnInit {
     const profUnicam = this.profUnicam;
     const profReferente = this.prof;
 
-    console.log("Nome:"+nome+"\nTipo:"+tipo+"\nScuola:"+scuola+"\nAnno:"+anno+"\nSede:"+this.sede+"\nDataInizio:"+dataInizio+"\nDataFine:"+dataFine+"\nDescrizione:"+descrizione+"\nProfUnicam:"+profUnicam+"\nProfReferente:"+profReferente)
+    console.log("Nome:" + nome + "\nTipo:" + tipo + "\nScuola:" + scuola + "\nAnno:" + anno + "\nSede:" + this.sede + "\nDataInizio:" + dataInizio + "\nDataFine:" + dataFine + "\nDescrizione:" + descrizione + "\nProfUnicam:" + profUnicam + "\nProfReferente:" + profReferente)
 
     let body = { nome, tipo, scuola, anno, sedeA, dataInizio, dataFine, descrizione, profUnicam, profReferente };
     this.http
@@ -215,7 +213,7 @@ export class AdminComponent implements OnInit {
         next: (response) => console.log(alert("inserimento avvenuto con successo"), response),
         error: (error) => console.log(error),
       });
-      this.onClick2();
+    this.onClick2();
   }
 
   cambioAttivita(event: any) {
@@ -332,13 +330,13 @@ export class AdminComponent implements OnInit {
       this.listaAnni[i] = annoAttuale - 1 + '/' + annoAttuale--;
     }
   }
-  
+
   creaStringaAnnoAcc(a: number) {
-    let aI=  Math.floor(a/10000);
-    let aF=a%10000
-    let ain = (aI%100);
-    let afin = (aF%100);
-    
+    let aI = Math.floor(a / 10000);
+    let aF = a % 10000
+    let ain = (aI % 100);
+    let afin = (aF % 100);
+
     return ain + '/' + afin;
   }
 
@@ -349,7 +347,7 @@ export class AdminComponent implements OnInit {
     return this.citta;
   }
   public getListaCitta(): string[] {
-    if(this.citta=="") {
+    if (this.citta == "") {
       return this.cittaLista;
     }
     return this.cittaLista.filter(c => c.startsWith(this.citta.toUpperCase()));
