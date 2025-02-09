@@ -27,93 +27,97 @@
     </div>
 
     <div class="filter">
-        <div class="view-activity-and-school-filters-div" *ngIf="click < 3">
-          <mat-form-field class="year-filter" *ngIf="click == 1">
-            <mat-label>Seleziona anno</mat-label>
-            <mat-select (selectionChange)="cambioAnno($event.value)">
-              <mat-option value=0>-</mat-option>
-              <mat-option class="year-filter-option" *ngFor="let an of anniRes" [value]="an.value">
-                {{ an.viewValue }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+      <div class="view-activity-and-school-filters-div" *ngIf="click < 3">
+        <mat-form-field class="year-filter" *ngIf="click == 1">
+          <mat-label>Seleziona anno</mat-label>
+          <mat-select (selectionChange)="cambioAnno($event.value)">
+            <mat-option value=0>-</mat-option>
+            <mat-option class="year-filter-option" *ngFor="let an of anniRes" [value]="an.value">
+              {{ an.viewValue }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-          <mat-form-field class="view-filter" *ngIf="click == 1">
-            <mat-label>Ordinamento vista</mat-label>
-            <mat-select class="view-filter-option" (selectionChange)="cambioOrdinamento($event.value)">
-              <mat-option value="">-</mat-option>
-              <mat-option value="ISCRITTI">Per numero di iscritti</mat-option>
-              <mat-option value="REGIONI">Alfabetico per regione</mat-option>
-              <mat-option value="SCUOLE">Alfabetico per le scuole</mat-option>
-            </mat-select>
-          </mat-form-field>
-          
-          <mat-form-field class="year-filter" *ngIf="click == 2">
-            <mat-label>Seleziona anno</mat-label>
-            <mat-select (selectionChange)="cambioAnno($event.value)">
-              <mat-option value=0>-</mat-option>
-              <mat-option class="year-filter-option" *ngFor="let an of anniRisAtt" [value]="an.value">
-                {{ an.viewValue }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+        <mat-form-field class="view-filter" *ngIf="click == 1">
+          <mat-label>Ordinamento vista</mat-label>
+          <mat-select class="view-filter-option" (selectionChange)="cambioOrdinamento($event.value)">
+            <mat-option value="">-</mat-option>
+            <mat-option value="ISCRITTI">Per numero di iscritti</mat-option>
+            <mat-option value="REGIONI">Alfabetico per regione</mat-option>
+            <mat-option value="SCUOLE">Alfabetico per le scuole</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-          <mat-form-field class="view-filter" *ngIf="click == 2">
-            <mat-label>Ordinamento vista</mat-label>
-            <mat-select class="view-filter-option" (selectionChange)="cambioOrdinamentoAtt($event.value)">
-              <mat-option value="">-</mat-option>
-              <mat-option value="ISCRITTI">Per numero di iscritti</mat-option>
-              <mat-option value="NOME">Alfabetico per attività</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        
-        <div class="input-filter input-activity-filter" *ngIf="click == 2">
-          <input type="text" id="text-filter" name="text-filter" (value)="textFilterA" [(ngModel)]="textFilterA" (change)="textFilterActivityApply($event)" autocomplete="off" placeholder="Filtra per attività" />
-        </div>
-        
-        <div class="view-region-prof-filter" *ngIf="click == 1 || click == 3">
-          <mat-form-field class="view-filter view-region-filter">
-            <mat-label>Ordina per regione</mat-label>
-            <mat-select class="view-filter-option" (selectionChange)="cambioRegione($event.value)" >
-              <mat-option value="">-</mat-option>
-              <mat-option *ngFor="let r of getListaRegioni()" [value]="r">{{r}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-          
-        <div class="view-province-prof-filter" *ngIf="click == 1 || click == 3">
-          <mat-form-field class="view-filter view-province-filter" *ngIf="regione!=''">
-            <mat-label>Ordina per provincia</mat-label>
-            <mat-select class="view-filter-option" (selectionChange)="cambioProvincia($event.value)" >
-              <mat-option value="">-</mat-option>
-              <mat-option *ngFor="let p of getListaProvince()" [value]="p">{{p}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-          
-        <div class="view-city-prof-filter" *ngIf="click == 3">
-          <mat-form-field class="view-filter view-city-filter" *ngIf="provincia!=''">
-            <mat-label>Ordina per citta</mat-label>
-            <mat-select class="view-filter-option" (selectionChange)="cambioCitta($event.value)" >
-              <mat-option value="">-</mat-option>
-              <mat-option *ngFor="let c of getListaCitta()" [value]="c">{{c}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+        <mat-form-field class="year-filter" *ngIf="click == 2">
+          <mat-label>Seleziona anno</mat-label>
+          <mat-select (selectionChange)="cambioAnno($event.value)">
+            <mat-option value=0>-</mat-option>
+            <mat-option class="year-filter-option" *ngFor="let an of anniRisAtt" [value]="an.value">
+              {{ an.viewValue }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-        <div class="input-filter input-city-filter" *ngIf="click == 1">
-          <input type="text" list="text-filter" id="text-filter" name="text-filter" (value)="textFilterC" [(ngModel)]="textFilterC" (change)="textFilterCityApply($event)" autocomplete="off" placeholder="Filtra per città" />
-          <datalist class="profUni-list" id="text-filter">
-            <option value="" >-</option>
-            <option *ngFor="let c of getVisualRis()" [value]="c.scuola.citta">{{c.scuola.citta}}</option>
-          </datalist>
-        </div>
-
-        <div class="input-filter input-prof-filter" *ngIf="click > 2">
-          <input type="text" id="text-filter" name="text-filter" (value)="textFilterP" [(ngModel)]="textFilterP" (change)="textFilterProfApply($event)" autocomplete="off" placeholder="Filtra per professore" />
-        </div>
+        <mat-form-field class="view-filter" *ngIf="click == 2">
+          <mat-label>Ordinamento vista</mat-label>
+          <mat-select class="view-filter-option" (selectionChange)="cambioOrdinamentoAtt($event.value)">
+            <mat-option value="">-</mat-option>
+            <mat-option value="ISCRITTI">Per numero di iscritti</mat-option>
+            <mat-option value="NOME">Alfabetico per attività</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
+
+      <div class="input-filter input-activity-filter" *ngIf="click == 2">
+        <input type="text" id="text-filter" name="text-filter" (value)="textFilterA" [(ngModel)]="textFilterA"
+          (change)="textFilterActivityApply($event)" autocomplete="off" placeholder="Filtra per attività" />
+      </div>
+
+      <div class="view-region-prof-filter" *ngIf="click == 1 || click == 3">
+        <mat-form-field class="view-filter view-region-filter">
+          <mat-label>Ordina per regione</mat-label>
+          <mat-select class="view-filter-option" (selectionChange)="cambioRegione($event.value)">
+            <mat-option value="">-</mat-option>
+            <mat-option *ngFor="let r of getListaRegioni()" [value]="r">{{r}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="view-province-prof-filter" *ngIf="click == 1 || click == 3">
+        <mat-form-field class="view-filter view-province-filter" *ngIf="regione!=''">
+          <mat-label>Ordina per provincia</mat-label>
+          <mat-select class="view-filter-option" (selectionChange)="cambioProvincia($event.value)">
+            <mat-option value="">-</mat-option>
+            <mat-option *ngFor="let p of getListaProvince()" [value]="p">{{p}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="view-city-prof-filter" *ngIf="click == 3">
+        <mat-form-field class="view-filter view-city-filter" *ngIf="provincia!=''">
+          <mat-label>Ordina per citta</mat-label>
+          <mat-select class="view-filter-option" (selectionChange)="cambioCitta($event.value)">
+            <mat-option value="">-</mat-option>
+            <mat-option *ngFor="let c of getListaCitta()" [value]="c">{{c}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="input-filter input-city-filter" *ngIf="click == 1">
+        <input type="text" list="text-filter" id="text-filter" name="text-filter" (value)="textFilterC"
+          [(ngModel)]="textFilterC" (change)="textFilterCityApply($event)" autocomplete="off"
+          placeholder="Filtra per città" />
+        <datalist class="profUni-list" id="text-filter">
+          <option value="">-</option>
+          <option *ngFor="let c of getVisualRis()" [value]="c.scuola.citta">{{c.scuola.citta}}</option>
+        </datalist>
+      </div>
+
+      <div class="input-filter input-prof-filter" *ngIf="click > 2">
+        <input type="text" id="text-filter" name="text-filter" (value)="textFilterP" [(ngModel)]="textFilterP"
+          (change)="textFilterProfApply($event)" autocomplete="off" placeholder="Filtra per professore" />
+      </div>
+    </div>
   </div>
 
   <div class="generato">
@@ -124,44 +128,54 @@
         </button>
       </div>
 
-      <div class="school-results" *ngFor="let ris of getVisualRis()">
-        <mat-accordion class="school-results-accordion">
-          <mat-expansion-panel class="school-results-panel">
-            <mat-expansion-panel-header class="school-results-panel-header">
-              <mat-panel-title *ngIf="ris.scuola!=null">
-                Scuola: {{ ris.scuola.nome }}<br>
-                Regione: {{ ris.scuola.regione }}<br>
-                Provincia: {{ ris.scuola.provincia }}<br>
-                Citta: {{ ris.scuola.citta }}<br>
-                Anno: {{ creaStringaAnnoAcc(ris.annoAcc) }}
-              </mat-panel-title>
-              <mat-panel-description class="school-results-subscription">
-                <br>
-                Totale iscritti: {{ ris.iscritti.length }}
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <div class="school-results-container">
-              <ng-container class="school-results-container-element" *ngFor="let a of ris.attivita">
-                NomeAttività: {{ a.nomeAttivita }}<br>
-                Tipo: {{a.tipo}}<br/>
-                Partecipanti: {{ a.partecipanti.length }}<br>
-                Iscritti: {{ a.iscritti.length }}
-                <br />
-                <ng-container *ngFor="let i of a.iscritti">
-                  {{ i.nome }} {{ i.cognome }}
-                </ng-container>
-                <br />
-              </ng-container>
-            </div>
-            <div *ngIf="ris.iscritti.length > 0">
-              Elenco Iscritti:<br>
-              <ng-container *ngFor="let i of ris.iscritti">
-                {{ i.nome }} {{ i.cognome }}
-                <br />
-              </ng-container>
-            </div>
-          </mat-expansion-panel>
-        </mat-accordion>
+
+      <div class="schools-info">
+        <div class="school-results">
+          <div class="school-card" *ngFor="let ris of getVisualRis()">
+            <mat-accordion class="school-results-accordion">
+              <mat-expansion-panel class="school-results-panel" [ngStyle]="{
+                background: ris.iscritti.length > 0 ? '#a0c4e0' : '#c9b6b6'
+              }">
+                <mat-expansion-panel-header class="school-results-panel-header">
+                  <mat-panel-title *ngIf="ris.scuola!=null">
+                    Scuola: {{ ris.scuola.nome }}<br>
+                    Regione: {{ ris.scuola.regione }}<br>
+                    Provincia: {{ ris.scuola.provincia }}<br>
+                    Citta: {{ ris.scuola.citta }}<br>
+                    Anno: {{ creaStringaAnnoAcc(ris.annoAcc) }}
+                  </mat-panel-title>
+                  <mat-panel-description class="school-results-subscription">
+                    <br>
+                    Totale iscritti: {{ ris.iscritti.length }}
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="school-results-container">
+                  <ng-container class="school-results-container-element" *ngFor="let a of ris.attivita">
+                    NomeAttività: {{ a.nomeAttivita }}<br>
+                    Tipo: {{a.tipo}}<br />
+                    Partecipanti: {{ a.partecipanti.length }}<br>
+                    Iscritti: {{ a.iscritti.length }}
+                    <br />
+                    <ng-container *ngFor="let i of a.iscritti">
+                      {{ i.nome }} {{ i.cognome }}
+                    </ng-container>
+                    <br />
+                  </ng-container>
+                </div>
+                <div *ngIf="ris.iscritti.length > 0">
+                  Elenco Iscritti:<br>
+                  <ng-container *ngFor="let i of ris.iscritti">
+                    {{ i.nome }} {{ i.cognome }}
+                    <br />
+                  </ng-container>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+          <div class="school-chart">
+
+          </div>
+        </div>
       </div>
     </div>
 
@@ -171,11 +185,12 @@
           <span class="button-content">Scarica Vista Risultati </span>
         </button>
       </div>
-      <div class="activity-div">
+      <div class="activities-info">
         <div class="activity-results">
           <div class="activity-card" *ngFor="let ris of getVisualRisAtt()">
             <mat-accordion class="activity-results-accordion">
-              <mat-expansion-panel class="activity-results-panel" [hidden]="ris.universitarii.length == 0" [hideToggle]="ris.universitarii.length == 0" [ngStyle]="{
+              <mat-expansion-panel class="activity-results-panel" [hidden]="ris.universitarii.length == 0"
+                [hideToggle]="ris.universitarii.length == 0" [ngStyle]="{
                   background: ris.universitarii.length > 0 ? '#a0c4e0' : '#c9b6b6'
                 }">
                 <mat-expansion-panel-header class="activity-results-panel-header">
@@ -192,7 +207,7 @@
                 </ng-container>
                 <ng-container *ngIf="ris.universitarii.length > 0">
                   <div class="activity-container-type" *ngIf="ris.tipo==''">
-                      Tipo: {{ris.tipo}}
+                    Tipo: {{ris.tipo}}
                   </div>
                   <div *ngFor="let i of ris.universitarii">
                     {{ i.nome }} {{ i.cognome }}
@@ -204,7 +219,7 @@
           </div>
         </div>
         <div class="activity-chart">
-         
+          CIAO
         </div>
       </div>
     </div>
