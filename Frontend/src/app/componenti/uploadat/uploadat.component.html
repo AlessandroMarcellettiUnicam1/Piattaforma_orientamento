@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <div class="title-container">
@@ -13,232 +10,253 @@
 <div class="line" *ngIf="visualizza=='SINGLEPROF'">CARICAMENTO SINGOLO PROFESSORI SCOLASTICI</div>
 <div class="line" *ngIf="visualizza=='SINGLEPROFUNICAM'">CARICAMENTO SINGOLO PROFESSORI UNICAM</div>
 <div class="container">
-    <div class="wrapper">
-      <div class="select-container">
-        <mat-form-field class="upload-filter">
-          <mat-label>Seleziona tipo Upload</mat-label>
-          <mat-select [value]="visualizza" (selectionChange)="cambioSel($event.value)">
-            <mat-option value="ATT">Upload Attività</mat-option>
-            <mat-option value="ISCR">Upload Immatricolati</mat-option>
-            <mat-option value="PROF">Upload Professori Scuole</mat-option>
-            <mat-option value="PROFUNICAM">Upload Professori Unicam</mat-option>
-            <mat-option value="SINGLEPROF">Upload Single Professore Scuole</mat-option>
-            <mat-option value="SINGLEPROFUNICAM">Upload Single Professore Unicam</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="upload">
-        <div class="attivita" *ngIf="visualizza == 'ATT'">
-         
-          <label class="field-title">Nome attività</label>
-          <input [value]="getAttivita()" type="text" id="text" (change)="cambioAttivita($event)" placeholder="Attività" required />
-          <label class="error-label" *ngIf="errorAttivita">Inserire il nome dell'attività</label>
-          <label class="field-title">Tipo attività</label>
-          <input type="text" id="text" (change)="cambioTipo($event)" placeholder="Tipologia" />
-
-            <label class="field-title" for="sede">Sede</label>
-            <select  type="text" id="sede" name="sede" [(ngModel)]="sede" (change)="onSedeChange($event)" required >
-              <option value="">-</option>
-              <option value="online">Online</option>
-              <option value="università">Università</option>
-              <option value="scuola">Scuola</option>
-              <option value="altro">Altro</option>
-            </select>
-            <label class="error-label" *ngIf="errorSede">Inserire la sede dell'attività</label>
-
-         
-            <div class="city-field">
-              <label class="field-title" for="citta">Città della Scuola</label>
-              <input [value]="citta" type="text" list="cityName" id="citta" name="citta" [(ngModel)]="citta" (change)="cambioCitta($event)" (change)="toggleDropdownS()" autocomplete="off" placeholder="Città" />
-              <datalist class="cities-list" id="cityName">
-                <option value="" >-</option>
-                <option *ngFor="let c of getListaCitta()" [value]="c">{{c}}</option>
-              </datalist>
-              <label class="error-label" *ngIf="errorCitta">Inserire correttamente il nome della città</label>
-            </div>
-
-            <div class="school-field" *ngIf="scuole.length > 0">
-              <label class="field-title" >Scuole Presenti</label>
-              <select [value]="scuola" type="text" [(ngModel)]="scuola" (change)="onSelectionChangeS($event)">
-                <option value="">-</option>
-                <option *ngFor="let s of scuole" [value]="s">{{s}}</option>
-              </select>
-            </div>
-
-            <div class="year-field">
-                <label class="field-title" for="annoInizio">Anno Accademico</label>
-                <select type="number" id="annoInizio" name="annoInizio" [(ngModel)]="annoAccademico" (change)="onSelectionChangeY($event)" required>
-                  <option value="">-</option>
-                  <option *ngFor="let anno of listaAnni" [value]="anno">{{anno}}</option>
-                </select>
-                <label class="error-label" *ngIf="errorAnno">Inserire l'anno accademico dell'attività</label>
-            </div>
-
-            <div class="data-fields">
-              <div class="data-inizio-field">
-                <label class="field-title" for="dataInizio">Data Inizio</label>
-                <input class="data-input" type="datetime-local" id="dataInizio" name="dataInizio" [(ngModel)]="dataInizio" required>
-              </div>
-              <div class="data-fine-field">
-                <label class="field-title" for="dataFine">Data Fine</label>
-                <input class="data-input" type="datetime-local" id="dataFine" name="dataFine" [(ngModel)]="dataFine" required>
-              </div>
-            </div>
-            <label class="error-label" *ngIf="errorData">
-              Controllare se la data inserita è corretta<br>
-              L'anno deve esserre lo stesso dell'anno accademico
-            </label>
-
-          <label class="field-title" for="descrizione">Descrizione</label>
-          <input type="text" id="text" (change)="cambioDescrizione($event)" placeholder="Descrizione"/>
-
-            <label class="field-title" for="pro">Professore Referente</label>
-            <input type="text" list="profRefName" id="profRef" name="profRef" [(ngModel)]="prof" (change)="cambioProfRef($event)" (change)="toggleDropdownP()" autocomplete="off" placeholder="Professore Referente" />
-              <datalist class="profRef-list" id="profRefName">
-                <option value="" >-</option>
-                <option *ngFor="let prof of professori" [value]="prof">{{prof}}</option>
-              </datalist>
-
-            <label class="field-title" for="prof">Professore Unicam</label>
-            <input type="text" list="profUniName" id="profUni" name="profUni" [(ngModel)]="profUnicam" (change)="cambioProfUni($event)" (change)="toggleDropdownU()" autocomplete="off" placeholder="Professore Unicam" />
-              <datalist class="profUni-list" id="profUniName">
-                <option value="" >-</option>
-                <option *ngFor="let profUnicam of professoriUnicam" [value]="profUnicam">{{profUnicam}}</option>
-              </datalist>
-
-          <div class="file-input">
-            <input type="file" accept=".xlsx" (change)="onChangeFile($event)" />
-          </div>
-
-          <div class="submit-field">
-            <button class="upload-button" (click)="submitAttForm()">Carica!</button>
-            <label class="error-label" *ngIf="errorAttivita || errorSede || errorCitta || errorAnno || errorData">ERRORE NELLA COMPILAZIONE DELL'ATTIVITA'!</label>
-          </div>
-          
-        </div>
-
-        <div class="iscritti" *ngIf="visualizza == 'ISCR'">
-
-          <div class="year-field">
-            <label class="field-title" for="annoInizio">Anno Accademico</label>
-            <select type="number" id="annoInizio" name="annoInizio" [(ngModel)]="annoAccademico" (change)="onSelectionChangeY($event)" required>
-              <option value="">-</option>
-              <option *ngFor="let anno of listaAnni" [value]="anno">{{anno}}</option>
-            </select>
-            <label class="error-label" *ngIf="errorAnno">Inserire l'anno accademico</label>
-          </div>
-
-          <div class="file-input">
-            <input type="file" accept=".xlsx" (change)="onChangeFileIscr($event)" />
-          </div>
-          <div class="submit-field">
-            <button class="upload-button" (click)="submitIscrForm()">Carica!</button>
-            <label class="error-label" *ngIf="errorAnno">INSERIRE L'ANNO ACCADEMICO!</label>
-          </div>
-        </div>
-
-        <div class="prof" *ngIf="visualizza == 'PROF'">
-          <div class="file-input">
-            <input type="file" accept=".xlsx" (change)="onChangeFileProf($event)" />
-          </div>
-          <button class="upload-button" (click)="onclickProf()">Carica!</button>
-        </div>
-
-        <div class="profUnicam" *ngIf="visualizza == 'PROFUNICAM'">
-          <div class="file-input">
-            <input type="file" accept=".xlsx" (change)="onChangeFileProfUnicam($event)" />
-          </div>
-          <button class="upload-button" (click)="onclickProfUnicam()">Carica!</button>
-        </div>
-
-        <div class="singleProf" *ngIf="visualizza == 'SINGLEPROF'">
-          <form>
-            <div>
-              <label class="field-title" for="nome">Nome</label>
-              <input [value]="getNome()" type="text" id="text" (change)="cambioNome($event)" placeholder="Nome" required />
-              <label class="error-label" *ngIf="errorNome">Inserire il nome del Professore</label>
-            </div>
-            <div>
-              <label class="field-title" for="cognome">Cognome</label>
-              <input [value]="getCognome()" type="text" id="text" (change)="cambioCognome($event)" placeholder="Cognome" required />
-              <label class="error-label" *ngIf="errorCognome">Inserire il cognome del Professore</label>
-            </div>
-            <div>
-              <label class="field-title" for="email">Email</label>
-              <input [value]="getEmail()" type="text" id="text" (change)="cambioEmail($event)" placeholder="Email" />
-            </div>
-              
-            <div class="city-field">
-              <label class="field-title" for="citta">Città della Scuola</label>
-              <input [value]="citta" type="text" list="cities-prof" id="citta" name="citta" [(ngModel)]="citta" (change)="cambioCitta($event)" (change)="toggleDropdownS()" autocomplete="off" placeholder="Città">
-              <datalist class="cities-list" id="cities-prof">
-                <option *ngFor="let c of getListaCitta()" [value]="c">{{c}}</option>
-              </datalist>
-              <label class="error-label" *ngIf="errorCitta">Inserire correttamente il nome della città</label>
-            </div>
-
-            <div class="school-field" *ngIf="scuole.length > 0">
-              <label class="field-title" for="scuola">Scuola</label>
-              <select [value]="scuola" type="text" [(ngModel)]="scuola" (change)="onSelectionChangeS($event)">
-                <option value="">-</option>
-                <option *ngFor="let s of scuole" [value]="s">{{s}}</option>
-              </select>
-            </div>
-            <div>
-              <label class="field-title" for="attività">Attività</label>
-              <input [value]="getAttivita()" type="text" id="text" (change)="cambioAttivita($event)" placeholder="Attività" />
-            </div>
-          </form>
-          <div class="submit-field">
-            <button class="upload-button" (click)="submitSingleProf()">Carica!</button>
-            <label class="error-label" *ngIf="errorNome || errorCognome || errorCitta">ERRORE NELLA COMPILAZIONE DEL PROFESSORE REFERENTE!</label>
-          </div>
-        </div>
-
-        <div class="singleProfUnicam" *ngIf="visualizza == 'SINGLEPROFUNICAM'">
-          <form>
-            <div>
-              <label class="field-title" for="nome">Nome</label>
-              <input [value]="getNome()" type="text" id="text" (change)="cambioNome($event)" required placeholder="Nome" />
-              <label class="error-label" *ngIf="errorNome">Inserire il nome del Professore</label>
-            </div>
-            <div>
-              <label class="field-title" for="cognome">Cognome</label>
-              <input [value]="getCognome()" type="text" id="text" (change)="cambioCognome($event)" required placeholder="Cognome" />
-              <label class="error-label" *ngIf="errorCognome">Inserire il cognome del Professore</label>
-            </div>
-            <div>
-              <label class="field-title" for="email">Email</label>
-              <input [value]="getEmail()" type="text" id="text" (change)="cambioEmail($event)" required placeholder="Email" />
-              <label class="error-label" *ngIf="errorEmail">Inserire l'email del Professore</label>
-            </div>
-          </form>
-          
-          <div class="submit-field">
-            <button class="upload-button" (click)="submitSingleProfUnicam()">Carica!</button>
-            <label class="error-label" *ngIf="errorNome || errorCognome || errorEmail">ERRORE NELLA COMPILAZIONE DEL PROFESSORE UNICAM!</label>
-          </div>
-        </div>
-      </div>
+  <div class="wrapper">
+    <div class="select-container">
+      <mat-form-field class="upload-filter">
+        <mat-label>Seleziona tipo Upload</mat-label>
+        <mat-select [value]="visualizza" (selectionChange)="cambioSel($event.value)">
+          <mat-option value="ATT">Upload Attività</mat-option>
+          <mat-option value="ISCR">Upload Immatricolati</mat-option>
+          <mat-option value="PROF">Upload Professori Scuole</mat-option>
+          <mat-option value="PROFUNICAM">Upload Professori Unicam</mat-option>
+          <mat-option value="SINGLEPROF">Upload Single Professore Scuole</mat-option>
+          <mat-option value="SINGLEPROFUNICAM">Upload Single Professore Unicam</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
-    <div class="image-container">
-      <div class="img-att" *ngIf="visualizza == 'ATT'">
-        <h3>Esempio formattazione file attività</h3>
-        <img src="assets/immagini/esempio_att.png" />
+    <div class="upload">
+      <div class="attivita" *ngIf="visualizza == 'ATT'">
+
+        <label class="field-title">Nome attività</label>
+        <input [value]="getAttivita()" type="text" id="text" (change)="cambioAttivita($event)" placeholder="Attività"
+          required />
+        <label class="error-label" *ngIf="errorAttivita">Inserire il nome dell'attività</label>
+        <label class="field-title">Tipo attività</label>
+        <input type="text" id="text" (change)="cambioTipo($event)" placeholder="Tipologia" />
+
+        <label class="field-title" for="sede">Sede</label>
+        <select type="text" id="sede" name="sede" [(ngModel)]="sede" (change)="onSedeChange($event)" required>
+          <option value="">-</option>
+          <option value="online">Online</option>
+          <option value="università">Università</option>
+          <option value="scuola">Scuola</option>
+          <option value="altro">Altro</option>
+        </select>
+        <label class="error-label" *ngIf="errorSede">Inserire la sede dell'attività</label>
+
+
+        <div class="city-field">
+          <label class="field-title" for="citta">Città della Scuola</label>
+          <input [value]="citta" type="text" list="cityName" id="citta" name="citta" [(ngModel)]="citta"
+            (change)="cambioCitta($event)" (change)="toggleDropdownS()" autocomplete="off" placeholder="Città" />
+          <datalist class="cities-list" id="cityName">
+            <option value="">-</option>
+            <option *ngFor="let c of getListaCitta()" [value]="c">{{c}}</option>
+          </datalist>
+          <label class="error-label" *ngIf="errorCitta">Inserire correttamente il nome della città</label>
+        </div>
+
+        <div class="school-field" *ngIf="scuole.length > 0">
+          <label class="field-title">Scuole Presenti</label>
+          <select [value]="scuola" type="text" [(ngModel)]="scuola" (change)="onSelectionChangeS($event)">
+            <option value="">-</option>
+            <option *ngFor="let s of scuole" [value]="s">{{s}}</option>
+          </select>
+        </div>
+
+        <div class="year-field">
+          <label class="field-title" for="annoInizio">Anno Accademico</label>
+          <select type="number" id="annoInizio" name="annoInizio" [(ngModel)]="annoAccademico"
+            (change)="onSelectionChangeY($event)" required>
+            <option value="">-</option>
+            <option *ngFor="let anno of listaAnni" [value]="anno">{{anno}}</option>
+          </select>
+          <label class="error-label" *ngIf="errorAnno">Inserire l'anno accademico dell'attività</label>
+        </div>
+
+        <div class="data-fields">
+          <div class="data-inizio-field">
+            <label class="field-title" for="dataInizio">Data Inizio</label>
+            <input class="data-input" type="datetime-local" id="dataInizio" name="dataInizio" [(ngModel)]="dataInizio"
+              required>
+          </div>
+          <div class="data-fine-field">
+            <label class="field-title" for="dataFine">Data Fine</label>
+            <input class="data-input" type="datetime-local" id="dataFine" name="dataFine" [(ngModel)]="dataFine"
+              required>
+          </div>
+        </div>
+        <label class="error-label" *ngIf="errorData">
+          Controllare se la data inserita è corretta<br>
+          L'anno deve esserre lo stesso dell'anno accademico
+        </label>
+
+        <label class="field-title" for="descrizione">Descrizione</label>
+        <input type="text" id="text" (change)="cambioDescrizione($event)" placeholder="Descrizione" />
+
+        <label class="field-title" for="pro">Professore Referente</label>
+        <input type="text" list="profRefName" id="profRef" name="profRef" [(ngModel)]="prof"
+          (change)="cambioProfRef($event)" (change)="toggleDropdownP()" autocomplete="off"
+          placeholder="Professore Referente" />
+        <datalist class="profRef-list" id="profRefName">
+          <option value="">-</option>
+          <option *ngFor="let prof of professori" [value]="prof">{{prof}}</option>
+        </datalist>
+
+        <label class="field-title" for="prof">Professore Unicam</label>
+        <input type="text" list="profUniName" id="profUni" name="profUni" [(ngModel)]="profUnicam"
+          (change)="cambioProfUni($event)" (change)="toggleDropdownU()" autocomplete="off"
+          placeholder="Professore Unicam" />
+        <datalist class="profUni-list" id="profUniName">
+          <option value="">-</option>
+          <option *ngFor="let profUnicam of professoriUnicam" [value]="profUnicam">{{profUnicam}}</option>
+        </datalist>
+
+        <div class="file-input">
+          <input type="file" accept=".xlsx" (change)="onChangeFile($event)" />
+        </div>
+
+        <div class="submit-field">
+          <button class="upload-button" (click)="submitAttForm()">Carica!</button>
+          <label class="error-label" *ngIf="errorAttivita || errorSede || errorCitta || errorAnno || errorData">ERRORE
+            NELLA COMPILAZIONE DELL'ATTIVITA'!</label>
+        </div>
+
       </div>
-      <div class="img-iscr" *ngIf="visualizza == 'ISCR'">
-        <h2>N.B: Nel file usato per l'inserimento gli iscritti devono essere tutti dello stesso corso!!!</h2>
-        <h3>Esempio formattazione file iscritti</h3>
-        <img src="assets/immagini/esempio_iscr.png" />
+
+      <div class="iscritti" *ngIf="visualizza == 'ISCR'">
+
+        <div class="year-field">
+          <label class="field-title" for="annoInizio">Anno Accademico</label>
+          <select type="number" id="annoInizio" name="annoInizio" [(ngModel)]="annoAccademico"
+            (change)="onSelectionChangeY($event)" required>
+            <option value="">-</option>
+            <option *ngFor="let anno of listaAnni" [value]="anno">{{anno}}</option>
+          </select>
+          <label class="error-label" *ngIf="errorAnno">Inserire l'anno accademico</label>
+        </div>
+
+        <div class="file-input">
+          <input type="file" accept=".xlsx" (change)="onChangeFileIscr($event)" />
+        </div>
+        <div class="submit-field">
+          <button class="upload-button" (click)="submitIscrForm()">Carica!</button>
+          <label class="error-label" *ngIf="errorAnno">INSERIRE L'ANNO ACCADEMICO!</label>
+        </div>
       </div>
-      <div class="img-prof" *ngIf="visualizza == 'PROF'">
-        <h3>Esempio formattazione file professori</h3>
-        <img src="assets/immagini/esempio_prof.png" />
+
+      <div class="prof" *ngIf="visualizza == 'PROF'">
+        <div class="file-input">
+          <input type="file" accept=".xlsx" (change)="onChangeFileProf($event)" />
+        </div>
+        <button class="upload-button" (click)="onclickProf()">Carica!</button>
       </div>
-      <div class="img-profUnicam" *ngIf="visualizza == 'PROFUNICAM'">
-        <h3>Esempio formattazione file professori Unicam</h3>
-        <img src="assets/immagini/esempio_profUnicam.png" />
+
+      <div class="profUnicam" *ngIf="visualizza == 'PROFUNICAM'">
+        <div class="file-input">
+          <input type="file" accept=".xlsx" (change)="onChangeFileProfUnicam($event)" />
+        </div>
+        <button class="upload-button" (click)="onclickProfUnicam()">Carica!</button>
+      </div>
+
+      <div class="singleProf" *ngIf="visualizza == 'SINGLEPROF'">
+        <form>
+          <div>
+            <label class="field-title" for="nome">Nome</label>
+            <input [value]="getNome()" type="text" id="text" (change)="cambioNome($event)" placeholder="Nome"
+              required />
+            <label class="error-label" *ngIf="errorNome">Inserire il nome del Professore</label>
+          </div>
+          <div>
+            <label class="field-title" for="cognome">Cognome</label>
+            <input [value]="getCognome()" type="text" id="text" (change)="cambioCognome($event)" placeholder="Cognome"
+              required />
+            <label class="error-label" *ngIf="errorCognome">Inserire il cognome del Professore</label>
+          </div>
+          <div>
+            <label class="field-title" for="email">Email</label>
+            <input [value]="getEmail()" type="text" id="text" (change)="cambioEmail($event)" placeholder="Email" />
+          </div>
+
+          <div class="city-field">
+            <label class="field-title" for="citta">Città della Scuola</label>
+            <input [value]="citta" type="text" list="cities-prof" id="citta" name="citta" [(ngModel)]="citta"
+              (change)="cambioCitta($event)" (change)="toggleDropdownS()" autocomplete="off" placeholder="Città">
+            <datalist class="cities-list" id="cities-prof">
+              <option *ngFor="let c of getListaCitta()" [value]="c">{{c}}</option>
+            </datalist>
+            <label class="error-label" *ngIf="errorCitta">Inserire correttamente il nome della città</label>
+          </div>
+
+          <div class="school-field" *ngIf="scuole.length > 0">
+            <label class="field-title" for="scuola">Scuola</label>
+            <select [value]="scuola" type="text" [(ngModel)]="scuola" (change)="onSelectionChangeS($event)">
+              <option value="">-</option>
+              <option *ngFor="let s of scuole" [value]="s">{{s}}</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-title" for="attività">Attività</label>
+            <input [value]="getAttivita()" type="text" id="text" (change)="cambioAttivita($event)"
+              placeholder="Attività" />
+          </div>
+        </form>
+        <div class="submit-field">
+          <button class="upload-button" (click)="submitSingleProf()">Carica!</button>
+          <label class="error-label" *ngIf="errorNome || errorCognome || errorCitta">ERRORE NELLA COMPILAZIONE DEL
+            PROFESSORE REFERENTE!</label>
+        </div>
+      </div>
+
+      <div class="singleProfUnicam" *ngIf="visualizza == 'SINGLEPROFUNICAM'">
+        <form>
+          <div>
+            <label class="field-title" for="nome">Nome</label>
+            <input [value]="getNome()" type="text" id="text" (change)="cambioNome($event)" required
+              placeholder="Nome" />
+            <label class="error-label" *ngIf="errorNome">Inserire il nome del Professore</label>
+          </div>
+          <div>
+            <label class="field-title" for="cognome">Cognome</label>
+            <input [value]="getCognome()" type="text" id="text" (change)="cambioCognome($event)" required
+              placeholder="Cognome" />
+            <label class="error-label" *ngIf="errorCognome">Inserire il cognome del Professore</label>
+          </div>
+          <div>
+            <label class="field-title" for="email">Email</label>
+            <input [value]="getEmail()" type="text" id="text" (change)="cambioEmail($event)" required
+              placeholder="Email" />
+            <label class="error-label" *ngIf="errorEmail">Inserire l'email del Professore</label>
+          </div>
+        </form>
+
+        <div class="submit-field">
+          <button class="upload-button" (click)="submitSingleProfUnicam()">Carica!</button>
+          <label class="error-label" *ngIf="errorNome || errorCognome || errorEmail">ERRORE NELLA COMPILAZIONE DEL
+            PROFESSORE UNICAM!</label>
+        </div>
       </div>
     </div>
   </div>
+  <div class="image-container">
+    <div class="img-att" *ngIf="visualizza == 'ATT'">
+      <h3>Esempio formattazione file attività</h3>
+      <img src="assets/immagini/esempio_att.png" />
+    </div>
+    <div class="img-iscr" *ngIf="visualizza == 'ISCR'">
+      <h2>N.B: Nel file usato per l'inserimento gli iscritti devono essere tutti dello stesso corso!!!</h2>
+      <h3>Esempio formattazione file iscritti</h3>
+      <img src="assets/immagini/esempio_iscr.png" />
+    </div>
+    <div class="img-prof" *ngIf="visualizza == 'PROF'">
+      <h3>Esempio formattazione file professori</h3>
+      <img src="assets/immagini/esempio_prof.png" />
+    </div>
+    <div class="img-profUnicam" *ngIf="visualizza == 'PROFUNICAM'">
+      <h3>Esempio formattazione file professori Unicam</h3>
+      <img src="assets/immagini/esempio_profUnicam.png" />
+    </div>
+  </div>
+</div>
+
 </html>
