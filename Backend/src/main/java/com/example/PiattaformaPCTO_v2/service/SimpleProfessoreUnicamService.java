@@ -79,17 +79,10 @@ public class SimpleProfessoreUnicamService implements ProfessoreUnicamService {
     }
 
     @Override
-    public List<ProfessoreUnicam> getProfByString(List<String> prof) {
+    public ProfessoreUnicam getProfByString(String prof) {
         List<ProfessoreUnicam> professoreUnicam=new ArrayList<>();
-
-        for(int i=0;i< prof.size();i++){
-            List<String> s=separa(prof.get(i));
-            if(professoreUnicamRepository.getByNomeCognome(s.get(0),s.get(1))!=null){
-
-                professoreUnicam.add(professoreUnicamRepository.getByNomeCognome(s.get(0),s.get(1)));
-            }
-        }
-        return professoreUnicam;
+        List<String> parametri=separa(prof);
+        return professoreUnicamRepository.getByNomeCognome(parametri.get(0),parametri.get(1));
     }
 
     @Override

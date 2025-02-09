@@ -1,6 +1,6 @@
 import { Scuola } from "./scuola"
 
-export interface Stedente {
+export interface Studente {
   _id: string
   nome: string
   cognome: string

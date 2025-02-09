@@ -1,5 +1,6 @@
 package com.example.PiattaformaPCTO_v2.service;
 
+import com.example.PiattaformaPCTO_v2.collection.Attivita;
 import com.example.PiattaformaPCTO_v2.collection.Professore;
 import com.example.PiattaformaPCTO_v2.collection.ProfessoreUnicam;
 import com.example.PiattaformaPCTO_v2.collection.Scuola;
@@ -34,13 +35,13 @@ public interface ProfessoreService {
      */
 
     void createEmptyActivity(String nome, String tipo, String scuola, int anno,Sede sede, LocalDateTime dataInizio, LocalDateTime dataFine
-            , String descrizione, List<ProfessoreUnicam> profUnicam, Professore profReferente);
+            , String descrizione, ProfessoreUnicam profUnicam, Professore profReferente);
 
     /**
      * il docente carica definitivamente l'attività con i suoi iscritti nel database
      * @param nome dell'attività
      */
-    void uploadActivityDefinitively(String nome) throws IOException;
+    void uploadActivityDefinitively(String nome, int anno) throws IOException;
 
     /**
      * metodo che carica i professori nel database tramite un file passato
@@ -52,7 +53,7 @@ public interface ProfessoreService {
      * metodo che ritorna tutti i nomi delle attività a cui è ancora possibile iscriversi
      * @return
      */
-    List<String> getAllPendingActivities();
+    List<Attivita> getAllPendingActivities();
 
     /**
      * metodo che scarica un file excel in cui mette tutti i prof presenti

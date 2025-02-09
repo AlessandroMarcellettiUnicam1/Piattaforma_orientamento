@@ -5,6 +5,7 @@ import com.example.PiattaformaPCTO_v2.Request.ActivityRequest;
 import com.example.PiattaformaPCTO_v2.Request.DeleteFileRequest;
 import com.example.PiattaformaPCTO_v2.Request.UploadDefinitively;
 import com.example.PiattaformaPCTO_v2.Request.UploadProfRequest;
+import com.example.PiattaformaPCTO_v2.collection.Attivita;
 import com.example.PiattaformaPCTO_v2.collection.Professore;
 import com.example.PiattaformaPCTO_v2.collection.ProfessoreUnicam;
 import com.example.PiattaformaPCTO_v2.service.ProfessoreService;
@@ -53,8 +54,9 @@ public class ProfessoreController {
     @PostMapping("/createEmptyActivity1")
     public void createEmptyActivity1(@RequestBody ActivityRequest create)
     {
+        System.out.println("Create:"+create);
 
-List<ProfessoreUnicam> prof=professoreUnicamService.getProfByString(create.getProfUnicam());
+ProfessoreUnicam prof=professoreUnicamService.getProfByString(create.getProfUnicam());
 Professore profReferente=professoreService.getProfByString(create.getProfReferente());
 
         professoreService.createEmptyActivity(create.getNome(), create.getTipo(), create.getScuola(),create.getAnno(),
@@ -73,9 +75,8 @@ Professore profReferente=professoreService.getProfByString(create.getProfReferen
 
 
     @GetMapping("/getPendingActivities")
-        public ResponseEntity<List<String>> getActivities(){
-        List<String> activities=professoreService.getAllPendingActivities();
-
+        public ResponseEntity<List<Attivita>> getActivities(){
+        List<Attivita> activities=professoreService.getAllPendingActivities();
         return new ResponseEntity<>(activities, HttpStatus.OK);
     }
 
@@ -85,7 +86,8 @@ Professore profReferente=professoreService.getProfByString(create.getProfReferen
 
     @PostMapping("/uploadActivityDefinitively")
     public void uploadActivityDefinitively(@RequestBody UploadDefinitively uploadDefinitively) throws IOException {
-        professoreService.uploadActivityDefinitively(uploadDefinitively.getNome());
+        System.out.println("UpNome: "+uploadDefinitively.getNome()+"\nUpAnno: "+uploadDefinitively.getAnno());
+        professoreService.uploadActivityDefinitively(uploadDefinitively.getNome(), uploadDefinitively.getAnno());
     }
 
     @PostMapping("/uploadConFile1")

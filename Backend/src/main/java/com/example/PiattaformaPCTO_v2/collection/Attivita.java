@@ -41,7 +41,7 @@ public class Attivita {
     /**
      * professori unicam
      */
-    private List<ProfessoreUnicam> profUnicam;
+    private ProfessoreUnicam profUnicam;
     /**
      * professore della scuola
      */
@@ -60,7 +60,7 @@ public class Attivita {
 
     public Attivita(String nome, String tipo, int annoAcc, List<Studente> studPartecipanti, Sede sede,
                     LocalDateTime dataInizio, LocalDateTime dataFine, String descrizione,
-                    List<ProfessoreUnicam> profUnicam, Professore profReferente,boolean iscrizionePossibile) {
+                    ProfessoreUnicam profUnicam, Professore profReferente,boolean iscrizionePossibile) {
         this.nome = nome;
         this.tipo = tipo;
         this.annoAcc = annoAcc;
@@ -78,9 +78,6 @@ public class Attivita {
     }
     public void addScuola(String scuola){
         this.scuola=scuola;
-    }
-    public void addProfUnicam(ProfessoreUnicam prof){
-        this.profUnicam.add(prof);
     }
     public String getNome() {
         return nome;
@@ -114,7 +111,7 @@ public class Attivita {
         return descrizione;
     }
 
-    public List<ProfessoreUnicam> getProfUnicam() {
+    public ProfessoreUnicam getProfUnicam() {
         return profUnicam;
     }
 

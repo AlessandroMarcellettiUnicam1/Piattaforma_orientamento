@@ -92,14 +92,8 @@ public class AttivitaController {
         create=create.substring(create.indexOf(" ")+1);
         String descrizione=create.substring(0,create.indexOf("+"));
         create=create.substring(create.indexOf("+")+1);
-        List<String> pUnicam=new ArrayList<>();
-
-        while(create.contains(",")){
-            pUnicam.add(create.substring(0,create.indexOf(",")));
-            create=create.substring(create.indexOf(",")+1);
-
-        }
-
+        String pUnicam= create.substring(0,create.indexOf(","));
+        create=create.substring(create.indexOf(",")+1);
         String referente=create.substring(1,create.indexOf("-"));
         create=create.substring(create.indexOf("2"));
 
@@ -119,8 +113,8 @@ public class AttivitaController {
                 sedeA=Sede.AltraSede;
                 break;
         }
-        List<ProfessoreUnicam> prof = new ArrayList<>();
-        if (!pUnicam.get(0).isEmpty()) {
+        ProfessoreUnicam prof = new ProfessoreUnicam();
+        if (!pUnicam.isEmpty()) {
             prof = professoreUnicamService.getProfByString(pUnicam);
         }
 

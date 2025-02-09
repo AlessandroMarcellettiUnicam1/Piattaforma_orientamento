@@ -1,7 +1,7 @@
 import { Sede } from "./sede";
 
 export interface Activity{
-nome: string;
+    nome: string;
     tipo: string;
     scuola: string;
     anno: number;
@@ -9,6 +9,6 @@ nome: string;
     dataInizio: Date;
     dataFine: Date;
     descrizione: string;
-    profUnicam: string[];
+    profUnicam: string;
     profReferente: string;
 }

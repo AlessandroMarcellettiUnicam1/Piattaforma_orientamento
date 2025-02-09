@@ -1,23 +1,12 @@
-
-
-
-
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  margin: 0;
-  padding: 0;
-  display: flex;
+.admin-form {
+  width: 100%;
+  display: block;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  overflow-y: auto;  /* Permette lo scrolling verticale */
-}
-
-.centered-title {
   text-align: center;
-  margin: 20px 0;
+  padding-top: 30px;
+  padding-bottom: 50px;
 }
 
 .title-container {
@@ -36,27 +25,94 @@ body {
   color: #E2001A;
 }
 
-form {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 500px;
-  margin-bottom: 20px;
-  overflow-y: auto; /* Permette lo scrolling verticale all'interno del form se necessario */
+.container {
+  display: block;
 }
 
+/* Stile per i campi di input e i selettori */
 input[type="text"],
 input[type="number"],
 input[type="datetime-local"],
 select {
-  width: 100%;
+  max-width: 400px;
   padding: 10px;
   margin: 10px 0;
-  border: 1px solid #ccc;
+  border: 1.5px solid rgb(100, 100, 100);
   border-radius: 4px;
   box-sizing: border-box;
+  text-align: center;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  width: 150%;
+}
+
+/* Stile per le etichette */
+.field-title {
+  font-weight: bold;
+  margin-top: 20px;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+/* Stile per i pulsanti */
+.submit-button, .activity-off-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 30px;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Stile per i pulsanti di selezione */
+.bottoni {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  height: 75px;
+  border: none;
+  background-color: #7FBD32;
+}
+
+.btn1, .btn2 {
+  width: 200px;
+  font-size: 15px;
+}
+
+.btn1:hover, .btn2:hover {
+  height: auto;
+  background-color: white;
+}
+
+/* Stile per i campi obbligatori */
+input[required],
+select[required] {
+  border-bottom: 3px solid rgb(150, 70, 70);
+}
+
+/* Stile per contenitore di campi accanto */
+.data-fields {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 50px;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  padding: 10px 20px;
+}
+
+.data-inizio-field, .data-fine-field {
+  align-content: center;
+}
+
+.data-input {
+  width: 250px;
 }
 
 label {
@@ -64,69 +120,46 @@ label {
   display: block;
 }
 
-button.btn {
-  display: inline-block;
-  background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.error-label {
+  color: rgb(230, 78, 78);
+  font-size: small;
+  display: block;
   text-align: center;
 }
 
-button.btn:hover {
-  background-color: #0056b3;
-}
-
-.dropdown {
-  display: none;
-  margin-top: 10px;
-}
-
-.flex-container {
+.manage-activities {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 50px;
 }
 
-.flex-item {
-  flex: 1;
-  margin-right: 10px;
+.activity-result-card {
+  width: 500px;
+  padding-bottom: 10px;
+  padding-left: 10px;
 }
 
-.flex-item:last-child {
-  margin-right: 0;
+.activity-results-panel-header {
+  height:150px;
 }
 
-h3 {
-  margin-top: 20px;
-  margin-bottom: 10px;
+.activity-card-action {
+  text-align: center;
 }
 
-@media (max-width: 600px) {
-  form {
-    padding: 10px;
-  }
+.close-activity-button {
+  width: 150px;
+  height: 2rem;
+  color: white;
+  background-color: #535e5e;
+  border: none;
+  border-radius: 1.5rem;
+  cursor: pointer;
+}
 
-  input[type="text"],
-  input[type="number"],
-  input[type="datetime-local"],
-  select {
-    margin: 5px 0;
-  }
-
-  .flex-container {
-    flex-direction: column;
-  }
-
-  .flex-item {
-    margin-right: 0;
-    margin-bottom: 10px;
-  }
-
-  .flex-item:last-child {
-    margin-bottom: 0;
-  }
+.close-activity-button:hover {
+  background-color: white;
+  color: black;
 }
 

@@ -37,6 +37,6 @@ Sheet fileOpenerHelper(MultipartFile file);
      */
     void uploadSingleActivity(String nome, String tipo, String scuola, String cittàScuola, int anno, Sede sede,
                               LocalDateTime dataInizio, LocalDateTime dataFine, String descrizione,
-                              List<ProfessoreUnicam> prof, Professore profReferente, MultipartFile file);
+                              ProfessoreUnicam prof, Professore profReferente, MultipartFile file);
 
 }

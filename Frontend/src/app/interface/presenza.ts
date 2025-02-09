@@ -1,8 +1,8 @@
-import { Stedente } from "./stedente"
+import { Studente } from "./studente"
 
 export interface Presenza {
   nomeAttivita: string
   tipo:string
-  partecipanti: Stedente[]
-  iscritti: Stedente[]
+  partecipanti: Studente[]
+  iscritti: Studente[]
 }

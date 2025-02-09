@@ -35,7 +35,7 @@ public interface ProfessoreUnicamService {
      * @return
      */
 
-    List<ProfessoreUnicam> getProfByString(List<String> prof);
+    ProfessoreUnicam getProfByString(String prof);
     /**
      * metodo che carica in un file excel tutti i prof presenti
      */
