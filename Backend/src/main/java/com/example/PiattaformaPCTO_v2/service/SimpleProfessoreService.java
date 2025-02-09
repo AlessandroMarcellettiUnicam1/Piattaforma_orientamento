@@ -93,19 +93,15 @@ if(attivitaRepository.findByNomeAnno(nome,anno).isEmpty()) {
 
 
     @Override
-    public void uploadActivityDefinitively(String nome) throws IOException {
-
-        int anno =Integer.parseInt(nome.substring(nome.lastIndexOf(" ")+1,nome.length()));
-        String nomeA=nome.substring(0,nome.lastIndexOf(" "));
-
-        Attivita attivita=attivitaRepository.findByNomeAndAnno(nomeA,anno);
+    public void uploadActivityDefinitively(String nome, int anno) throws IOException {
+        Attivita attivita=attivitaRepository.findByNomeAndAnno(nome,anno);
         Query query = new Query();
-        query.addCriteria(Criteria.where("nome").is(nomeA).and("annoAcc").is(anno));
+        query.addCriteria(Criteria.where("nome").is(nome).and("annoAcc").is(anno));
         Update update = new Update();
         update.set("iscrizionePossibile", false);
         mongoTemplate.updateFirst(query, update, Attivita.class);
-       createRisulataiAtt(attivita);
-       createRisultati(attivita);
+        createRisulataiAtt(attivita);
+        createRisultati(attivita);
     }
 
     /**
@@ -230,7 +226,6 @@ risultatiAttRepository.save(risultatiAtt);
         // Recupera la lista delle attività pendenti
         List<String> activity = new ArrayList<>();
         List<Attivita> activityPending=attivitaRepository.findByIscrizione(true);
-        System.out.println("Attività: "+activityPending);
         return activityPending;
 
     }

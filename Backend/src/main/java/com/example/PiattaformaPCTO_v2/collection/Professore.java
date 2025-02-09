@@ -1,6 +1,5 @@
 package com.example.PiattaformaPCTO_v2.collection;
 
-import com.example.PiattaformaPCTO_v2.service.Utilities;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;

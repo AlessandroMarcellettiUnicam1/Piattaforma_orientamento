@@ -77,7 +77,6 @@ Professore profReferente=professoreService.getProfByString(create.getProfReferen
     @GetMapping("/getPendingActivities")
         public ResponseEntity<List<Attivita>> getActivities(){
         List<Attivita> activities=professoreService.getAllPendingActivities();
-
         return new ResponseEntity<>(activities, HttpStatus.OK);
     }
 
@@ -87,7 +86,7 @@ Professore profReferente=professoreService.getProfByString(create.getProfReferen
 
     @PostMapping("/uploadActivityDefinitively")
     public void uploadActivityDefinitively(@RequestBody UploadDefinitively uploadDefinitively) throws IOException {
-        professoreService.uploadActivityDefinitively(uploadDefinitively.getNome());
+        professoreService.uploadActivityDefinitively(uploadDefinitively.getNome(), uploadDefinitively.getAnno());
     }
 
     @PostMapping("/uploadConFile1")
