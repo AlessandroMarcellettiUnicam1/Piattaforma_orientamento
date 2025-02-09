@@ -40,7 +40,6 @@ public interface ProfessoreService {
     /**
      * il docente carica definitivamente l'attività con i suoi iscritti nel database
      * @param nome dell'attività
-     * @param anno dell'attività
      */
     void uploadActivityDefinitively(String nome, int anno) throws IOException;
 

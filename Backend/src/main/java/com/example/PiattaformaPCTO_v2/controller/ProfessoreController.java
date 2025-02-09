@@ -86,6 +86,7 @@ Professore profReferente=professoreService.getProfByString(create.getProfReferen
 
     @PostMapping("/uploadActivityDefinitively")
     public void uploadActivityDefinitively(@RequestBody UploadDefinitively uploadDefinitively) throws IOException {
+        System.out.println("UpNome: "+uploadDefinitively.getNome()+"\nUpAnno: "+uploadDefinitively.getAnno());
         professoreService.uploadActivityDefinitively(uploadDefinitively.getNome(), uploadDefinitively.getAnno());
     }
 

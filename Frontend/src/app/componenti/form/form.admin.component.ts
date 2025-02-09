@@ -1,6 +1,6 @@
 
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ResService } from 'src/app/service/res.service';
 import { ActivityAvailable } from 'src/app/interface/activityAvailable';
 import { Component, OnInit } from '@angular/core';
@@ -206,6 +206,18 @@ export class AdminComponent implements OnInit {
       });
   }
 
+  handleButtonClick(nome: string, anno: number): void {
+
+    let body = { nome, anno };
+    this.http
+      .post('http://localhost:8080/professori/uploadActivityDefinitively', body)
+      .subscribe({
+        next: (response) => console.log(alert("inserimento avvenuto con successo"), response),
+        error: (error) => console.log(error),
+      });
+      this.onClick2();
+  }
+
   cambioAttivita(event: any) {
     this.attivita = event.target.value;
   }
@@ -311,17 +323,6 @@ export class AdminComponent implements OnInit {
     return this.http.get<string[]>('http://localhost:8080/professoriUnicam/getProfUnicam').pipe(
       map((response: any) => response.map((profUnicam: any) => profUnicam.toString()))
     );
-  }
-
-  handleButtonClick(nome: String, annoAcc: number): void {
-
-    let body = { nome, annoAcc};
-      this.http
-        .post('http://localhost:8080/professori/uploadActivityDefinitively', body)
-        .subscribe({
-          next: (response) => console.log(alert("inserimento avvenuto con successo"), response),
-          error: (error) => console.log(error),
-        });
   }
 
   listaAnni: string[] = [];
