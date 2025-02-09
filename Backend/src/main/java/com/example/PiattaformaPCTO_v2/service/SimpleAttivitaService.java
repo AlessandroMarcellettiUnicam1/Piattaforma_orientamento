@@ -142,7 +142,7 @@ public class SimpleAttivitaService implements AttivitaService {
      * @param file
      */
     @Override
-    public void uploadSingleActivity(String nome, String tipo, String scuola, String cittàScuola, int anno, Sede sede, LocalDateTime dataInizio, LocalDateTime dataFine, String descrizione, List<ProfessoreUnicam> prof, Professore profReferente, MultipartFile file) {
+    public void uploadSingleActivity(String nome, String tipo, String scuola, String cittàScuola, int anno, Sede sede, LocalDateTime dataInizio, LocalDateTime dataFine, String descrizione, ProfessoreUnicam prof, Professore profReferente, MultipartFile file) {
 
         Sheet dataSheet = this.fileOpenerHelper(file);
         Iterator<Row> iterator = dataSheet.rowIterator();

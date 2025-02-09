@@ -35,7 +35,7 @@ public interface ProfessoreService {
      */
 
     void createEmptyActivity(String nome, String tipo, String scuola, int anno,Sede sede, LocalDateTime dataInizio, LocalDateTime dataFine
-            , String descrizione, List<ProfessoreUnicam> profUnicam, Professore profReferente);
+            , String descrizione, ProfessoreUnicam profUnicam, Professore profReferente);
 
     /**
      * il docente carica definitivamente l'attività con i suoi iscritti nel database

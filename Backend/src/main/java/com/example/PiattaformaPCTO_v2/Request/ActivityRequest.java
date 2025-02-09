@@ -23,7 +23,7 @@ public class ActivityRequest {
     /**
      * professori unicam
      */
-    private List<String> profUnicam;
+    private String profUnicam;
     /**
      * proffessore della scuola
      */
@@ -32,7 +32,7 @@ public class ActivityRequest {
 
     public ActivityRequest(String nome, String tipo, String scuola, int anno, Sede sede,
                            LocalDateTime dataInizio, LocalDateTime dataFine, String descrizione,
-                           List<String> profUnicam, String profReferente) {
+                           String profUnicam, String profReferente) {
         this.nome = nome;
         this.tipo = tipo;
         this.scuola = scuola;
@@ -110,11 +110,11 @@ public class ActivityRequest {
         this.descrizione = descrizione;
     }
 
-    public List<String> getProfUnicam() {
+    public String getProfUnicam() {
         return profUnicam;
     }
 
-    public void setProfUnicam(List<String> profUnicam) {
+    public void setProfUnicam(String profUnicam) {
         this.profUnicam = profUnicam;
     }
 

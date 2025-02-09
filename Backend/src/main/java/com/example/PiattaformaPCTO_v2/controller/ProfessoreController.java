@@ -54,8 +54,9 @@ public class ProfessoreController {
     @PostMapping("/createEmptyActivity1")
     public void createEmptyActivity1(@RequestBody ActivityRequest create)
     {
+        System.out.println("Create:"+create);
 
-List<ProfessoreUnicam> prof=professoreUnicamService.getProfByString(create.getProfUnicam());
+ProfessoreUnicam prof=professoreUnicamService.getProfByString(create.getProfUnicam());
 Professore profReferente=professoreService.getProfByString(create.getProfReferente());
 
         professoreService.createEmptyActivity(create.getNome(), create.getTipo(), create.getScuola(),create.getAnno(),

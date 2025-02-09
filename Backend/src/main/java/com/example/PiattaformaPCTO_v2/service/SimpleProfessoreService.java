@@ -76,7 +76,7 @@ public class SimpleProfessoreService implements ProfessoreService{
 
     @Override
     public void createEmptyActivity(String nome, String tipo, String scuola, int anno,Sede sede, LocalDateTime dataInizio, LocalDateTime dataFine
-            , String descrizione, List<ProfessoreUnicam> profUnicam, Professore profReferente) {
+            , String descrizione, ProfessoreUnicam profUnicam, Professore profReferente) {
 
 if(attivitaRepository.findByNomeAnno(nome,anno).isEmpty()) {
     Attivita attivita = new Attivita(nome, tipo, anno, new ArrayList<>(), sede, dataInizio, dataFine, descrizione, profUnicam, profReferente, true);
@@ -230,6 +230,7 @@ risultatiAttRepository.save(risultatiAtt);
         // Recupera la lista delle attività pendenti
         List<String> activity = new ArrayList<>();
         List<Attivita> activityPending=attivitaRepository.findByIscrizione(true);
+        System.out.println("Attività: "+activityPending);
         return activityPending;
 
     }
