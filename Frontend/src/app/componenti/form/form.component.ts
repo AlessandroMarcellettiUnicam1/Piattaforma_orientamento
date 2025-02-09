@@ -1,17 +1,16 @@
 
 import { Component, OnInit } from '@angular/core';
-
 import { ActivatedRoute } from '@angular/router';
-
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
 import { Observable, toArray } from 'rxjs';
 import { map } from 'rxjs/operators';
+
 @Component({
     selector: 'app-Form',
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.css'],
   })
+  
 export class FormdatComponent implements OnInit{
 
   items: string[]=[];
