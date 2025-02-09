@@ -2,8 +2,7 @@
 
 import { HttpClient } from '@angular/common/http';
 import { ResService } from 'src/app/service/res.service';
-import { Presenza } from 'src/app/interface/presenza';
-import { Res } from 'src/app/interface/res';
+import { ActivityAvailable } from 'src/app/interface/activityAvailable';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -24,7 +23,7 @@ export class AdminComponent implements OnInit {
 
   click = 1;
   anno: number = 0;
-  res: Res[] = [];
+  activities: ActivityAvailable[] = [];
   annoAccademicoInizio: number = 0;
   annoAccademicoFine: number = 0;
   private attivita: string = '';
@@ -33,6 +32,8 @@ export class AdminComponent implements OnInit {
   cittaLista: string[] = [];
   dataInizio: Date = new Date();
   dataFine: Date = new Date();
+  dataI: Date = new Date();
+  dataF: Date = new Date();
   private tipo: string = ''
   items: string[] = [];
   scuole: string[] = [];
@@ -44,7 +45,6 @@ export class AdminComponent implements OnInit {
   descrizione: string = '';
   prof: string = '';
   profUnicam: string = '';
-  private visualizzaAtt: string = '';
   annoAccademico: string = '';
   errorAttivita: boolean = false;
   errorSede: boolean = false;
@@ -123,14 +123,17 @@ export class AdminComponent implements OnInit {
 
   checkData() : boolean {
     let error = false;
-    const annoI = parseInt(this.dataInizio.toString().slice(0,4));
-    const annoF = parseInt(this.dataFine.toString().slice(0,4));
-    const meseI = parseInt(this.dataInizio.toString().slice(5,7));
-    const meseF = parseInt(this.dataFine.toString().slice(5,7));
-    const giornoI = parseInt(this.dataInizio.toString().slice(8,10));
-    const giornoF = parseInt(this.dataFine.toString().slice(8,10));
-    const oraI = parseInt(this.dataInizio.toString().slice(11,13));
-    const oraF = parseInt(this.dataFine.toString().slice(11,13));
+    const annoI = parseInt(this.dataI.toString().slice(0,4));
+    const annoF = parseInt(this.dataF.toString().slice(0,4));
+    const meseI = parseInt(this.dataI.toString().slice(5,7));
+    const meseF = parseInt(this.dataF.toString().slice(5,7));
+    const giornoI = parseInt(this.dataI.toString().slice(8,10));
+    const giornoF = parseInt(this.dataF.toString().slice(8,10));
+    const oraI = parseInt(this.dataI.toString().slice(11,13));
+    const oraF = parseInt(this.dataF.toString().slice(11,13));
+
+    console.log(this.dataI.toString().slice(0,4)+", "+this.dataI.toString().slice(5,7)+", "+this.dataI.toString().slice(8,10)+", "+this.dataI.toString().slice(11,13));
+
     if(annoI == this.annoAccademicoInizio && annoF == this.annoAccademicoInizio
       || annoI == this.annoAccademicoFine && annoF == this.annoAccademicoFine) {
       
@@ -212,6 +215,9 @@ export class AdminComponent implements OnInit {
   cambioCitta(event: any) {
     this.citta = event.target.value;
   }
+  cambioScuola(event: any) {
+    this.scuola = event.target.value;
+  }
   cambioDescrizione(event: any) {
     this.descrizione = event.target.value;
   }
@@ -221,10 +227,21 @@ export class AdminComponent implements OnInit {
   cambioProfUni(event: any) {
     this.profUnicam = event.target.value;
   }
+  onSedeChange(event: Event): void {
+    const selectedSede = (event.target as HTMLSelectElement).value;
+    this.mostraCampoCitta = selectedSede === 'scuola';
+  }
+  onSelectionChangeY(event: any): void {
+    this.annoAccademico = event.target.value;
+
+    const [anno1, anno2] = this.annoAccademico.split('/');
+    this.annoAccademicoInizio = parseInt(anno1, 10);
+    this.annoAccademicoFine = parseInt(anno2, 10);
+  }
 
   toggleDropdowAtt() {
     this.resService.getResAttActive().subscribe({
-      next: (response) => (this.res = response),
+      next: (response) => (this.activities = response),
       error: (error) => console.log(error),
     });
   }
@@ -296,42 +313,15 @@ export class AdminComponent implements OnInit {
     );
   }
 
-  handleButtonClick(event: any): void {
-    const nome: string = event.target;
+  handleButtonClick(nome: String, annoAcc: number): void {
 
-    let body = { nome };
-    if (nome != "") {
+    let body = { nome, annoAcc};
       this.http
         .post('http://localhost:8080/professori/uploadActivityDefinitively', body)
         .subscribe({
           next: (response) => console.log(alert("inserimento avvenuto con successo"), response),
           error: (error) => console.log(error),
         });
-    }
-    else {
-      alert("N.B:Tutti i campi devono essere riempiti");
-    }
-  }
-
-  onSelectionChange(event: any) {
-    this.prof = event.target.value;
-  }
-  onSelectionChangeS(event: any) {
-    this.scuola = event.target.value;
-  }
-  onSelectionChangeAtt(event: any) {
-    this.visualizzaAtt = event.target.value;
-  }
-  onSedeChange(event: Event): void {
-    const selectedSede = (event.target as HTMLSelectElement).value;
-    this.mostraCampoCitta = selectedSede === 'scuola';
-  }
-  onSelectionChangeY(event: any): void {
-    this.annoAccademico = event.target.value;
-
-    const [anno1, anno2] = this.annoAccademico.split('/');
-    this.annoAccademicoInizio = parseInt(anno1, 10);
-    this.annoAccademicoFine = parseInt(anno2, 10);
   }
 
   listaAnni: string[] = [];

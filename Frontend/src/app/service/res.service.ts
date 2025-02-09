@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Res } from '../interface/res';
+import { ActivityAvailable } from '../interface/activityAvailable';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class ResService {
     return this.http.get<Res[]>('http://localhost:8080/risultati/res/'+a)
   }
 
-  getResAttActive() : Observable<Res[]>{
-    return this.http.get<Res[]>('http://localhost:8080/professori/getPendingActivities');
+  getResAttActive() : Observable<ActivityAvailable[]>{
+    return this.http.get<ActivityAvailable[]>('http://localhost:8080/professori/getPendingActivities');
   }
 }

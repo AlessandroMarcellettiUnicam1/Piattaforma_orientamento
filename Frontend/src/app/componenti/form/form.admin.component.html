@@ -51,7 +51,7 @@
 
     <div class="school-field" *ngIf="scuole.length > 0">
       <label class="field-title">Scuole Presenti</label>
-      <select [value]="scuola" type="text" [(ngModel)]="scuola" (change)="onSelectionChangeS($event)">
+      <select [value]="scuola" type="text" [(ngModel)]="scuola" (change)="cambioScuola($event)">
         <option value="">-</option>
         <option *ngFor="let s of scuole" [value]="s">{{s}}</option>
       </select>
@@ -70,12 +70,12 @@
     <div class="data-fields">
       <div class="data-inizio-field">
         <label class="field-title" for="dataInizio">Data Inizio</label>
-        <input class="data-input" type="datetime-local" id="dataInizio" name="dataInizio" [(ngModel)]="dataInizio"
+        <input class="data-input" type="datetime-local" id="dataInizio" name="dataInizio" [(ngModel)]="dataI"
           required>
       </div>
       <div class="data-fine-field">
         <label class="field-title" for="dataFine">Data Fine</label>
-        <input class="data-input" type="datetime-local" id="dataFine" name="dataFine" [(ngModel)]="dataFine" required>
+        <input class="data-input" type="datetime-local" id="dataFine" name="dataFine" [(ngModel)]="dataF" required>
       </div>
     </div>
     <label class="error-label" *ngIf="errorData">
@@ -117,50 +117,30 @@
 
 
   <div class="manage-activities" *ngIf="click==2">
-    <div class="activity-card" *ngFor="let ris of res">
-      <mat-accordion class="activity-results-accordion" *ngFor="let a of ris.attivita">
-        <mat-expansion-panel class="activity-results-panel" [ngStyle]="{
-          background: ris.iscritti.length > 0 ? '#a0c4e0' : '#c9b6b6'
+    <div class="activity-result-card" *ngFor="let act of activities">
+      <mat-card class="activity-card" [ngStyle]="{
+          background: act.studPartecipanti.length > 0 ? '#a0c4e0' : '#c9b6b6'
         }">
-          <mat-expansion-panel-header class="activity-results-panel-header">
-            <mat-panel-title *ngIf="ris.scuola!=null">
-              Scuola: {{ ris.scuola.nome }}<br>
-              Regione: {{ ris.scuola.regione }}<br>
-              Provincia: {{ ris.scuola.provincia }}<br>
-              Citta: {{ ris.scuola.citta }}<br>
-              Anno: {{ creaStringaAnnoAcc(ris.annoAcc) }}
-            </mat-panel-title>
-            <mat-panel-description class="activity-results-subscription">
-              <br>
-              Totale iscritti: {{ ris.iscritti.length }}
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-          <div class="activity-results-container">
-            <ng-container class="activity-results-container-element">
-              NomeAttività: {{ a.nomeAttivita }}<br>
-              Tipo: {{a.tipo}}<br />
-              Partecipanti: {{ a.partecipanti.length }}<br>
-              Iscritti: {{ a.iscritti.length }}
-              <br />
-              <ng-container *ngFor="let i of a.iscritti">
-                {{ i.nome }} {{ i.cognome }}
-              </ng-container>
-              <br />
-            </ng-container>
-          </div>
-          <div *ngIf="ris.iscritti.length > 0">
-            Elenco Iscritti:<br>
-            <ng-container *ngFor="let i of ris.iscritti">
-              {{ i.nome }} {{ i.cognome }}
-              <br />
-            </ng-container>
-          </div>
-        </mat-expansion-panel>
-        <button class="activity-off-button" [value]="a.nomeAttivita" (click)="handleButtonClick($event)">Termina
-          Iscrizione</button>
-      </mat-accordion>
+            <mat-card-title class="activity-card-title">
+              {{ act.nome }}<br>
+            </mat-card-title>
+            <mat-card-content class="activity-card-content">
+              DATA: {{ act.dataFine.toString().slice(0,10) }} / {{ act.dataFine.toString().slice(0,10) }}<br>
+              ANNO ACCADEMICO: {{ creaStringaAnnoAcc(act.annoAcc) }}<br>
+              ISCRIZIONI: {{ act.studPartecipanti.length }}<br>
+              PROF. UNICAM: {{ act.profUnicam.nome }} {{ act.profUnicam.cognome }}<br>
+              PROF. REFERENTE: {{ act.profReferente.nome }} {{ act.profReferente.cognome }}<br>
+              SCUOLA: {{ act.profReferente.scuolaImp.nome }}<br>
+              CITTA': {{ act.profReferente.scuolaImp.citta }}<br>
+              POVINCIA: {{ act.profReferente.scuolaImp.provincia }}<br>
+              REGIONE: {{ act.profReferente.scuolaImp.regione }}<br>
+            </mat-card-content>
+            <mat-card-actions class="activity-card-action">
+              <button class="close-activity-button" (click)="handleButtonClick(act.nome, act.annoAcc)">Termina
+                Iscrizione</button>
+            </mat-card-actions>
+      </mat-card>
     </div>
-
   </div>
 
 </div>

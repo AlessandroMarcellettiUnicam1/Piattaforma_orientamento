@@ -131,11 +131,35 @@ label {
   display: flex;
   align-items: center;
   flex-direction: column;
+  padding-top: 50px;
 }
 
-.activity-card {
+.activity-result-card {
   width: 500px;
   padding-bottom: 10px;
   padding-left: 10px;
+}
+
+.activity-results-panel-header {
+  height:150px;
+}
+
+.activity-card-action {
+  text-align: center;
+}
+
+.close-activity-button {
+  width: 150px;
+  height: 2rem;
+  color: white;
+  background-color: #535e5e;
+  border: none;
+  border-radius: 1.5rem;
+  cursor: pointer;
+}
+
+.close-activity-button:hover {
+  background-color: white;
+  color: black;
 }
 
