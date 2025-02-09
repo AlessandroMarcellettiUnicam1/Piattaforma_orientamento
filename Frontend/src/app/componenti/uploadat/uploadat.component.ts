@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Anni } from 'src/app/interface/anni';
-import { Sede } from 'src/app/interface/sede';
 @Component({
   selector: 'app-uploadat',
   templateUrl: './uploadat.component.html',
@@ -13,12 +12,11 @@ export class UploadatComponent implements OnInit {
   private tipo: string = '';
   visualizza: string = 'ATT';
   private nome: string = '';
-  private n: string = '';
   private data = new FormData();
   private dataIscr = new FormData();
   private dataProf = new FormData();
   private dataProfUnicam = new FormData();
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
   private anno = 0;
   anni: Anni[] = [];
   annoAccademicoInizio: number = 0;
@@ -138,7 +136,7 @@ export class UploadatComponent implements OnInit {
         anno.toString();
     } else {
       param =
-      this.attivita +
+        this.attivita +
         '&' +
         this.tipo +
         '$' +
@@ -222,7 +220,6 @@ export class UploadatComponent implements OnInit {
   cambioAnno(e: any) {
     this.anno = e;
   }
-
   cambioNome(event: any) {
     this.nome = event.target.value;
   }
@@ -249,24 +246,80 @@ export class UploadatComponent implements OnInit {
   }
   submitAttForm() {
     let error = false;
+    if (this.checkAttivita()) {
+      error = true;
+    }
+    if (this.checkSede()) {
+      error = true;
+    }
+    if (this.checkCitta()) {
+      error = true;
+    }
+    if (this.checkAnnoAccademico()) {
+      error = true;
+    }
+    if (this.checkData()) {
+      error = true;
+    }
+    if (!error) {
+      this.onClick();
+    }
+  }
+
+  submitIscrForm() {
+    if (!this.checkAnnoAccademico) {
+      this.onClickIscr();
+    }
+  }
+
+  submitSingleProf() {
+    if (!this.checkNomeCognome()) {
+      this.onclickSingleProf();
+    }
+  }
+
+  submitSingleProfUnicam() {
+    let error = false;
+    if (this.checkNomeCognome()) {
+      error = true;
+    }
+    if (this.checkEmail()) {
+      error = true;
+    }
+    if (!error) {
+      this.onclickSingleProfUnicam();
+    }
+  }
+
+  checkAttivita(): boolean {
     if (this.attivita == '') {
       this.errorAttivita = true;
-      error = true;
-    } else {
-      this.errorAttivita = false;
+      return true;
     }
+    this.errorAttivita = false;
+    return false;
+  }
+
+  checkSede(): boolean {
     if (this.sede == '') {
       this.errorSede = true;
-      error = true;
-    } else {
-      this.errorSede = false;
+      return true;
     }
-    if (this.annoAccademico == '') {
-      this.errorAnno = true;
-      error = true;
-    } else {
-      this.errorAnno = false;
+    this.errorSede = false;
+    return false;
+  }
+
+  checkCitta(): boolean {
+    if (this.citta != "" && this.scuole.length == 0) {
+      this.errorCitta = true;
+      return true;
     }
+    this.errorCitta = false;
+    return false;
+  }
+
+  checkData(): boolean {
+    let error = false;
     const annoI = parseInt(this.dataInizio.slice(0, 4));
     const annoF = parseInt(this.dataFine.slice(0, 4));
     const meseI = parseInt(this.dataInizio.slice(5, 7));
@@ -275,22 +328,22 @@ export class UploadatComponent implements OnInit {
     const giornoF = parseInt(this.dataFine.slice(8, 10));
     const oraI = parseInt(this.dataInizio.slice(11, 13));
     const oraF = parseInt(this.dataFine.slice(11, 13));
-    if(annoI == this.annoAccademicoInizio && annoF == this.annoAccademicoInizio
+    if (annoI == this.annoAccademicoInizio && annoF == this.annoAccademicoInizio
       || annoI == this.annoAccademicoFine && annoF == this.annoAccademicoFine) {
-      
-        if(annoI>annoF) {
+
+      if (annoI > annoF) {
         this.errorData = true;
         error = true;
-      } else if(meseI>meseF) {
+      } else if (meseI > meseF) {
         this.errorData = true;
         error = true;
-      } else if(meseI==meseF && giornoI>giornoF) {
+      } else if (meseI == meseF && giornoI > giornoF) {
         this.errorData = true;
         error = true;
-      } else if(giornoI==giornoF && oraI>oraF) {
+      } else if (giornoI == giornoF && oraI > oraF) {
         this.errorData = true;
         error = true;
-      } else if(this.errorData) {
+      } else if (this.errorData) {
         this.errorData = false;
       }
 
@@ -298,29 +351,18 @@ export class UploadatComponent implements OnInit {
       this.errorData = true;
       error = true;
     }
-
-    if(this.citta!="" && this.scuole.length==0) {
-      this.errorCitta = true;
-      error = true;
-    } else {
-      this.errorCitta = false;
-    }
-    
-    if(!error) {
-      this.onClick();
-    }
+    return error;
   }
 
-  submitIscrForm() {
-    if(this.annoAccademico=="") {
+  checkAnnoAccademico(): boolean {
+    if (this.annoAccademico == "") {
       this.errorAnno = true;
-    } else {
-      this.errorAnno = false;
-      this.onClickIscr();
     }
+    this.errorAnno = false;
+    return false;
   }
 
-  submitSingleProf() {
+  checkNomeCognome(): boolean {
     let error = false;
     if (this.cognome == '') {
       this.errorCognome = true;
@@ -334,34 +376,16 @@ export class UploadatComponent implements OnInit {
     } else {
       this.errorNome = false;
     }
-    if (!error) {
-      this.onclickSingleProf();
-    }
+    return error;
   }
 
-  submitSingleProfUnicam() {
-    let error = false;
-    if (this.cognome == '') {
-      this.errorCognome = true;
-      error = true;
-    } else {
-      this.errorCognome = false;
-    }
-    if (this.nome == '') {
-      this.errorNome = true;
-      error = true;
-    } else {
-      this.errorNome = false;
-    }
+  checkEmail(): boolean {
     if (this.email == '') {
       this.errorEmail = true;
-      error = true;
-    } else {
-      this.errorEmail = false;
+      return true;
     }
-    if (!error) {
-      this.onclickSingleProfUnicam();
-    }
+    this.errorEmail = false;
+    return false;
   }
 
   listaAnni: string[] = [];
@@ -380,19 +404,17 @@ export class UploadatComponent implements OnInit {
     this.annoAccademicoFine = parseInt(anno2, 10);
   }
 
-  showDropdownS: boolean = false;
   toggleDropdownS() {
     let array = this.getScuole();
     array.subscribe(
       (result: string[]) => {
         // Qui puoi utilizzare i valori emessi dall'Observable come un array di stringhe
         this.scuole = result;
-        if(this.scuole.length==0) {
-          this.scuola="";
+        if (this.scuole.length == 0) {
+          this.scuola = "";
         }
       }
     );
-    this.showDropdownS = !this.showDropdownS;
   }
 
   getScuole(): Observable<string[]> {
@@ -491,15 +513,12 @@ export class UploadatComponent implements OnInit {
       );
   }
 
-  showDropdownU: boolean = false;
-
   toggleDropdownU() {
     let array = this.getProfUnicam();
     array.subscribe((result: string[]) => {
       // Qui puoi utilizzare i valori emessi dall'Observable come un array di stringhe
       this.professoriUnicam = result; // Stampa i valori su console
     });
-    this.showDropdownU = !this.showDropdownU;
   }
 
   getProfUnicam(): Observable<string[]> {
@@ -528,7 +547,7 @@ export class UploadatComponent implements OnInit {
     return this.citta;
   }
   public getListaCitta(): string[] {
-    if(this.citta=="") {
+    if (this.citta == "") {
       return this.cittaLista;
     }
     return this.cittaLista.filter(c => c.startsWith(this.citta.toUpperCase()));

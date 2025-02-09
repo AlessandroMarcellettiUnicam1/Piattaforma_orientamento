@@ -14,9 +14,8 @@ import { Profvisual } from 'src/app/interface/profvisual';
 import { ProfUnicamvisual } from 'src/app/interface/profUnicamVisual';
 import { ProfessoriUnicam } from 'src/app/interface/professoriUnicam';
 import { ProfessoriUnicamService } from 'src/app/service/professoriUnicam.service';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { filter, Observable, toArray } from 'rxjs';
-import { Activity } from 'src/app/interface/activity';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-stats',

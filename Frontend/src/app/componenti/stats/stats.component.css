@@ -1,7 +1,3 @@
-.container {
-  display: block;
-}
-
 .lst1 {
   background-color: #fff;
 }
@@ -23,10 +19,6 @@
 }
 
 .wrapper {
-  display: block;
-}
-
-.generato {
   display: block;
 }
 
@@ -56,29 +48,29 @@ input[type="text"] {
   text-align: center;
 }
 
+.activities-info {
+  display: flex;
+}
+
 .school-button, .activity-button, .school-prof-button, .unicam-prof-button {
   padding-bottom: 20px;
 }
 
-.activity-div {
-  display: flex;
+.activity-results, .activity-chart, .schoole-results, .school-chart {
+  flex: 1;
 }
 
-.activity-results, .activity-chart {
-  flex: 1;
+.schoole-results, .activity-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .activity-chart {
   display: block;
 }
 
-.activity-results {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.school-results, .activity-card {
+.school-card, .activity-card {
   width: 500px;
   padding-bottom: 10px;
   padding-left: 10px;
@@ -213,10 +205,6 @@ input[type="text"] {
 }
 
 @media (max-width: 550px) {
-
-  .bottoni {
-    height: auto;
-  }
 
   .school-results-accordion, .activty-results-accordion {
     margin-bottom: 50px;

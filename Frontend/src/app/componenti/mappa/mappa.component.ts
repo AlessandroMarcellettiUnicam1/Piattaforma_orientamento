@@ -1,6 +1,5 @@
-import { Component, ComponentFactoryResolver, Inject, Input, OnChanges, OnInit, SimpleChanges, ViewContainerRef } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { Coords, LatLngLiteral } from 'leaflet';
 import { Anni } from 'src/app/interface/anni';
 
 import { Res } from 'src/app/interface/res';
