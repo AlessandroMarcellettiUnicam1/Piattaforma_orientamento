@@ -288,8 +288,6 @@ export class AdminComponent implements OnInit {
 
   toggleDropdownC() {
     let array = this.getCitta();
-    var c = this.citta;
-
     array.subscribe((result: string[]) => {
       // Qui puoi utilizzare i valori emessi dall'Observable come un array di stringhe
       this.cittaLista = result; // Stampa i valori su console

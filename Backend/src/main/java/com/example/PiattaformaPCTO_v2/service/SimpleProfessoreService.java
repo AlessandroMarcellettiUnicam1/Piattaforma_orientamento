@@ -8,23 +8,19 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -78,14 +74,13 @@ public class SimpleProfessoreService implements ProfessoreService{
     public void createEmptyActivity(String nome, String tipo, String scuola, int anno,Sede sede, LocalDateTime dataInizio, LocalDateTime dataFine
             , String descrizione, ProfessoreUnicam profUnicam, Professore profReferente) {
 
-if(attivitaRepository.findByNomeAnno(nome,anno).isEmpty()) {
-    Attivita attivita = new Attivita(nome, tipo, anno, new ArrayList<>(), sede, dataInizio, dataFine, descrizione, profUnicam, profReferente, true);
+        if(attivitaRepository.findByNomeAnno(nome,anno).isEmpty()) {
+            Attivita attivita = new Attivita(nome, tipo, anno, new ArrayList<>(), sede, dataInizio, dataFine, descrizione, profUnicam, profReferente, true);
 
-    attivita.setScuola(scuola);
+            attivita.setScuola(scuola);
 
-
-    attivitaRepository.save(attivita);
-}
+            attivitaRepository.save(attivita);
+        }
     }
 
 
@@ -182,15 +177,15 @@ if(attivitaRepository.findByNomeAnno(nome,anno).isEmpty()) {
         risultatiAtt.setAttivita(attivita.getNome());
         risultatiAtt.setTipo(attivita.getTipo());
         List<Universitario> universitarioList=new ArrayList<>();
-for(int i=0;i<attivita.getStudPartecipanti().size();i++){
-    Studente stud=attivita.getStudPartecipanti().get(i);
-    Universitario universitario=universitarioRepository.findByNomeAndCognome(stud.getNome(),stud.getCognome());
-    if(universitario!=null){
-       risultatiAtt.addUniversitari(universitario);
+        for(int i=0;i<attivita.getStudPartecipanti().size();i++){
+            Studente stud=attivita.getStudPartecipanti().get(i);
+            Universitario universitario=universitarioRepository.findByNomeAndCognome(stud.getNome(),stud.getCognome());
+            if(universitario!=null){
+               risultatiAtt.addUniversitari(universitario);
+            }
+        }
+        risultatiAttRepository.save(risultatiAtt);
     }
-}
-risultatiAttRepository.save(risultatiAtt);
-}
 
 
     @Override
