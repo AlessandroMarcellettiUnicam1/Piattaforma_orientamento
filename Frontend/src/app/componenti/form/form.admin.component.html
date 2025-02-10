@@ -21,7 +21,7 @@
       <input [value]="getAttivita()" type="text" id="nome" (change)="cambioAttivita($event)" placeholder="Attività"
         required />
     </div>
-    <label class="error-label" *ngIf="errorAttivita">Inserire il nome dell'attività</label>
+    <label class="error-label" *ngIf="errorAttivita">Inserire il nome dell'attività.</label>
     <div class="activity-type-field">
       <label class="field-title">Tipo attività</label>
       <input type="text" id="tipo" (change)="cambioTipo($event)" placeholder="Tipologia" />
@@ -36,7 +36,7 @@
         <option value="altro">Altro</option>
       </select>
     </div>
-    <label class="error-label" *ngIf="errorSede">Inserire la sede dell'attività</label>
+    <label class="error-label" *ngIf="errorSede">Inserire la sede dell'attività.</label>
 
     <div class="city-field">
       <label class="field-title" for="citta">Città della Scuola</label>
@@ -47,7 +47,7 @@
         <option *ngFor="let c of getListaCitta()" [value]="c">{{c}}</option>
       </datalist>
     </div>
-    <label class="error-label" *ngIf="errorCitta">Inserire correttamente il nome della città</label>
+    <label class="error-label" *ngIf="errorCitta">Inserire correttamente il nome della città.</label>
 
     <div class="school-field" *ngIf="scuole.length > 0">
       <label class="field-title">Scuole Presenti</label>
@@ -65,7 +65,7 @@
         <option *ngFor="let anno of listaAnni" [value]="anno">{{anno}}</option>
       </select>
     </div>
-    <label class="error-label" *ngIf="errorAnno">Inserire l'anno accademico dell'attività</label>
+    <label class="error-label" *ngIf="errorAnno">Inserire l'anno accademico dell'attività.</label>
 
     <div class="data-fields">
       <div class="data-inizio-field">
@@ -79,8 +79,8 @@
       </div>
     </div>
     <label class="error-label" *ngIf="errorData">
-      Controllare se la data inserita è corretta<br>
-      L'anno deve esserre lo stesso dell'anno accademico
+      Controllare se la data inserita è corretta.<br>
+      L'anno deve esserre lo stesso dell'anno accademico.
     </label>
 
     <div class="description-field">
@@ -92,7 +92,7 @@
       <label class="field-title" for="pro">Professore Referente</label>
       <input type="text" list="profRefName" id="profRef" name="profRef" [(ngModel)]="prof"
         (change)="cambioProfRef($event)" (change)="toggleDropdownP()" autocomplete="off"
-        placeholder="Professore Referente" />
+        placeholder="Professore Referente" required/>
       <datalist class="profRef-list" id="profRefName">
         <option value="">-</option>
         <option *ngFor="let prof of professori" [value]="prof">{{prof}}</option>
@@ -103,7 +103,7 @@
       <label class="field-title" for="prof">Professore Unicam</label>
       <input type="text" list="profUniName" id="profUni" name="profUni" [(ngModel)]="profUnicam"
         (change)="cambioProfUni($event)" (change)="toggleDropdownU()" autocomplete="off"
-        placeholder="Professore Unicam" />
+        placeholder="Professore Unicam" required/>
       <datalist class="profUni-list" id="profUniName">
         <option value="">-</option>
         <option *ngFor="let profUnicam of professoriUnicam" [value]="profUnicam">{{profUnicam}}</option>
@@ -111,7 +111,7 @@
     </div>
 
     <button class="submit-button" type="button" (click)="inviaForm()">Carica!</button>
-
+    <label class="error-label" *ngIf="errorAttivita || errorSede || errorAnno || errorCitta || errorData">ERRORE NELLA COMPILAZIONE DEL FORM!</label>
   </div>
 
 

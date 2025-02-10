@@ -30,7 +30,7 @@
         <label class="field-title">Nome attività</label>
         <input [value]="getAttivita()" type="text" id="nome" (change)="cambioAttivita($event)" placeholder="Attività"
           required />
-        <label class="error-label" *ngIf="errorAttivita">Inserire il nome dell'attività</label>
+        <label class="error-label" *ngIf="errorAttivita">Inserire il nome dell'attività.</label>
         <label class="field-title">Tipo attività</label>
         <input type="text" id="tipo" (change)="cambioTipo($event)" placeholder="Tipologia" />
 
@@ -42,7 +42,7 @@
           <option value="scuola">Scuola</option>
           <option value="altro">Altro</option>
         </select>
-        <label class="error-label" *ngIf="errorSede">Inserire la sede dell'attività</label>
+        <label class="error-label" *ngIf="errorSede">Inserire la sede dell'attività.</label>
 
 
         <div class="city-field">
@@ -53,7 +53,7 @@
             <option value="">-</option>
             <option *ngFor="let c of getListaCitta()" [value]="c">{{c}}</option>
           </datalist>
-          <label class="error-label" *ngIf="errorCitta">Inserire correttamente il nome della città</label>
+          <label class="error-label" *ngIf="errorCitta">Inserire correttamente il nome della città.</label>
         </div>
 
         <div class="school-field" *ngIf="scuole.length > 0">
@@ -71,7 +71,7 @@
             <option value="">-</option>
             <option *ngFor="let anno of listaAnni" [value]="anno">{{anno}}</option>
           </select>
-          <label class="error-label" *ngIf="errorAnno">Inserire l'anno accademico dell'attività</label>
+          <label class="error-label" *ngIf="errorAnno">Inserire l'anno accademico dell'attività.</label>
         </div>
 
         <div class="data-fields">
@@ -87,8 +87,8 @@
           </div>
         </div>
         <label class="error-label" *ngIf="errorData">
-          Controllare se la data inserita è corretta<br>
-          L'anno deve esserre lo stesso dell'anno accademico
+          Controllare se la data inserita è corretta.<br>
+          L'anno deve esserre lo stesso dell'anno accademico.
         </label>
 
         <label class="field-title" for="descrizione">Descrizione</label>
@@ -133,7 +133,7 @@
             <option value="">-</option>
             <option *ngFor="let anno of listaAnni" [value]="anno">{{anno}}</option>
           </select>
-          <label class="error-label" *ngIf="errorAnno">Inserire l'anno accademico</label>
+          <label class="error-label" *ngIf="errorAnno">Inserire l'anno accademico.</label>
         </div>
 
         <div class="file-input">
@@ -165,13 +165,13 @@
             <label class="field-title" for="nome">Nome</label>
             <input [value]="getNome()" type="text" id="nome" (change)="cambioNome($event)" placeholder="Nome"
               required />
-            <label class="error-label" *ngIf="errorNome">Inserire il nome del Professore</label>
+            <label class="error-label" *ngIf="errorNome">Inserire il nome del Professore.</label>
           </div>
           <div>
             <label class="field-title" for="cognome">Cognome</label>
             <input [value]="getCognome()" type="text" id="cognome" (change)="cambioCognome($event)" placeholder="Cognome"
               required />
-            <label class="error-label" *ngIf="errorCognome">Inserire il cognome del Professore</label>
+            <label class="error-label" *ngIf="errorCognome">Inserire il cognome del Professore.</label>
           </div>
           <div>
             <label class="field-title" for="email">Email</label>
@@ -185,7 +185,7 @@
             <datalist class="cities-list" id="cities-prof">
               <option *ngFor="let c of getListaCitta()" [value]="c">{{c}}</option>
             </datalist>
-            <label class="error-label" *ngIf="errorCitta">Inserire correttamente il nome della città</label>
+            <label class="error-label" *ngIf="errorCitta">Inserire correttamente il nome della città.</label>
           </div>
 
           <div class="school-field" *ngIf="scuole.length > 0">
@@ -214,19 +214,19 @@
             <label class="field-title" for="nome">Nome</label>
             <input [value]="getNome()" type="text" id="nome" (change)="cambioNome($event)" required
               placeholder="Nome" />
-            <label class="error-label" *ngIf="errorNome">Inserire il nome del Professore</label>
+            <label class="error-label" *ngIf="errorNome">Inserire il nome del Professore.</label>
           </div>
           <div>
             <label class="field-title" for="cognome">Cognome</label>
             <input [value]="getCognome()" type="text" id="cognome" (change)="cambioCognome($event)" required
               placeholder="Cognome" />
-            <label class="error-label" *ngIf="errorCognome">Inserire il cognome del Professore</label>
+            <label class="error-label" *ngIf="errorCognome">Inserire il cognome del Professore.</label>
           </div>
           <div>
             <label class="field-title" for="email">Email</label>
             <input [value]="getEmail()" type="text" id="email" (change)="cambioEmail($event)" required
               placeholder="Email" />
-            <label class="error-label" *ngIf="errorEmail">Inserire l'email del Professore</label>
+            <label class="error-label" *ngIf="errorEmail">Inserire l'email del Professore.</label>
           </div>
         </form>
 
