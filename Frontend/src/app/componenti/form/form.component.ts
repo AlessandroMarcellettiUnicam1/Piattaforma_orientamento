@@ -18,8 +18,8 @@ export class FormdatComponent implements OnInit {
   constructor(private http: HttpClient,
     private resService: ResService
   ) {}
-  listaAttivita: ActivityAvailable[] = [];
-  attivita: ActivityAvailable | null = null;
+  listaAttivita: string[] = [];
+  attivita: string = '';
   nome: string = '';
   cognome: string = '';
   email: string = '';
@@ -36,7 +36,6 @@ export class FormdatComponent implements OnInit {
 
   ngOnInit(): void {
     this.toggleDropdownAtt();
-    this.toggleDropdownS();
     this.toggleDropdownC();
   }
 
@@ -44,7 +43,7 @@ export class FormdatComponent implements OnInit {
     let array = this.resService.getResAttActive();
     array.subscribe(
       (result: ActivityAvailable[]) => {
-        this.listaAttivita = result;
+        result.forEach(a => this.listaAttivita.push(a.nome+'%'+a.annoAcc));
       }
     );
   }
@@ -82,12 +81,8 @@ export class FormdatComponent implements OnInit {
   }
 
   inviaIscrizione(): void {
-    let nomeAttivita: string = '';
-    let anno: number = 0;
-    if(this.attivita != null) {
-      nomeAttivita = this.attivita.nome;
-      anno = this.attivita.annoAcc;
-    }
+    const nomeAttivita: string = this.attivita.slice(0, this.attivita.indexOf('%'));
+    const anno: number =  parseInt(this.attivita.slice(this.attivita.indexOf('%')+1, this.attivita.length));
     const nome: string = this.nome;
     const cognome: string = this.cognome;
     const email: string = this.email;
@@ -130,7 +125,7 @@ export class FormdatComponent implements OnInit {
   }
 
   checkAttivita(): boolean {
-    if (this.attivita == null) {
+    if (this.attivita == '') {
       this.errorAttivita = true;
       return true;
     }

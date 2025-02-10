@@ -7,30 +7,28 @@
   <div class="subscription-form">
     <div class="activity-field">
       <label class="field-title" for="citta">Attività da svolgere</label>
-      <input [value]="attivita" type="text" list="activityName" id="activity" name="activity" [(ngModel)]="attivita"
-        (change)="cambioAttivita($event)" (change)="toggleDropdownS()" autocomplete="off" placeholder="Attività" required/>
-      <datalist class="activities-list" id="activityName">
-        <option value="">-</option>
-        <option *ngFor="let a of listaAttivita" [value]="a.nome">{{a.nome}}</option>
-      </datalist>
+      <select [value]="attivita" (change)="cambioAttivita($event)" type="select" required>
+        <option value='' selected disabled hidden>-</option>
+        <option *ngFor="let a of listaAttivita" [value]="a">{{a.split('%')[0]}}</option>
+      </select>
     </div>
-    <label class="error-label" *ngIf="errorNome">Inserire l'attività.</label>
+    <label class="error-label" *ngIf="errorAttivita">Inserire l'attività.</label>
 
     <div class="name-field">
       <label class="field-title">Nome</label>
-      <input [value]="nome" type="text" id="text" (change)="cambioNome($event)" placeholder="Nome" required />
+      <input [value]="nome" type="text" id="nome" (change)="cambioNome($event)" placeholder="Nome" required />
     </div>
     <label class="error-label" *ngIf="errorNome">Inserire il nome.</label>
 
     <div class="surname-field">
       <label class="field-title">Cognome</label>
-      <input [value]="cognome" type="text" id="text" (change)="cambioCognome($event)" placeholder="Cognome" required />
+      <input [value]="cognome" type="text" id="cognome" (change)="cambioCognome($event)" placeholder="Cognome" required />
     </div>
     <label class="error-label" *ngIf="errorCognome">Inserire il cognome.</label>
 
     <div class="email-field">
       <label class="field-title">Email</label>
-      <input [value]="cognome" type="email" id="email" (change)="cambioEmail($event)" placeholder="email@esempio.com"
+      <input [value]="email" type="email" id="email" (change)="cambioEmail($event)" placeholder="email@esempio.com"
         required />
     </div>
     <label class="error-label" *ngIf="errorEmail">Inserire correttamente l'email.</label>
@@ -48,8 +46,8 @@
     
     <div class="school-field" *ngIf="listaScuole.length > 0">
       <label class="field-title">Scuola</label>
-      <select [value]="scuola" type="text" [(ngModel)]="scuola" (change)="cambioScuola($event)" required>
-        <option value="">-</option>
+      <select [value]="scuola" type="select" [(ngModel)]="scuola" (change)="cambioScuola($event)" placeholder="Scuola" required>
+        <option value="" selected disabled hidden>-</option>
         <option *ngFor="let s of listaScuole" [value]="s">{{s}}</option>
       </select>
     </div>
@@ -57,6 +55,7 @@
 
 
     <button class="subscription-button" (click)="checkInvioIscrizione()">Invia!</button>
+    <label class="error-label" *ngIf="errorAttivita || errorNome || errorCognome || errorEmail || errorCitta || errorScuola">Errore nella compilazione del form.</label>
   </div>
 </div>
 
