@@ -18,13 +18,13 @@
   <div class="admin-form" *ngIf="click==1">
     <div class="activity-name-field">
       <label class="field-title">Nome attività</label>
-      <input [value]="getAttivita()" type="text" id="text" (change)="cambioAttivita($event)" placeholder="Attività"
+      <input [value]="getAttivita()" type="text" id="nome" (change)="cambioAttivita($event)" placeholder="Attività"
         required />
     </div>
     <label class="error-label" *ngIf="errorAttivita">Inserire il nome dell'attività</label>
     <div class="activity-type-field">
       <label class="field-title">Tipo attività</label>
-      <input type="text" id="text" (change)="cambioTipo($event)" placeholder="Tipologia" />
+      <input type="text" id="tipo" (change)="cambioTipo($event)" placeholder="Tipologia" />
     </div>
     <div class="sede-field">
       <label class="field-title" for="sede">Sede</label>
@@ -58,8 +58,8 @@
     </div>
 
     <div class="year-field">
-      <label class="field-title" for="annoInizio">Anno Accademico</label>
-      <select type="number" id="annoInizio" name="annoInizio" [(ngModel)]="annoAccademico"
+      <label class="field-title" for="annoAccademico">Anno Accademico</label>
+      <select type="number" id="annoAccademico" name="annoAccademico" [(ngModel)]="annoAccademico"
         (change)="onSelectionChangeY($event)" required>
         <option value="">-</option>
         <option *ngFor="let anno of listaAnni" [value]="anno">{{anno}}</option>
@@ -85,7 +85,7 @@
 
     <div class="description-field">
       <label class="field-title" for="descrizione">Descrizione</label>
-      <input type="text" id="text" (change)="cambioDescrizione($event)" placeholder="Descrizione" />
+      <input type="text" id="descrizione" (change)="cambioDescrizione($event)" placeholder="Descrizione" />
     </div>
 
     <div class="school-prof-field">
