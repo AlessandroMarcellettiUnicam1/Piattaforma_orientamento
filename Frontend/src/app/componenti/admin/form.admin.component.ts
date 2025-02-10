@@ -49,6 +49,8 @@ export class AdminComponent implements OnInit {
   errorCitta: boolean = false;
   errorAnno: boolean = false;
   errorData: boolean = false;
+  errorProfRef: boolean = false;
+  errorProfUnicam: boolean = false;
 
 
 
@@ -86,6 +88,12 @@ export class AdminComponent implements OnInit {
     if (this.checkData()) {
       error = true;
     }
+    if (this.checkProfRef()) {
+      error = true;
+    }
+    if (this.checkProfUnicam()) {
+      error = true;
+    }
     if (!error) {
       this.onClick();
     }
@@ -111,7 +119,7 @@ export class AdminComponent implements OnInit {
   }
 
   checkCitta(): boolean {
-    if (this.citta != "" && this.scuole.length == 0) {
+    if (this.citta != '' && this.scuole.length == 0) {
       this.errorCitta = true;
       return true;
     }
@@ -159,10 +167,26 @@ export class AdminComponent implements OnInit {
   }
 
   checkAnnoAccademico(): boolean {
-    if (this.annoAccademico == "") {
+    if (this.annoAccademico == '') {
       this.errorAnno = true;
     }
     this.errorAnno = false;
+    return false;
+  }
+
+  checkProfRef(): boolean {
+    if (this.prof == '') {
+      this.errorProfRef = true;
+    }
+    this.errorProfRef = false;
+    return false;
+  }
+
+  checkProfUnicam(): boolean {
+    if (this.profUnicam == '') {
+      this.errorProfUnicam = true;
+    }
+    this.errorProfUnicam = false;
     return false;
   }
 
@@ -345,7 +369,7 @@ export class AdminComponent implements OnInit {
     return this.citta;
   }
   public getListaCitta(): string[] {
-    if (this.citta == "") {
+    if (this.citta == '') {
       return this.cittaLista;
     }
     return this.cittaLista.filter(c => c.startsWith(this.citta.toUpperCase()));

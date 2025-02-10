@@ -98,6 +98,7 @@
         <option *ngFor="let prof of professori" [value]="prof">{{prof}}</option>
       </datalist>
     </div>
+    <label class="error-label" *ngIf="errorProfRef">Inserire il professore referente dell'attività.</label>
 
     <div class="unicam-prof-field">
       <label class="field-title" for="prof">Professore Unicam</label>
@@ -109,6 +110,7 @@
         <option *ngFor="let profUnicam of professoriUnicam" [value]="profUnicam">{{profUnicam}}</option>
       </datalist>
     </div>
+    <label class="error-label" *ngIf="errorProfUnicam">Inserire il professore Unicam dell'attività.</label>
 
     <button class="submit-button" type="button" (click)="inviaForm()">Carica!</button>
     <label class="error-label" *ngIf="errorAttivita || errorSede || errorAnno || errorCitta || errorData">ERRORE NELLA COMPILAZIONE DEL FORM!</label>

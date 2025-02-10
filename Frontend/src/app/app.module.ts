@@ -21,7 +21,7 @@ import {CdkTreeModule} from '@angular/cdk/tree';
 import {MatSelectModule} from '@angular/material/select';
 import {MatAutocompleteModule} from '@angular/material/autocomplete'
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { AdminComponent } from './componenti/form/form.admin.component';
+import { AdminComponent } from './componenti/admin/form.admin.component';
 import { FormdatComponent } from './componenti/form/form.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
