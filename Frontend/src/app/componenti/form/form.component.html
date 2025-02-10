@@ -1,71 +1,63 @@
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Forms</title>
-</head>
-<body>
-  
-  <div class="title-container">
-    <h2 class="title">Iscrizione</h2>
-  </div>
-  <form>
-  <div>
-    <button (click)="toggleDropdown()">Mostra Attività Presenti</button>
-    <div *ngIf="showDropdown">
-     
-      <select [(ngModel)]="selectedItem" (change)="onSelectionChange($event)">
-        <option *ngFor="let item of items" [value]="item">{{item}}</option>
+<div class="title-container">
+  <h2 class="title">Iscrizione</h2>
+</div>
+<div class="container">
+  <div class="line">CARICAMENTO ATTIVITA'</div>
+  <div class="subscription-form">
+    <div class="activity-field">
+      <label class="field-title" for="citta">Attività da svolgere</label>
+      <input [value]="attivita" type="text" list="activityName" id="activity" name="activity" [(ngModel)]="attivita"
+        (change)="cambioAttivita($event)" (change)="toggleDropdownS()" autocomplete="off" placeholder="Attività" required/>
+      <datalist class="activities-list" id="activityName">
+        <option value="">-</option>
+        <option *ngFor="let a of listaAttivita" [value]="a.nome">{{a.nome}}</option>
+      </datalist>
+    </div>
+    <label class="error-label" *ngIf="errorNome">Inserire l'attività.</label>
+
+    <div class="name-field">
+      <label class="field-title">Nome</label>
+      <input [value]="nome" type="text" id="text" (change)="cambioNome($event)" placeholder="Nome" required />
+    </div>
+    <label class="error-label" *ngIf="errorNome">Inserire il nome.</label>
+
+    <div class="surname-field">
+      <label class="field-title">Cognome</label>
+      <input [value]="cognome" type="text" id="text" (change)="cambioCognome($event)" placeholder="Cognome" required />
+    </div>
+    <label class="error-label" *ngIf="errorCognome">Inserire il cognome.</label>
+
+    <div class="email-field">
+      <label class="field-title">Email</label>
+      <input [value]="cognome" type="email" id="email" (change)="cambioEmail($event)" placeholder="email@esempio.com"
+        required />
+    </div>
+    <label class="error-label" *ngIf="errorEmail">Inserire correttamente l'email.</label>
+
+    <div class="city-field">
+      <label class="field-title" for="citta">Città</label>
+      <input [value]="citta" type="text" list="cityName" id="citta" name="citta" [(ngModel)]="citta"
+        (change)="cambioCitta($event)" (change)="toggleDropdownS()" autocomplete="off" placeholder="Città" required/>
+      <datalist class="cities-list" id="cityName">
+        <option value="">-</option>
+        <option *ngFor="let c of getListaCitta()" [value]="c">{{c}}</option>
+      </datalist>
+    </div>
+    <label class="error-label" *ngIf="errorCitta">Inserire correttamente il nome della città.</label>
+    
+    <div class="school-field" *ngIf="listaScuole.length > 0">
+      <label class="field-title">Scuola</label>
+      <select [value]="scuola" type="text" [(ngModel)]="scuola" (change)="cambioScuola($event)" required>
+        <option value="">-</option>
+        <option *ngFor="let s of listaScuole" [value]="s">{{s}}</option>
       </select>
     </div>
+    <label class="error-label" *ngIf="errorScuola && listaScuole.length > 0">Inserire la scuola di provenienza.</label>
+
+
+    <button class="subscription-button" (click)="checkInvioIscrizione()">Invia!</button>
   </div>
-    <div>
-        <h2>Iscriviti</h2>
-        <form>
-          <div>
-            <input
-            type="text"
-            id="text"
-            (change)="cambioNome($event)"
-            placeholder="Nome"
-          />
-          </div>
-          <div>
-            <input
-            type="text"
-            id="text"
-            (change)="cambioCognome($event)"
-            placeholder="Cognome"
-          />
-          </div>
-          <div>
-            <input
-            type="text"
-            id="text"
-            (change)="cambioEmail($event)"
-            placeholder="Email"
-          />
-          </div>
+</div>
 
-          <div >
-            <label for="citta">Città Scuola</label>
-            <input type="text" id="citta" name="citta" [(ngModel)]="citta" (change)="cambioCitta($event)" required>
-            <button (click)="toggleDropdownS()"class="btn">Cerca Scuola!</button>
-            
-            <div *ngIf="showDropdownS">
-           
-              <h3>ScuolePresenti</h3>
-              
-              <select [(ngModel)]="selectedItem" (change)="onSelectionChangeS($event)">
-                <option *ngFor="let scuola of scuole" [value]="scuola">{{scuola}}</option>
-              </select>
-            </div>
-        </div>
-
-
-          <button (click)="InviaIscrizione()">Invia!</button>
-        </form>
-      </div>
-    </form>  
-</body>
 </html>

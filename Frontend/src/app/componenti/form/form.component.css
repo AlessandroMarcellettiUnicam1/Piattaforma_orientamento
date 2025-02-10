@@ -1,84 +1,96 @@
+.title-container {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  height: 150px;
+}
 
+.title {
+  margin-top: 50px;
+  width: 300px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 64px;
+  z-index: 1000;
+  color: #E2001A;
+}
 
+.line {
+  height: 75px;
+  line-height: 75px;
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold;
+  color: #222C4A;
+  background-color: #7FBD32;
+}
 
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f0f0f0;
-  }
-  .centered-title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100; 
-    color: #000000;
-  }
-  .container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
+.container {
+  width: 100%;
+  display: block;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 30px;
+  padding-bottom: 50px;
+}
 
-  .title-container {
-    display: flex;
-    text-align: center;
-    justify-content: center;
-    height: 150px;
-  }
-  
-  .title {
-    margin-top: 50px;
-    width: 300px;
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 64px;
-    z-index: 1000;
-    color: #E2001A;
-  }
-  
-  button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  form {
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    margin: auto;
-  }
+/* Stile per i campi di input e i selettori */
+input[type="text"],
+input[type="email"],
+input[type="datetime-local"],
+select {
+  max-width: 400px;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1.5px solid rgb(100, 100, 100);
+  border-radius: 4px;
+  box-sizing: border-box;
+  text-align: center;
+}
 
+input[type="text"],
+input[type="email"],
+select {
+  width: 150%;
+}
 
+/* Stile per le etichette */
+.field-title {
+  font-weight: bold;
+  margin-top: 20px;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
 
-  select,
-  input[type="text"] {
-    width: 80%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
+.error-label {
+  color: rgb(230, 78, 78);
+  font-size: small;
+  display: block;
+  text-align: center;
+}
 
-  
-  h2 {
-    margin-top: 0;
-  }
+/* Stile per i campi obbligatori */
+input[required],
+select[required] {
+  border-bottom: 3px solid rgb(150, 70, 70);
+}
 
-  
-  div {
-    margin-bottom: 20px;
-  }
+/* Stile per i pulsanti */
+.subscription-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 30px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.subscription-button:hover {
+  color: #fff;
+  background-color: #5a3ba8;
+}
