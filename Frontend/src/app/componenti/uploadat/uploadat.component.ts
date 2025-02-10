@@ -357,6 +357,7 @@ export class UploadatComponent implements OnInit {
   checkAnnoAccademico(): boolean {
     if (this.annoAccademico == '') {
       this.errorAnno = true;
+      return true;
     }
     this.errorAnno = false;
     return false;

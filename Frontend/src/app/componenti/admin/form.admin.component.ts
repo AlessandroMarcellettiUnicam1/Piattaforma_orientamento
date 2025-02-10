@@ -169,6 +169,7 @@ export class AdminComponent implements OnInit {
   checkAnnoAccademico(): boolean {
     if (this.annoAccademico == '') {
       this.errorAnno = true;
+      return true;
     }
     this.errorAnno = false;
     return false;
@@ -177,6 +178,7 @@ export class AdminComponent implements OnInit {
   checkProfRef(): boolean {
     if (this.prof == '') {
       this.errorProfRef = true;
+      return true;
     }
     this.errorProfRef = false;
     return false;
@@ -185,6 +187,7 @@ export class AdminComponent implements OnInit {
   checkProfUnicam(): boolean {
     if (this.profUnicam == '') {
       this.errorProfUnicam = true;
+      return true;
     }
     this.errorProfUnicam = false;
     return false;
