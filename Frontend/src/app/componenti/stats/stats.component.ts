@@ -226,7 +226,7 @@ export class StatsComponent implements OnInit {
     let stringaAnno = anno.toString();
     let a: Anni = {
       value: anno,
-      viewValue: stringaAnno.slice(2,4)+"/"+stringaAnno.slice(6),
+      viewValue: stringaAnno.slice(2,4)+'/'+stringaAnno.slice(6),
     }
     return a;
   }
@@ -374,11 +374,11 @@ export class StatsComponent implements OnInit {
   cambioRegione(e: any) {
     this.regione = e;
     this.provincia='';
-    this.citta=''
+    this.citta='';
   }
   cambioProvincia(e: any) {
     this.provincia = e;
-    this.citta=''
+    this.citta='';
   }
   cambioCitta(e: any) {
     this.citta = e;

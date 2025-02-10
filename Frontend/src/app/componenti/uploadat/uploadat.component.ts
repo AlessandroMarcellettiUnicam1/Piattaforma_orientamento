@@ -310,7 +310,7 @@ export class UploadatComponent implements OnInit {
   }
 
   checkCitta(): boolean {
-    if (this.citta != "" && this.scuole.length == 0) {
+    if (this.citta != '' && this.scuole.length == 0) {
       this.errorCitta = true;
       return true;
     }
@@ -355,7 +355,7 @@ export class UploadatComponent implements OnInit {
   }
 
   checkAnnoAccademico(): boolean {
-    if (this.annoAccademico == "") {
+    if (this.annoAccademico == '') {
       this.errorAnno = true;
     }
     this.errorAnno = false;
@@ -411,7 +411,7 @@ export class UploadatComponent implements OnInit {
         // Qui puoi utilizzare i valori emessi dall'Observable come un array di stringhe
         this.scuole = result;
         if (this.scuole.length == 0) {
-          this.scuola = "";
+          this.scuola = '';
         }
       }
     );
@@ -547,7 +547,7 @@ export class UploadatComponent implements OnInit {
     return this.citta;
   }
   public getListaCitta(): string[] {
-    if (this.citta == "") {
+    if (this.citta == '') {
       return this.cittaLista;
     }
     return this.cittaLista.filter(c => c.startsWith(this.citta.toUpperCase()));
