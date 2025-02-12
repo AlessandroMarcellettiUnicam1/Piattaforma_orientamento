@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -22,9 +23,7 @@ import java.util.List;
 public class PiattaformaPctoV2Application {
 
 	public static void main(String[] args) {
-
-		SpringApplication.run(PiattaformaPctoV2Application.class, args);
-
+		ApplicationContext context = SpringApplication.run(PiattaformaPctoV2Application.class, args);
 	}
 
 

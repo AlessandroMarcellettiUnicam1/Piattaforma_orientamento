@@ -63,9 +63,13 @@ metodo che inserisce tutti quei studenti inseriti nell'exel in quell'anno
             String m = String.valueOf(matr).replaceAll("[0]*$", "").replaceAll(".$", "");
             String nome = row.getCell(2).getStringCellValue();
             String cognome = row.getCell(3).getStringCellValue();
+            String scuola="";
             if (row.getCell(5)!=null){
                 String comune = row.getCell(5).getStringCellValue().toUpperCase();
-                String scuola = row.getCell(4).getStringCellValue();
+                if (row.getCell(4) != null) {
+                    scuola = row.getCell(4).getStringCellValue();
+                }
+
                 String corso = row.getCell(0).getStringCellValue();
                 Corso=corso;
                 Universitario universitario = new Universitario(m,nome,cognome,anno,corso,comune,scuola);

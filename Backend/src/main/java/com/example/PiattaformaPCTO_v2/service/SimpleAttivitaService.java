@@ -10,6 +10,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -258,8 +259,6 @@ public class SimpleAttivitaService implements AttivitaService {
         presenza.addPartecipanti(attivita.getStudPartecipanti());
         presenza.addIscritti(universitari);
         return presenza;
-
-
     }
 
 
@@ -295,6 +294,8 @@ public class SimpleAttivitaService implements AttivitaService {
 
 
     private Scuola findScuola(String citta, String scuola){
+        citta = citta.toUpperCase();
+        scuola = scuola.toUpperCase();
         List<Scuola> scuole = scuolaRepository.getScuolaByCitta(citta);
         List<String> nomi = new ArrayList<>();
         for (Scuola s : scuole){

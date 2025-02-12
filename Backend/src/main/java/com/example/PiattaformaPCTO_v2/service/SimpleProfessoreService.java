@@ -49,6 +49,10 @@ public class SimpleProfessoreService implements ProfessoreService{
     @Autowired
     private MongoTemplate mongoTemplate;
 
+    @Autowired
+    private ScuolaService scuolaService;
+    @Autowired
+    private SimpleStringFinderHelper simpleStringFinderHelper;
     @Override
     public String save(Professore professore) {
         return professoreRepository.save(professore).getEmail();
@@ -105,7 +109,7 @@ if(attivitaRepository.findByNomeAnno(nome,anno).isEmpty()) {
     }
 
     /**
-     * metodo che da un attività crea la vista sulle scuola
+     * Metodo che da un attività crea la vista sulle scuole
      * @param attivita
      */
     private void createRisultati(Attivita attivita){
@@ -198,24 +202,33 @@ risultatiAttRepository.save(risultatiAtt);
         Sheet dataSheet = this.fileOpenerHelper(file);
         Iterator<Row> iterator = dataSheet.rowIterator();
         iterator.next();
-
+        List<String> allCities = scuolaService.getCitta();
         while (iterator.hasNext()){
             Row row = iterator.next();
             if(row.getCell(0)==null)break;
-            String nome=row.getCell(0).getStringCellValue();
-            String cognome=row.getCell(1).getStringCellValue();
+            String nome=row.getCell(0).getStringCellValue().trim();
+            String cognome=row.getCell(1).getStringCellValue().trim();
             String attivita=row.getCell(2).getStringCellValue();
-            String scuola=row.getCell(3).getStringCellValue();
-            String cittascuola=row.getCell(4).getStringCellValue();
+            String scuola=row.getCell(3).getStringCellValue().toUpperCase();
+            String cittascuola=row.getCell(4).getStringCellValue().toUpperCase();
             String email=row.getCell(5).getStringCellValue();
 
+            String bestMatchingCity = simpleStringFinderHelper.findClosestCity(cittascuola, allCities);
 
-            Scuola scuola1 =scuolaRepository.getScuolaByCittaAndNome(cittascuola,scuola);
-            System.out.println(checkactivity(nome,cognome,attivita));
-            if(scuolaRepository.getScuolaByCittaAndNome(cittascuola,scuola)!=null&&
-            !checkactivity(nome,cognome,attivita)) {
-                Professore prof=new Professore(nome,cognome,email,scuola1,attivita);
-                professoreRepository.save(prof);
+            List<Scuola> scuoleNellaCitta = scuolaRepository.getScuolaByCitta(bestMatchingCity);
+
+            Scuola bestMatchingSchool = simpleStringFinderHelper.findClosestScuola(scuola, scuoleNellaCitta);
+
+            System.out.println("Attività già fatta dal professore? "+checkactivity(nome,cognome,attivita));
+
+            if (bestMatchingSchool != null && !checkactivity(nome,cognome,attivita)) {
+                Professore professoreEsistente = professoreRepository.getProfessoreByNomeCognomeScuola(nome, cognome, bestMatchingSchool.getIdScuola());
+                if (professoreEsistente == null) {
+                    Professore prof = new Professore(nome, cognome, email, bestMatchingSchool, attivita);
+                    professoreRepository.save(prof);
+                } else {
+                    System.out.println("Professore già presente nella scuola: " + nome + " " + cognome + " - " + bestMatchingSchool.getNome());
+                }
             }
         }
 
