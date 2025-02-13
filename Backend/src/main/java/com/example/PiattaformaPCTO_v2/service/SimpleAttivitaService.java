@@ -253,7 +253,14 @@ public class SimpleAttivitaService implements AttivitaService {
      * @param attivita
      */
     private Presenza createPresenza(Attivita attivita) {
-        List<Universitario> universitari=risultatiAttRepository.findbyNomeAttivita(attivita.getNome()).get(0).getUniversitarii();
+        return getPresenza(attivita, risultatiAttRepository);
+
+
+    }
+
+    @NotNull
+    public Presenza getPresenza(Attivita attivita, RisultatiAttRepository risultatiAttRepository) {
+        List<Universitario> universitari= risultatiAttRepository.findbyNomeAttivita(attivita.getNome()).get(0).getUniversitarii();
         Presenza presenza=new Presenza(attivita.getNome());
         presenza.setTipo(attivita.getTipo());
         presenza.addPartecipanti(attivita.getStudPartecipanti());
