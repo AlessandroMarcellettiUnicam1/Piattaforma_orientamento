@@ -281,7 +281,7 @@ public class SimpleAttivitaService implements AttivitaService {
         List<Universitario> universitarioList=new ArrayList<>();
         for(int i=0;i<attivita.getStudPartecipanti().size();i++){
             Studente stud=attivita.getStudPartecipanti().get(i);
-            Universitario universitario=universitarioRepository.findByNomeAndCognome(stud.getNome(),stud.getCognome());
+            Universitario universitario=universitarioRepository.findByNomeAndCognome(stud.getNome().toUpperCase(),stud.getCognome().toUpperCase());
             if(universitario!=null){
                 risultatiAtt.addUniversitari(universitario);
             }
