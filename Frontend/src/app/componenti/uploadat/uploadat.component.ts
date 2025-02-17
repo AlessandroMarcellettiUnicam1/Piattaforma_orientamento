@@ -16,7 +16,7 @@ export class UploadatComponent implements OnInit {
   private dataIscr = new FormData();
   private dataProf = new FormData();
   private dataProfUnicam = new FormData();
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
   private anno = 0;
   anni: Anni[] = [];
   annoAccademicoInizio: number = 0;
@@ -110,7 +110,6 @@ export class UploadatComponent implements OnInit {
   }
 
   onClick() {
-
     const anno: number = (this.anno =
       this.annoAccademicoInizio * 10000 + this.annoAccademicoFine);
 
@@ -122,7 +121,7 @@ export class UploadatComponent implements OnInit {
         this.tipo +
         '$' +
         this.sede +
-        '-' +
+        '£' +
         this.dataInizio.toString() +
         ' ' +
         this.dataFine.toString() +
@@ -141,9 +140,9 @@ export class UploadatComponent implements OnInit {
         this.tipo +
         '$' +
         this.scuola.toString() +
-        '-' +
+        '£' +
         this.citta.toString() +
-        '-' +
+        '£' +
         this.sede +
         '*' +
         this.dataInizio.toString() +
@@ -310,7 +309,7 @@ export class UploadatComponent implements OnInit {
   }
 
   checkCitta(): boolean {
-    if (this.citta != "" && this.scuole.length == 0) {
+    if (this.citta != '' && this.scuole.length == 0) {
       this.errorCitta = true;
       return true;
     }
@@ -328,9 +327,11 @@ export class UploadatComponent implements OnInit {
     const giornoF = parseInt(this.dataFine.slice(8, 10));
     const oraI = parseInt(this.dataInizio.slice(11, 13));
     const oraF = parseInt(this.dataFine.slice(11, 13));
-    if (annoI == this.annoAccademicoInizio && annoF == this.annoAccademicoInizio
-      || annoI == this.annoAccademicoFine && annoF == this.annoAccademicoFine) {
-
+    if (
+      (annoI == this.annoAccademicoInizio &&
+        annoF == this.annoAccademicoInizio) ||
+      (annoI == this.annoAccademicoFine && annoF == this.annoAccademicoFine)
+    ) {
       if (annoI > annoF) {
         this.errorData = true;
         error = true;
@@ -346,7 +347,6 @@ export class UploadatComponent implements OnInit {
       } else if (this.errorData) {
         this.errorData = false;
       }
-
     } else {
       this.errorData = true;
       error = true;
@@ -355,7 +355,7 @@ export class UploadatComponent implements OnInit {
   }
 
   checkAnnoAccademico(): boolean {
-    if (this.annoAccademico == "") {
+    if (this.annoAccademico == '') {
       this.errorAnno = true;
     }
     this.errorAnno = false;
@@ -406,15 +406,13 @@ export class UploadatComponent implements OnInit {
 
   toggleDropdownS() {
     let array = this.getScuole();
-    array.subscribe(
-      (result: string[]) => {
-        // Qui puoi utilizzare i valori emessi dall'Observable come un array di stringhe
-        this.scuole = result;
-        if (this.scuole.length == 0) {
-          this.scuola = "";
-        }
+    array.subscribe((result: string[]) => {
+      // Qui puoi utilizzare i valori emessi dall'Observable come un array di stringhe
+      this.scuole = result;
+      if (this.scuole.length == 0) {
+        this.scuola = '';
       }
-    );
+    });
   }
 
   getScuole(): Observable<string[]> {
@@ -547,10 +545,12 @@ export class UploadatComponent implements OnInit {
     return this.citta;
   }
   public getListaCitta(): string[] {
-    if (this.citta == "") {
+    if (this.citta == '') {
       return this.cittaLista;
     }
-    return this.cittaLista.filter(c => c.startsWith(this.citta.toUpperCase()));
+    return this.cittaLista.filter((c) =>
+      c.startsWith(this.citta.toUpperCase())
+    );
   }
   public getScuola(): string {
     return this.scuola;
