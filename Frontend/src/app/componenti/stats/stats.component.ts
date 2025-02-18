@@ -17,6 +17,7 @@ import { ProfessoriUnicamService } from 'src/app/service/professoriUnicam.servic
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { ChartType } from 'angular-google-charts';
 
 @Component({
   selector: 'app-stats',
@@ -25,7 +26,8 @@ import { environment } from 'src/environments/environment';
 })
 
 export class StatsComponent implements OnInit {
-  constructor(private http: HttpClient,
+  constructor(
+    private http: HttpClient,
     private scuolaService: ScuoleService,
     private universiService: UniversiService,
     private resService: ResService,
@@ -63,6 +65,11 @@ export class StatsComponent implements OnInit {
   public regione: string = '';
   public provincia: string = '';
   public citta: string = '';
+  public arrayChart: any[] = [];
+  chartType: any;
+  chartColumns: any[] = [];
+  chartData: any[] = [];
+
 
   ngOnInit(): void {
     this.getRes();
@@ -70,7 +77,14 @@ export class StatsComponent implements OnInit {
     this.getScuole();
     this.getUniversi();
     this.getProfessoriUnicam();
+    this.getStatsRisAttForChart();
+    //Dati per modificare il grafico
+    this.chartType=ChartType.Bar;
+    this.chartColumns=['Anno accademico','Iscritti'];
+    this.chartData= this.arrayChart;
+    console.log(this.arrayChart)
   }
+  
 
   textFilterCityApply(event: any): void {
     this.textFilterC = event.target.value;
@@ -295,6 +309,20 @@ export class StatsComponent implements OnInit {
     }
 
     return filteredVisualRisAtt;
+  }
+
+  getStatsRisAttForChart() {
+    let i = 0;
+    while(this.anniRes.length > i) {
+      let iscritti = 0;
+      this.visualRisAtt.forEach((a) => {
+        if(a.annoAcc == this.anniRisAtt[i].value) {
+          iscritti += a.universitarii.length;
+        }
+      });
+      this.arrayChart.push(iscritti, this.anniRisAtt[i].value);
+      i++;
+    }
   }
 
   cambioAnno(e: any) {

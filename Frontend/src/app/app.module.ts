@@ -25,6 +25,7 @@ import { AdminComponent } from './componenti/admin/form.admin.component';
 import { FormdatComponent } from './componenti/form/form.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { GoogleChartsModule } from 'angular-google-charts';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MatSelectModule,
     MatAutocompleteModule,
     MatIconModule,
-    MatMenuModule
+    MatMenuModule,
+    GoogleChartsModule
   ],
 
   providers: [],
