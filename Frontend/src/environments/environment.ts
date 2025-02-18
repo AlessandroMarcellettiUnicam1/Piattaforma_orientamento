@@ -1,16 +1,33 @@
-// This file can be replaced during build by using the `fileReplacements` array.
-// `ng build` replaces `environment.ts` with `environment.prod.ts`.
-// The list of file replacements can be found in `angular.json`.
+const dotenv = require("dotenv");
+
+dotenv.config({ path: './.env' });
 
 export const environment = {
-  production: true//cambiato
+  production: false,
+  API_BASE_URL: "${process.env.API_BASE_URL}",
+  GET_PROFESSORI: "${process.env.GET_PROFESSORI}",
+  GET_PROFESSORI_UNICAM: "${process.env.GET_PROFESSORI_UNICAM}",
+  GET_RES_RISULTATI: "${process.env.GET_RES_RISULTATI}",
+  GET_RES_RISULTATI_DA_ANNO: "${process.env.GET_RES_RISULTATI_DA_ANNO}",
+  GET_ATTIVITA_ATTIVE: "${process.env.GET_ATTIVITA_ATTIVE}",
+  GET_RISULTATI_ATT: "${process.env.GET_RISULTATI_ATT}",
+  GET_LISTA_SCUOLE: "${process.env.GET_LISTA_SCUOLE}",
+  GET_LISTA_IMMATRICOLATI: "${process.env.GET_LISTA_IMMATRICOLATI}",
+  POST_CREAZIONE_ATTIVITA_ATTIVA: "${process.env.POST_CREAZIONE_ATTIVITA_ATTIVA}",
+  POST_ATTIVITA_TERMINATA: "${process.env.POST_ATTIVITA_TERMINATA}",
+  GET_LISTA_CITTA: "${process.env.GET_LISTA_CITTA}",
+  GET_LISTA_SCUOLE_DA_CITTA: "${process.env.GET_LISTA_SCUOLE_DA_CITTA}",
+  GET_LISTA_PROFESSORI_REFERENTI: "${process.env.GET_LISTA_PROFESSORI_REFERENTI}",
+  GET_LISTA_PROFESSORI_UNICAM: "${process.env.GET_LISTA_PROFESSORI_UNICAM}",
+  POST_ISCRIZIONE_STUDENTE: "${process.env.POST_ISCRIZIONE_STUDENTE}",
+  POST_DOWNLOAD_PROFESSORI_REFERNIT: "${process.env.POST_DOWNLOAD_PROFESSORI_REFERNIT}",
+  POST_DOWNLOAD_PROFESSORI_UNICAM: "${process.env.POST_DOWNLOAD_PROFESSORI_UNICAM}",
+  POST_DOWNLOAD_RISULTATI: "${process.env.POST_DOWNLOAD_RISULTATI}",
+  POST_DOWNLOAD_SCUOLE: "${process.env.POST_DOWNLOAD_SCUOLE}",
+  POST_CARICA_IMMATRICOLATI: "${process.env.POST_CARICA_IMMATRICOLATI}",
+  POST_CARICA_ATTIVITA: "${process.env.POST_CARICA_ATTIVITA}",
+  POST_CARICA_FILE_PROFESSORI_REFERENTI: "${process.env.POST_CARICA_FILE_PROFESSORI_REFERENTI}",
+  POST_CARICA_FILE_PROFESSORI_UNICAM: "${process.env.POST_CARICA_FILE_PROFESSORI_UNICAM}",
+  POST_CARICA_PROFESSORE_REFERENTE: "${process.env.POST_CARICA_PROFESSORE_REFERENTE}",
+  POST_CARICA_PROFESSORE_UNICAM: "${process.env.POST_CARICA_PROFESSORE_UNICAM}",
 };
-
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

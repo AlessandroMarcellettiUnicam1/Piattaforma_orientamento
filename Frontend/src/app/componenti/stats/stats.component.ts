@@ -16,12 +16,14 @@ import { ProfessoriUnicam } from 'src/app/interface/professoriUnicam';
 import { ProfessoriUnicamService } from 'src/app/service/professoriUnicam.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-stats',
   templateUrl: './stats.component.html',
   styleUrls: ['./stats.component.css'],
 })
+
 export class StatsComponent implements OnInit {
   constructor(private http: HttpClient,
     private scuolaService: ScuoleService,
@@ -30,10 +32,10 @@ export class StatsComponent implements OnInit {
     private resatService: ResattService,
     private professoriService: ProfessoriService,
     private professoriUnicamService: ProfessoriUnicamService
-  ) {}
+  ) { }
 
   public isMenuOpened: boolean = false;
-  public scuole: Scuola[] =[];
+  public scuole: Scuola[] = [];
   public universi: Universi[] | undefined;
   public risultati: Res[] = [];
   public risatt: Risatt[] = [];
@@ -41,8 +43,8 @@ export class StatsComponent implements OnInit {
   public anniRisAtt: Anni[] = [];
   public prof: Professori[] = [];
   public profUnicam: ProfessoriUnicam[] = [];
-  public profVisual : Profvisual[] = [];
-  public profUnicamVisual : ProfUnicamvisual[] = [];
+  public profVisual: Profvisual[] = [];
+  public profUnicamVisual: ProfUnicamvisual[] = [];
   public click = 1;
   public anno = 0;
   public annoVisual = '';
@@ -87,21 +89,21 @@ export class StatsComponent implements OnInit {
       next: (response) => (this.prof = response),
       complete: () => {
         this.createProfVisual()
-        },
+      },
       error: (error) => console.log(error),
     });
   }
 
   createProfVisual() {
-    if(this.prof.length>0){
-      this.prof.forEach(p=>{
+    if (this.prof.length > 0) {
+      this.prof.forEach(p => {
         let nome = p.nome.toUpperCase();
         let cognome = p.cognome.toUpperCase();
         let id = p.email
-        let prof = {email:p.email,nome: nome,cognome:cognome,scuolaImp:p.scuolaImp,attivita:p.attivita}
-        this.scuole.forEach(s=>{
-          if(s.idScuola== prof.scuolaImp.idScuola){
-            let provis:Profvisual = {professore : prof,scuola :s}
+        let prof = { email: p.email, nome: nome, cognome: cognome, scuolaImp: p.scuolaImp, attivita: p.attivita }
+        this.scuole.forEach(s => {
+          if (s.idScuola == prof.scuolaImp.idScuola) {
+            let provis: Profvisual = { professore: prof, scuola: s }
             this.profVisual.push(provis)
           }
         })
@@ -113,18 +115,18 @@ export class StatsComponent implements OnInit {
       next: (response) => (this.profUnicam = response),
       complete: () => {
         this.createProfUnicamVisual()
-        },
+      },
       error: (error) => console.log(error),
     });
   }
-  createProfUnicamVisual(){
-    if(this.profUnicam.length>0){
-      this.profUnicam.forEach(pUnicam=>{
+  createProfUnicamVisual() {
+    if (this.profUnicam.length > 0) {
+      this.profUnicam.forEach(pUnicam => {
         let nome = pUnicam.nome.toUpperCase();
         let cognome = pUnicam.cognome.toUpperCase();
         let id = pUnicam.email
-        let profUnicam = {email:pUnicam.email,nome: nome,cognome:cognome}
-        let provis:ProfUnicamvisual = {professore : profUnicam}
+        let profUnicam = { email: pUnicam.email, nome: nome, cognome: cognome }
+        let provis: ProfUnicamvisual = { professore: profUnicam }
         this.profUnicamVisual.push(provis)
       })
     }
@@ -155,24 +157,24 @@ export class StatsComponent implements OnInit {
 
   getVisualRis(): Res[] {
     let filteredVisualRis = this.visualRis;
-    if(this.anno!=0) {
-      filteredVisualRis = filteredVisualRis.filter(res => res.annoAcc==this.anno);
+    if (this.anno != 0) {
+      filteredVisualRis = filteredVisualRis.filter(res => res.annoAcc == this.anno);
     }
 
-    if(this.regione!='') {
-      filteredVisualRis = filteredVisualRis.filter(res => res.scuola.regione==this.regione);
-      if(this.provincia!='') {
+    if (this.regione != '') {
+      filteredVisualRis = filteredVisualRis.filter(res => res.scuola.regione == this.regione);
+      if (this.provincia != '') {
         filteredVisualRis = filteredVisualRis.filter(res => res.scuola.provincia.includes(this.provincia));
-        
+
       }
     }
-    if(this.citta!='') {
+    if (this.citta != '') {
       filteredVisualRis = filteredVisualRis.filter(res => res.scuola.citta.includes(this.citta));
     }
-    
-    if(this.visualRis.length > 0) {
-      switch(this.ordinamenti) {
-       
+
+    if (this.visualRis.length > 0) {
+      switch (this.ordinamenti) {
+
         case 'REGIONI':
           filteredVisualRis.sort((a, b) =>
             a.scuola.regione.localeCompare(b.scuola.regione)
@@ -183,11 +185,11 @@ export class StatsComponent implements OnInit {
             a.scuola.nome.localeCompare(b.scuola.nome)
           );
           break;
-          case 'ISCRITTI':
-            filteredVisualRis.sort((a, b) =>
-              b.iscritti.length - a.iscritti.length
-            );
-            break;
+        case 'ISCRITTI':
+          filteredVisualRis.sort((a, b) =>
+            b.iscritti.length - a.iscritti.length
+          );
+          break;
         default:
           break;
       }
@@ -197,11 +199,11 @@ export class StatsComponent implements OnInit {
   }
 
   creaAnniListaRes() {
-    let listaAnni: Anni[]= [];
-    let listValori: number[]= [];
+    let listaAnni: Anni[] = [];
+    let listValori: number[] = [];
     this.visualRis.forEach(r => listaAnni.push(this.creaDatoAnni(r.annoAcc)));
     listaAnni.forEach(a => {
-      if(!listValori.includes(a.value)) {
+      if (!listValori.includes(a.value)) {
         this.anniRes.push(a);
         listValori.push(a.value);
       }
@@ -210,11 +212,11 @@ export class StatsComponent implements OnInit {
   }
 
   creaAnniListaRisAtt() {
-    let listaAnni: Anni[]= [];
-    let listValori: number[]= [];
+    let listaAnni: Anni[] = [];
+    let listValori: number[] = [];
     this.visualRisAtt.forEach(r => listaAnni.push(this.creaDatoAnni(r.annoAcc)));
     listaAnni.forEach(a => {
-      if(!listValori.includes(a.value)) {
+      if (!listValori.includes(a.value)) {
         this.anniRisAtt.push(a);
         listValori.push(a.value);
       }
@@ -226,17 +228,17 @@ export class StatsComponent implements OnInit {
     let stringaAnno = anno.toString();
     let a: Anni = {
       value: anno,
-      viewValue: stringaAnno.slice(2,4)+'/'+stringaAnno.slice(6),
+      viewValue: stringaAnno.slice(2, 4) + '/' + stringaAnno.slice(6),
     }
     return a;
   }
-  
+
   creaStringaAnnoAcc(a: number) {
-    let aI=  Math.floor(a/10000);
-    let aF=a%10000
-    let ain = (aI%100);
-    let afin = (aF%100);
-    
+    let aI = Math.floor(a / 10000);
+    let aF = a % 10000
+    let ain = (aI % 100);
+    let afin = (aF % 100);
+
     return ain + '/' + afin;
   }
 
@@ -266,30 +268,30 @@ export class StatsComponent implements OnInit {
 
   getVisualRisAtt(): Risatt[] {
     let filteredVisualRisAtt = this.visualRisAtt;
-    if(this.anno!=0) {
-      filteredVisualRisAtt = filteredVisualRisAtt.filter(res => res.annoAcc==this.anno);
+    if (this.anno != 0) {
+      filteredVisualRisAtt = filteredVisualRisAtt.filter(res => res.annoAcc == this.anno);
     }
-    
-    if(this.visualRis.length > 0) {
-      switch(this.ordinamenti) {
+
+    if (this.visualRis.length > 0) {
+      switch (this.ordinamenti) {
 
         case 'NOME':
           filteredVisualRisAtt.sort((a, b) =>
             a.attivita.localeCompare(b.attivita)
           );
           break;
-          case 'ISCRITTI':
-            filteredVisualRisAtt.sort((a, b) =>
-              b.universitarii.length - a.universitarii.length
-            );
-            break;
+        case 'ISCRITTI':
+          filteredVisualRisAtt.sort((a, b) =>
+            b.universitarii.length - a.universitarii.length
+          );
+          break;
         default:
           break;
       }
     }
 
-    if(this.textFilterA!='') {
-      filteredVisualRisAtt = filteredVisualRisAtt.filter( res => res.attivita.toLowerCase().startsWith(this.textFilterA.toLowerCase()) );
+    if (this.textFilterA != '') {
+      filteredVisualRisAtt = filteredVisualRisAtt.filter(res => res.attivita.toLowerCase().startsWith(this.textFilterA.toLowerCase()));
     }
 
     return filteredVisualRisAtt;
@@ -337,14 +339,14 @@ export class StatsComponent implements OnInit {
     this.onClickResetFilter();
   }
   onClickResetFilter() {
-    this.anno=0;
-    this.ordinamenti='';
-    this.ordinamentiAtt='';
-    this.regione='';
-    this.provincia='';
-    this.citta='';
-    this.textFilterA='';
-    this.textFilterP='';
+    this.anno = 0;
+    this.ordinamenti = '';
+    this.ordinamentiAtt = '';
+    this.regione = '';
+    this.provincia = '';
+    this.citta = '';
+    this.textFilterA = '';
+    this.textFilterP = '';
   }
 
   cambioOrdinamento(e: any) {
@@ -356,7 +358,7 @@ export class StatsComponent implements OnInit {
   }
 
   cambioOrdinamentoAtt(e: any) {
-    this.ordinamentiAtt=e
+    this.ordinamentiAtt = e
     switch (this.ordinamentiAtt) {
 
       case 'ISCRITTI':
@@ -373,20 +375,20 @@ export class StatsComponent implements OnInit {
   }
   cambioRegione(e: any) {
     this.regione = e;
-    this.provincia='';
-    this.citta='';
+    this.provincia = '';
+    this.citta = '';
   }
   cambioProvincia(e: any) {
     this.provincia = e;
-    this.citta='';
+    this.citta = '';
   }
   cambioCitta(e: any) {
     this.citta = e;
   }
 
 
- // Metodo per avviare il download del file
-  scaricaVistaProfessori():void  {
+  // Metodo per avviare il download del file
+  scaricaVistaProfessori(): void {
     this.downloadProfFile().subscribe(
       (blob: Blob) => {
         // Creare un oggetto URL per il blob scaricato
@@ -395,7 +397,7 @@ export class StatsComponent implements OnInit {
         // Creare un link temporaneo e avviare il download
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'professori.xlsx'; 
+        link.download = 'professori.xlsx';
         document.body.appendChild(link);
         link.click();
 
@@ -408,21 +410,16 @@ export class StatsComponent implements OnInit {
     );
   }
   downloadProfFile(): Observable<Blob> {
-    const url = 'http://localhost:8080/professori/download';
-    let body = {name:"professori.xlsx" };
-  
-    
-  return this.http.post<Blob>(url, body, {
-    responseType: 'blob' as 'json', 
-  });
+    let body = { name: "professori.xlsx" };
+
+    return this.http.post<Blob>(environment.POST_DOWNLOAD_PROFESSORI_REFERNIT, body, {
+      responseType: 'blob' as 'json',
+    });
 
   }
 
-
-
-
- // Metodo per avviare il download del file
-  scaricaVistaProfessoriUnicam():void  {
+  // Metodo per avviare il download del file
+  scaricaVistaProfessoriUnicam(): void {
     this.downloadProfUnicamFile().subscribe(
       (blob: Blob) => {
         // Creare un oggetto URL per il blob scaricato
@@ -431,7 +428,7 @@ export class StatsComponent implements OnInit {
         // Creare un link temporaneo e avviare il download
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'professoriUnicam.xlsx'; 
+        link.download = 'professoriUnicam.xlsx';
         document.body.appendChild(link);
         link.click();
 
@@ -445,17 +442,15 @@ export class StatsComponent implements OnInit {
   }
 
   downloadProfUnicamFile(): Observable<Blob> {
-    const url = 'http://localhost:8080/professoriUnicam/download';
-    let body = {name:"professoriUnicam.xlsx" };
+    let body = { name: "professoriUnicam.xlsx" };
 
-  
-    return this.http.post<Blob>(url, body, {
-      responseType: 'blob' as 'json', 
+    return this.http.post<Blob>(environment.POST_DOWNLOAD_PROFESSORI_UNICAM, body, {
+      responseType: 'blob' as 'json',
     });
   }
 
   // Metodo per avviare il download del file
-  scaricaVistarisulati():void  {
+  scaricaVistarisulati(): void {
     this.downloadRisFile().subscribe(
       (blob: Blob) => {
         // Creare un oggetto URL per il blob scaricato
@@ -464,7 +459,7 @@ export class StatsComponent implements OnInit {
         // Creare un link temporaneo e avviare il download
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'risultati.xlsx'; 
+        link.download = 'risultati.xlsx';
         document.body.appendChild(link);
         link.click();
 
@@ -478,20 +473,18 @@ export class StatsComponent implements OnInit {
   }
   downloadRisFile(): Observable<Blob> {
 
-  let annoi=this.annoVisual.substring(0,this.annoVisual.indexOf("/"));
-  let annof=this.annoVisual.substring(this.annoVisual.indexOf("/")+1,this.annoVisual.length);
-  let annot = ((parseInt(annoi)+2000)*10000)+(parseInt(annof)+2000);
+    let annoi = this.annoVisual.substring(0, this.annoVisual.indexOf("/"));
+    let annof = this.annoVisual.substring(this.annoVisual.indexOf("/") + 1, this.annoVisual.length);
+    let annot = ((parseInt(annoi) + 2000) * 10000) + (parseInt(annof) + 2000);
 
+    let body = { name: "risultati.xlsx", anno: annot };
 
-    const url = 'http://localhost:8080/risultati/download';
-    let body = {name:"risultati.xlsx",anno:annot};
-
-  return this.http.post<Blob>(url, body, {
-    responseType: 'blob' as 'json', // Indica al server che ci aspettiamo un blob come risposta
-  });
+    return this.http.post<Blob>(environment.POST_DOWNLOAD_RISULTATI, body, {
+      responseType: 'blob' as 'json', // Indica al server che ci aspettiamo un blob come risposta
+    });
   }
   // Metodo per avviare il download del file
-  scaricaVistaScuole():void  {
+  scaricaVistaScuole(): void {
     this.downloadScuoleFile().subscribe(
       (blob: Blob) => {
         // Creare un oggetto URL per il blob scaricato
@@ -500,7 +493,7 @@ export class StatsComponent implements OnInit {
         // Creare un link temporaneo e avviare il download
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'scuole.xlsx'; 
+        link.download = 'scuole.xlsx';
         document.body.appendChild(link);
         link.click();
 
@@ -513,66 +506,65 @@ export class StatsComponent implements OnInit {
     );
   }
   downloadScuoleFile(): Observable<Blob> {
-    let annoi=this.annoVisual.substring(0,this.annoVisual.indexOf("/"));
-    let annof=this.annoVisual.substring(this.annoVisual.indexOf("/")+1,this.annoVisual.length);
-    let annot =((parseInt(annoi)+2000)*10000)+(parseInt(annof)+2000);
-    const url = 'http://localhost:8080/scuola/download';
-    let body = {name:"scuole.xlsx",anno:annot };
-    
+    let annoi = this.annoVisual.substring(0, this.annoVisual.indexOf("/"));
+    let annof = this.annoVisual.substring(this.annoVisual.indexOf("/") + 1, this.annoVisual.length);
+    let annot = ((parseInt(annoi) + 2000) * 10000) + (parseInt(annof) + 2000);
 
-  return this.http.post<Blob>(url, body, {
-    responseType: 'blob' as 'json', // Indica al server che ci aspettiamo un blob come risposta
-  });
+    let body = { name: "scuole.xlsx", anno: annot };
+
+    return this.http.post<Blob>(environment.POST_DOWNLOAD_SCUOLE, body, {
+      responseType: 'blob' as 'json', // Indica al server che ci aspettiamo un blob come risposta
+    });
 
   }
 
   getProfList(): Profvisual[] {
     let filteredProfVisual = this.profVisual;
-    if(this.regione!='') {
+    if (this.regione != '') {
       filteredProfVisual = filteredProfVisual.filter(p => p.professore.scuolaImp.regione.includes(this.regione));
-      if(this.provincia!='') {
+      if (this.provincia != '') {
         filteredProfVisual = filteredProfVisual.filter(p => p.professore.scuolaImp.provincia.includes(this.provincia));
-        if(this.citta!='') {
+        if (this.citta != '') {
           filteredProfVisual = filteredProfVisual.filter(p => p.professore.scuolaImp.citta.includes(this.citta));
         }
       }
     }
-    if(this.textFilterP!='') {
+    if (this.textFilterP != '') {
       filteredProfVisual = filteredProfVisual.filter(p => p.professore.nome.startsWith(this.textFilterP.toUpperCase())
-                                        || p.professore.cognome.startsWith(this.textFilterP.toUpperCase())
-                                        || p.professore.email.startsWith(this.textFilterP.toUpperCase())
-                                      );
+        || p.professore.cognome.startsWith(this.textFilterP.toUpperCase())
+        || p.professore.email.startsWith(this.textFilterP.toUpperCase())
+      );
     }
 
     return filteredProfVisual;
   }
 
   getProfUnicamList(): ProfUnicamvisual[] {
-    if(this.textFilterP=='') {
+    if (this.textFilterP == '') {
       return this.profUnicamVisual;
     }
     return this.profUnicamVisual.filter(p => p.professore.nome.startsWith(this.textFilterP.toUpperCase())
-                                          || p.professore.cognome.startsWith(this.textFilterP.toUpperCase())
-                                          || p.professore.email.startsWith(this.textFilterP.toUpperCase())
-                                        );
+      || p.professore.cognome.startsWith(this.textFilterP.toUpperCase())
+      || p.professore.email.startsWith(this.textFilterP.toUpperCase())
+    );
   }
 
   getListaRegioni(): string[] {
-    if(this.regione=='') {
+    if (this.regione == '') {
       this.listaRegioni = [];
     }
-    if(this.click==1) {
+    if (this.click == 1) {
 
       this.visualRis.forEach(res => {
-        if(!this.listaRegioni.includes(res.scuola.regione)) {
+        if (!this.listaRegioni.includes(res.scuola.regione)) {
           this.listaRegioni.push(res.scuola.regione);
         }
       });
     }
-    if(this.click==3) {
+    if (this.click == 3) {
 
       this.getProfList().forEach(p => {
-        if(!this.listaRegioni.includes(p.scuola.regione)) {
+        if (!this.listaRegioni.includes(p.scuola.regione)) {
           this.listaRegioni.push(p.scuola.regione);
         }
       });
@@ -582,21 +574,21 @@ export class StatsComponent implements OnInit {
   }
 
   getListaProvince(): string[] {
-    if(this.provincia=='') {
+    if (this.provincia == '') {
       this.listaProvince = [];
     }
-    if(this.click==1) {
+    if (this.click == 1) {
 
       this.visualRis.forEach(res => {
-        if(!this.listaProvince.includes(res.scuola.provincia) && res.scuola.regione==this.regione) {
+        if (!this.listaProvince.includes(res.scuola.provincia) && res.scuola.regione == this.regione) {
           this.listaProvince.push(res.scuola.provincia);
         }
       });
     }
-    if(this.click==3) {
+    if (this.click == 3) {
 
       this.getProfList().forEach(p => {
-        if(!this.listaProvince.includes(p.scuola.provincia) && p.scuola.regione==this.regione) {
+        if (!this.listaProvince.includes(p.scuola.provincia) && p.scuola.regione == this.regione) {
           this.listaProvince.push(p.scuola.provincia);
         }
       });
@@ -605,21 +597,21 @@ export class StatsComponent implements OnInit {
   }
 
   getListaCitta(): string[] {
-    if(this.citta=='') {
+    if (this.citta == '') {
       this.listaCitta = [];
     }
-    if(this.click==1) {
+    if (this.click == 1) {
 
       this.visualRis.forEach(res => {
-        if(!this.listaCitta.includes(res.scuola.citta) && res.scuola.provincia==this.provincia && res.scuola.citta != null) {
+        if (!this.listaCitta.includes(res.scuola.citta) && res.scuola.provincia == this.provincia && res.scuola.citta != null) {
           this.listaCitta.push(res.scuola.citta);
         }
       });
     }
-    if(this.click==3) {
+    if (this.click == 3) {
 
       this.getProfList().forEach(p => {
-        if(!this.listaCitta.includes(p.scuola.citta) && p.scuola.provincia==this.provincia) {
+        if (!this.listaCitta.includes(p.scuola.citta) && p.scuola.provincia == this.provincia) {
           this.listaCitta.push(p.scuola.citta);
         }
       });

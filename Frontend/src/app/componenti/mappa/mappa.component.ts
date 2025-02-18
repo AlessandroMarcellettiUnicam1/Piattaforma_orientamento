@@ -1,26 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Anni } from 'src/app/interface/anni';
-
 import { Res } from 'src/app/interface/res';
 import { Risreg } from 'src/app/interface/risreg';
 import { ResService } from 'src/app/service/res.service';
-
-
-
-
-
 
 @Component({
   selector: 'app-mappa',
   templateUrl: './mappa.component.html',
   styleUrls: ['./mappa.component.css']
 })
+
 export class MappaComponent implements OnInit {
-
-
-
-
 
   constructor(private resService: ResService,
     public dialog :MatDialog) {}
@@ -31,10 +22,6 @@ export class MappaComponent implements OnInit {
   public a : Anni[] =[]
   public visualizza = false
   public visualRis : Res[] = []
-
-
-
-
 
 public coord = [
   { nome : "Marche", iscr :0,id :"IT-57"},

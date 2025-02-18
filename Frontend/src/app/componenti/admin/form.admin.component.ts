@@ -1,5 +1,3 @@
-
-
 import { HttpClient } from '@angular/common/http';
 import { ResService } from 'src/app/service/res.service';
 import { ActivityAvailable } from 'src/app/interface/activityAvailable';
@@ -7,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Sede } from 'src/app/interface/sede';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-Admin',
@@ -32,7 +31,7 @@ export class AdminComponent implements OnInit {
   dataFine: Date = new Date();
   dataI: Date = new Date();
   dataF: Date = new Date();
-  private tipo: string = ''
+  private tipo: string = '';
   items: string[] = [];
   scuole: string[] = [];
   professori: string[] = [];
@@ -224,7 +223,7 @@ export class AdminComponent implements OnInit {
 
     let body = { nome, tipo, scuola, anno, sedeA, dataInizio, dataFine, descrizione, profUnicam, profReferente };
     this.http
-      .post<string>('http://localhost:8080/professori/createEmptyActivity1', body)
+      .post<string>(environment.POST_CREAZIONE_ATTIVITA_ATTIVA, body)
       .subscribe({
         next: (response) => console.log(alert("inserimento avvenuto con successo"), response),
         error: (error) => console.log(error),
@@ -235,7 +234,7 @@ export class AdminComponent implements OnInit {
 
     let body = { nome, anno };
     this.http
-      .post('http://localhost:8080/professori/uploadActivityDefinitively', body)
+      .post(environment.POST_ATTIVITA_TERMINATA, body)
       .subscribe({
         next: (response) => console.log(alert("inserimento avvenuto con successo"), response),
         error: (error) => console.log(error),
@@ -277,7 +276,7 @@ export class AdminComponent implements OnInit {
   }
 
   toggleDropdowAtt() {
-    this.resService.getResAttActive().subscribe({
+    this.resService.getAttActive().subscribe({
       next: (response) => (this.activities = response),
       error: (error) => console.log(error),
     });
@@ -323,7 +322,7 @@ export class AdminComponent implements OnInit {
 
   getCitta(): Observable<string[]> {
     return this.http
-      .get<string[]>('http://localhost:8080/scuola/orderCitta')
+      .get<string[]>(environment.GET_LISTA_CITTA)
       .pipe(
         map((response: any) => response.map((citta: any) => citta.toString()))
       );
@@ -331,19 +330,19 @@ export class AdminComponent implements OnInit {
 
   getScuole(): Observable<string[]> {
 
-    return this.http.get<string[]>('http://localhost:8080/scuola/scuoleCitta/' + this.citta).pipe(
+    return this.http.get<string[]>(environment.GET_LISTA_SCUOLE_DA_CITTA + this.citta).pipe(
       map((response: any) => response.map((scuola: any) => scuola.toString()))
     );
   }
   getReferenti(): Observable<string[]> {
 
-    return this.http.get<string[]>('http://localhost:8080/professori/getReferenti').pipe(
+    return this.http.get<string[]>(environment.GET_LISTA_PROFESSORI_REFERENTI).pipe(
       map((response: any) => response.map((prof: any) => prof.toString()))
     );
   }
   getProfUnicam(): Observable<string[]> {
 
-    return this.http.get<string[]>('http://localhost:8080/professoriUnicam/getProfUnicam').pipe(
+    return this.http.get<string[]>(environment.GET_LISTA_PROFESSORI_UNICAM).pipe(
       map((response: any) => response.map((profUnicam: any) => profUnicam.toString()))
     );
   }
