@@ -69,10 +69,14 @@ input[type="text"] {
 .activity-chart {
   display: flex;
   justify-content: center;
+  flex-direction: row;
+  padding-top: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
 }
 
 .chart {
-  width: 500px;
+  width: 600px;
   height: 300px;
 }
 
@@ -199,6 +203,11 @@ input[type="text"] {
 }
 
 @media (max-width: 710px) {
+
+  .bottoni {
+    height: auto;
+  }
+
   .school-prof-results, .unicam-prof-results {
     width: 75%;
   }
@@ -211,6 +220,10 @@ input[type="text"] {
 }
 
 @media (max-width: 550px) {
+
+  .bottoni {
+    height: auto;
+  }
 
   .school-results-accordion, .activty-results-accordion {
     margin-bottom: 50px;

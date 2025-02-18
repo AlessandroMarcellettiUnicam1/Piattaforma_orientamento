@@ -109,7 +109,7 @@
           placeholder="Filtra per città" />
         <datalist class="profUni-list" id="text-filter">
           <option value="">-</option>
-          <option *ngFor="let c of getVisualRis()" [value]="c.scuola.citta">{{c.scuola.citta}}</option>
+          <option *ngFor="let c of getFilteredRes()" [value]="c.scuola.citta">{{c.scuola.citta}}</option>
         </datalist>
       </div>
 
@@ -131,7 +131,7 @@
 
       <div class="schools-info">
         <div class="school-results">
-          <div class="school-card" *ngFor="let ris of getVisualRis()">
+          <div class="school-card" *ngFor="let ris of getFilteredRes()">
             <mat-accordion class="school-results-accordion">
               <mat-expansion-panel class="school-results-panel" [ngStyle]="{
                 background: ris.iscritti.length > 0 ? '#a0c4e0' : '#c9b6b6'
@@ -185,9 +185,13 @@
           <span class="button-content">Scarica Vista Risultati </span>
         </button>
       </div>
+      <div class="activity-chart">
+        <google-chart class="chart" [dynamicResize]="true" [type]="mainChartType" [data]="mainChartData" [columns]="mainChartColumns"></google-chart>
+        <google-chart class="chart" *ngIf="this.anno!=0" [type]="chartTypeAtt" [data]="chartDataAtt" [columns]="chartColumnsAtt"></google-chart>
+      </div>
       <div class="activities-info">
         <div class="activity-results">
-          <div class="activity-card" *ngFor="let ris of getVisualRisAtt()">
+          <div class="activity-card" *ngFor="let ris of getFilteredRisAtt()">
             <mat-accordion class="activity-results-accordion">
               <mat-expansion-panel class="activity-results-panel" [hidden]="ris.universitarii.length == 0"
                 [hideToggle]="ris.universitarii.length == 0" [ngStyle]="{
@@ -206,7 +210,7 @@
                   NESSUN DATO DA SEGNALARE
                 </ng-container>
                 <ng-container *ngIf="ris.universitarii.length > 0">
-                  <div class="activity-container-type" *ngIf="ris.tipo==''">
+                  <div class="activity-container-type" *ngIf="ris.tipo!=''">
                     Tipo: {{ris.tipo}}
                   </div>
                   <div *ngFor="let i of ris.universitarii">
@@ -217,9 +221,6 @@
               </mat-expansion-panel>
             </mat-accordion>
           </div>
-        </div>
-        <div class="activity-chart">
-          <google-chart class="chart" [type]="chartType" [data]="chartData" [columns]="chartColumns"></google-chart>
         </div>
       </div>
     </div>

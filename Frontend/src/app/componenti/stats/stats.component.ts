@@ -34,13 +34,11 @@ export class StatsComponent implements OnInit {
     private resatService: ResattService,
     private professoriService: ProfessoriService,
     private professoriUnicamService: ProfessoriUnicamService
-  ) { }
+  ) {}
 
   public isMenuOpened: boolean = false;
   public scuole: Scuola[] = [];
   public universi: Universi[] | undefined;
-  public risultati: Res[] = [];
-  public risatt: Risatt[] = [];
   public anniRes: Anni[] = [];
   public anniRisAtt: Anni[] = [];
   public prof: Professori[] = [];
@@ -50,8 +48,8 @@ export class StatsComponent implements OnInit {
   public click = 1;
   public anno = 0;
   public annoVisual = '';
-  public visualRis: Res[] = [];
-  public visualRisAtt: Risatt[] = [];
+  public res: Res[] = [];
+  public risAtt: Risatt[] = [];
   public ordinamenti = '';
   public ordinamentiAtt = '';
   public searchButton = document.getElementById('searchButton') as HTMLButtonElement;
@@ -65,10 +63,17 @@ export class StatsComponent implements OnInit {
   public regione: string = '';
   public provincia: string = '';
   public citta: string = '';
-  public arrayChart: any[] = [];
-  chartType: any;
-  chartColumns: any[] = [];
-  chartData: any[] = [];
+  public arrayChart: [string, number][] = [];
+  public arrayChartAtt: [string, number][] = [];
+
+  //Dati per modificare il grafico
+  mainChartType=ChartType.Bar;
+  mainChartColumns=["Anno accademico", "Immatricolati"];
+  mainChartData=this.arrayChart;
+
+  chartTypeAtt=ChartType.Bar;
+  chartColumnsAtt=["Attività, Immatricolati"];
+  chartDataAtt=this.arrayChartAtt;
 
 
   ngOnInit(): void {
@@ -77,14 +82,36 @@ export class StatsComponent implements OnInit {
     this.getScuole();
     this.getUniversi();
     this.getProfessoriUnicam();
-    this.getStatsRisAttForChart();
-    //Dati per modificare il grafico
-    this.chartType=ChartType.Bar;
-    this.chartColumns=['Anno accademico','Iscritti'];
-    this.chartData= this.arrayChart;
-    console.log(this.arrayChart)
   }
-  
+
+  onClick1() {
+    this.click = 1;
+    this.onClickResetFilter();
+  }
+  onClick2() {
+    this.click = 2;
+    this.onClickResetFilter();
+    this.getStatsRisAttForChartBar();
+  }
+  onClick3() {
+    this.click = 3;
+    this.onClickResetFilter();
+  }
+  onClick4() {
+    this.click = 4;
+    this.onClickResetFilter();
+  }
+
+  onClickResetFilter() {
+    this.anno = 0;
+    this.ordinamenti = '';
+    this.ordinamentiAtt = '';
+    this.regione = '';
+    this.provincia = '';
+    this.citta = '';
+    this.textFilterA = '';
+    this.textFilterP = '';
+  } 
 
   textFilterCityApply(event: any): void {
     this.textFilterC = event.target.value;
@@ -163,44 +190,44 @@ export class StatsComponent implements OnInit {
 
   getRes(): void {
     this.resService.getRes().subscribe({
-      next: (response) => (this.visualRis = response),
+      next: (response) => (this.res = response),
       complete: () => this.creaAnniListaRes(),
       error: (error) => console.log(error),
     });
   }
 
-  getVisualRis(): Res[] {
-    let filteredVisualRis = this.visualRis;
+  getFilteredRes(): Res[] {
+    let filteredRes = this.res;
     if (this.anno != 0) {
-      filteredVisualRis = filteredVisualRis.filter(res => res.annoAcc == this.anno);
+      filteredRes = filteredRes.filter(res => res.annoAcc == this.anno);
     }
 
     if (this.regione != '') {
-      filteredVisualRis = filteredVisualRis.filter(res => res.scuola.regione == this.regione);
+      filteredRes = filteredRes.filter(res => res.scuola.regione == this.regione);
       if (this.provincia != '') {
-        filteredVisualRis = filteredVisualRis.filter(res => res.scuola.provincia.includes(this.provincia));
+        filteredRes = filteredRes.filter(res => res.scuola.provincia.includes(this.provincia));
 
       }
     }
     if (this.citta != '') {
-      filteredVisualRis = filteredVisualRis.filter(res => res.scuola.citta.includes(this.citta));
+      filteredRes = filteredRes.filter(res => res.scuola.citta.includes(this.citta));
     }
 
-    if (this.visualRis.length > 0) {
+    if (this.res.length > 0) {
       switch (this.ordinamenti) {
 
         case 'REGIONI':
-          filteredVisualRis.sort((a, b) =>
+          filteredRes.sort((a, b) =>
             a.scuola.regione.localeCompare(b.scuola.regione)
           );
           break;
         case 'SCUOLE':
-          filteredVisualRis.sort((a, b) =>
+          filteredRes.sort((a, b) =>
             a.scuola.nome.localeCompare(b.scuola.nome)
           );
           break;
         case 'ISCRITTI':
-          filteredVisualRis.sort((a, b) =>
+          filteredRes.sort((a, b) =>
             b.iscritti.length - a.iscritti.length
           );
           break;
@@ -209,13 +236,76 @@ export class StatsComponent implements OnInit {
       }
     }
 
-    return filteredVisualRis;
+    return filteredRes;
+  }
+
+  getRisAtt(): void {
+    this.resatService.getRes().subscribe({
+      next: (response) => (this.risAtt = response),
+      complete: () => this.creaAnniListaRisAtt(),
+      error: (error) => console.log(error),
+    });
+  }
+
+  getFilteredRisAtt(): Risatt[] {
+    let filteredRisAtt = this.risAtt;
+    if (this.anno != 0) {
+      filteredRisAtt = filteredRisAtt.filter(ris => ris.annoAcc == this.anno);
+    }
+
+    if (this.res.length > 0) {
+      switch (this.ordinamenti) {
+
+        case 'NOME':
+          filteredRisAtt.sort((a, b) =>
+            a.attivita.localeCompare(b.attivita)
+          );
+          break;
+        case 'ISCRITTI':
+          filteredRisAtt.sort((a, b) =>
+            b.universitarii.length - a.universitarii.length
+          );
+          break;
+        default:
+          break;
+      }
+    }
+
+    if (this.textFilterA != '') {
+      filteredRisAtt = filteredRisAtt.filter(ris => ris.attivita.toLowerCase().startsWith(this.textFilterA.toLowerCase()));
+    }
+
+    return filteredRisAtt;
+  }
+
+  getStatsRisAttForChartBar() {
+    let i = this.anniRisAtt.length-1;
+    while(i >= 0) {
+      let immatricolati = 0;
+      this.risAtt.forEach((a) => {
+        if(a.annoAcc == this.anniRisAtt[i].value) {
+          immatricolati += a.universitarii.length;
+        }
+      });
+      this.arrayChart.push([this.anniRisAtt[i].viewValue, immatricolati]);
+      i--;
+    }
+  }
+
+  updateChart() {
+    console.log("AC:",this.arrayChart)
+    this.risAtt.forEach((a) => {
+      if(a.annoAcc == this.anno) {
+        this.arrayChartAtt.push([a.attivita, a.universitarii.length]);
+      }
+    });
+    console.log("ACA:", this.arrayChartAtt)
   }
 
   creaAnniListaRes() {
     let listaAnni: Anni[] = [];
     let listValori: number[] = [];
-    this.visualRis.forEach(r => listaAnni.push(this.creaDatoAnni(r.annoAcc)));
+    this.res.forEach(r => listaAnni.push(this.creaDatoAnni(r.annoAcc)));
     listaAnni.forEach(a => {
       if (!listValori.includes(a.value)) {
         this.anniRes.push(a);
@@ -228,7 +318,7 @@ export class StatsComponent implements OnInit {
   creaAnniListaRisAtt() {
     let listaAnni: Anni[] = [];
     let listValori: number[] = [];
-    this.visualRisAtt.forEach(r => listaAnni.push(this.creaDatoAnni(r.annoAcc)));
+    this.risAtt.forEach(r => listaAnni.push(this.creaDatoAnni(r.annoAcc)));
     listaAnni.forEach(a => {
       if (!listValori.includes(a.value)) {
         this.anniRisAtt.push(a);
@@ -256,125 +346,32 @@ export class StatsComponent implements OnInit {
     return ain + '/' + afin;
   }
 
-  setRisultati() {
-    this.risultati.forEach((r) => {
-      if (r.annoAcc == this.anno) {
-        this.visualRis.push(r);
-      }
-    });
-  }
-
-  setRisultatiAtt() {
-    this.risatt.forEach((r) => {
-      if (r.annoAcc == this.anno) {
-        this.visualRisAtt.push(r);
-      }
-    });
-  }
-
-  getRisAtt(): void {
-    this.resatService.getRes().subscribe({
-      next: (response) => (this.visualRisAtt = response),
-      complete: () => this.creaAnniListaRisAtt(),
-      error: (error) => console.log(error),
-    });
-  }
-
-  getVisualRisAtt(): Risatt[] {
-    let filteredVisualRisAtt = this.visualRisAtt;
-    if (this.anno != 0) {
-      filteredVisualRisAtt = filteredVisualRisAtt.filter(res => res.annoAcc == this.anno);
-    }
-
-    if (this.visualRis.length > 0) {
-      switch (this.ordinamenti) {
-
-        case 'NOME':
-          filteredVisualRisAtt.sort((a, b) =>
-            a.attivita.localeCompare(b.attivita)
-          );
-          break;
-        case 'ISCRITTI':
-          filteredVisualRisAtt.sort((a, b) =>
-            b.universitarii.length - a.universitarii.length
-          );
-          break;
-        default:
-          break;
-      }
-    }
-
-    if (this.textFilterA != '') {
-      filteredVisualRisAtt = filteredVisualRisAtt.filter(res => res.attivita.toLowerCase().startsWith(this.textFilterA.toLowerCase()));
-    }
-
-    return filteredVisualRisAtt;
-  }
-
-  getStatsRisAttForChart() {
-    let i = 0;
-    while(this.anniRes.length > i) {
-      let iscritti = 0;
-      this.visualRisAtt.forEach((a) => {
-        if(a.annoAcc == this.anniRisAtt[i].value) {
-          iscritti += a.universitarii.length;
-        }
-      });
-      this.arrayChart.push(iscritti, this.anniRisAtt[i].value);
-      i++;
-    }
-  }
-
   cambioAnno(e: any) {
     this.anno = e;
+    if(this.click==2) {
+      this.updateChart();
+    }
   }
 
   cambioRisultati(e: any) {
-    while (this.visualRis.length > 0) {
-      this.visualRis.pop();
+    while (this.res.length > 0) {
+      this.res.pop();
     }
-    this.risultati.forEach((r) => {
+    this.res.forEach((r) => {
       if (r.annoAcc == e) {
-        this.visualRis.push(r);
+        this.res.push(r);
       }
     });
-    while (this.visualRisAtt.length > 0) {
-      this.visualRisAtt.pop();
+    while (this.risAtt.length > 0) {
+      this.risAtt.pop();
     }
 
-    this.risatt.forEach((r) => {
+    this.risAtt.forEach((r) => {
       if (r.annoAcc == e) {
-        this.visualRisAtt.push(r);
+        this.risAtt.push(r);
       }
     });
     this.cambioOrdinamentoAtt(this.ordinamentiAtt)
-  }
-
-  onClick1() {
-    this.click = 1;
-    this.onClickResetFilter();
-  }
-  onClick2() {
-    this.click = 2;
-    this.onClickResetFilter();
-  }
-  onClick3() {
-    this.click = 3;
-    this.onClickResetFilter();
-  }
-  onClick4() {
-    this.click = 4;
-    this.onClickResetFilter();
-  }
-  onClickResetFilter() {
-    this.anno = 0;
-    this.ordinamenti = '';
-    this.ordinamentiAtt = '';
-    this.regione = '';
-    this.provincia = '';
-    this.citta = '';
-    this.textFilterA = '';
-    this.textFilterP = '';
   }
 
   cambioOrdinamento(e: any) {
@@ -390,12 +387,12 @@ export class StatsComponent implements OnInit {
     switch (this.ordinamentiAtt) {
 
       case 'ISCRITTI':
-        this.visualRisAtt.sort(
+        this.risAtt.sort(
           (a, b) => b.universitarii.length - a.universitarii.length
         );
         break;
       case 'NOME':
-        this.visualRisAtt.sort((a, b) => a.attivita.localeCompare(b.attivita));
+        this.risAtt.sort((a, b) => a.attivita.localeCompare(b.attivita));
         break;
       default:
         break;
@@ -583,7 +580,7 @@ export class StatsComponent implements OnInit {
     }
     if (this.click == 1) {
 
-      this.visualRis.forEach(res => {
+      this.res.forEach(res => {
         if (!this.listaRegioni.includes(res.scuola.regione)) {
           this.listaRegioni.push(res.scuola.regione);
         }
@@ -607,7 +604,7 @@ export class StatsComponent implements OnInit {
     }
     if (this.click == 1) {
 
-      this.visualRis.forEach(res => {
+      this.res.forEach(res => {
         if (!this.listaProvince.includes(res.scuola.provincia) && res.scuola.regione == this.regione) {
           this.listaProvince.push(res.scuola.provincia);
         }
@@ -630,7 +627,7 @@ export class StatsComponent implements OnInit {
     }
     if (this.click == 1) {
 
-      this.visualRis.forEach(res => {
+      this.res.forEach(res => {
         if (!this.listaCitta.includes(res.scuola.citta) && res.scuola.provincia == this.provincia && res.scuola.citta != null) {
           this.listaCitta.push(res.scuola.citta);
         }

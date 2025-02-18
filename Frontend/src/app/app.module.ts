@@ -16,11 +16,11 @@ import { MappaComponent } from './componenti/mappa/mappa.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { UploadatComponent } from './componenti/uploadat/uploadat.component';
-import {MatDialogModule} from '@angular/material/dialog';
-import {CdkTreeModule} from '@angular/cdk/tree';
-import {MatSelectModule} from '@angular/material/select';
-import {MatAutocompleteModule} from '@angular/material/autocomplete'
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { CdkTreeModule } from '@angular/cdk/tree';
+import { MatSelectModule } from '@angular/material/select';
+import { MatAutocompleteModule } from '@angular/material/autocomplete'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminComponent } from './componenti/admin/form.admin.component';
 import { FormdatComponent } from './componenti/form/form.component';
 import { MatIconModule } from '@angular/material/icon';
