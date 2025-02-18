@@ -35,7 +35,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MappaComponent,
     UploadatComponent,
     AdminComponent,
-    FormdatComponent,
+    FormdatComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +55,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatSelectModule,
     MatAutocompleteModule,
     MatIconModule,
-    MatMenuModule,
+    MatMenuModule
   ],
 
   providers: [],
