@@ -289,7 +289,7 @@ public class SimpleAttivitaService implements AttivitaService {
         risultatiAttRepository.save(risultatiAtt);
     }
 
-    /**TODO Collegamento frontend tramite metodo upload nuovi immatricolati
+    /**
      * Metodo che aggiorna i risultatiAtt in modo da aggiungere gli studenti che sono diventati universitari dopo la creazione dell'attività.
      */
     public void updateRisultatiAtt(){
