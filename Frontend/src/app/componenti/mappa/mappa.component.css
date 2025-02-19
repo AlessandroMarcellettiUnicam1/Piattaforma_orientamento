@@ -34,6 +34,16 @@ svg path{
   color: #E2001A;
 }
 
+.line {
+  height: 75px;
+  line-height: 75px;
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold;
+  color: #222C4A;
+  background-color: #7FBD32;
+}
+
 .page-container{
   width: 100%;
   display: block;
@@ -51,16 +61,21 @@ svg path{
   justify-content: center;
 }
 
-.page-results {
-  display: block;
-  padding-top: 20px;
-  padding-right: 50px;
-  justify-content: center;
-}
-
 .map-filter {
   width: 700px;
   padding-left: auto;
+}
+
+.map-and-data {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-results {
+  display: flex;
+  padding-bottom: 500px;
 }
 
 .mappa{
@@ -68,7 +83,7 @@ svg path{
   display: block;
   padding-top: 20px;
   padding-left: 50px;
-  padding-right: 50px;
+  margin-right: -10%;
   overflow-x: auto;
 }
 
@@ -76,6 +91,13 @@ svg path{
   max-height: 90vh;
   overflow-y: auto;
   float: right;
+}
+
+@media (max-width: 1200px) {
+  
+  .mappa {
+    margin-right: 0;
+  }
 }
 
 @media (max-width: 900px) {

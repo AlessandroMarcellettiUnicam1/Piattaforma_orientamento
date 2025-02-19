@@ -63,8 +63,6 @@ export class StatsComponent implements OnInit {
   public regione: string = '';
   public provincia: string = '';
   public citta: string = '';
-  public mainDataChart: [string, number][] = [];
-  public dataChart: [string, number][] = [];
   public mainChartType: any;
   public mainChartColumnsSch: any;
   public mainChartColumnsAct: any;

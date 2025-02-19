@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { ChartType } from 'angular-google-charts';
 import { Anni } from 'src/app/interface/anni';
 import { Res } from 'src/app/interface/res';
 import { Risreg } from 'src/app/interface/risreg';
@@ -16,12 +17,15 @@ export class MappaComponent implements OnInit {
   constructor(private resService: ResService,
     public dialog :MatDialog) {}
 
-  public risultati : Res[] = []
+  public risultati : Res[] = [];
   public risreg : Risreg[] | undefined;
   public anno : number =0;
-  public a : Anni[] =[]
-  public visualizza = false
-  public visualRis : Res[] = []
+  public a : Anni[] =[];
+  public visualizza = false;
+  public visualRis : Res[] = [];
+  public chartType = ChartType.Table;
+  public chartColumns = ["Scuola", "Immatricolazioni"];
+  public chartData: any[] = [];
 
 public coord = [
   { nome : "Marche", iscr :0,id :"IT-57"},
@@ -58,6 +62,7 @@ public coord = [
 
 
   openDialog(c:any): void {
+    this.chartData = [];
     while(this.visualRis.length>0){
       this.visualRis.pop()
     }
@@ -81,7 +86,7 @@ public coord = [
         }
       })
     }
-
+    this.chartData = this.visualRis.map(r => [r.scuola.nome, r.iscritti.length])
   }
 
 
