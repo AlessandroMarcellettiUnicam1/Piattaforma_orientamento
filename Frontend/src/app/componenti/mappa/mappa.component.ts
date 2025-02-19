@@ -146,8 +146,10 @@ public coord = [
         this.risultati= response;
       },
       complete : ()=> {
-        this.anno=this.risultati[this.risultati.length-1].annoAcc;
-        this.setMap();
+        if(this.risultati.length != 0) {
+          this.anno=this.risultati[this.risultati.length-1].annoAcc;
+          this.setMap();
+        }
       },
       error: (error) => console.log(error),
     });

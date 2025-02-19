@@ -1,7 +1,7 @@
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ResService } from 'src/app/service/res.service';
 import { ActivityAvailable } from 'src/app/interface/activityAvailable';
-import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Sede } from 'src/app/interface/sede';
@@ -14,8 +14,10 @@ import { environment } from 'src/environments/environment';
 })
 
 export class AdminComponent implements OnInit {
-  constructor(private http: HttpClient,
+  constructor(
+    private http: HttpClient,
     private resService: ResService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   click = 1;
@@ -127,8 +129,6 @@ export class AdminComponent implements OnInit {
     const oraI = parseInt(this.dataI.toString().slice(11, 13));
     const oraF = parseInt(this.dataF.toString().slice(11, 13));
 
-    console.log(this.dataI.toString().slice(0, 4) + ", " + this.dataI.toString().slice(5, 7) + ", " + this.dataI.toString().slice(8, 10) + ", " + this.dataI.toString().slice(11, 13));
-
     if (annoI == this.annoAccademicoInizio && annoF == this.annoAccademicoInizio
       || annoI == this.annoAccademicoFine && annoF == this.annoAccademicoFine) {
 
@@ -191,8 +191,6 @@ export class AdminComponent implements OnInit {
     const profUnicam = this.profUnicam;
     const profReferente = this.prof;
 
-    console.log("Nome:" + nome + "\nTipo:" + tipo + "\nScuola:" + scuola + "\nAnno:" + anno + "\nSede:" + this.sede + "\nDataInizio:" + dataInizio + "\nDataFine:" + dataFine + "\nDescrizione:" + descrizione + "\nProfUnicam:" + profUnicam + "\nProfReferente:" + profReferente)
-
     let body = { nome, tipo, scuola, anno, sedeA, dataInizio, dataFine, descrizione, profUnicam, profReferente };
     this.http
       .post<string>(environment.POST_CREAZIONE_ATTIVITA_ATTIVA, body)
@@ -202,16 +200,20 @@ export class AdminComponent implements OnInit {
       });
   }
 
-  handleButtonClick(nome: string, anno: number): void {
+  handleActivityButtonClear(nome: string, anno: number): void {
 
     let body = { nome, anno };
     this.http
       .post(environment.POST_ATTIVITA_TERMINATA, body)
       .subscribe({
-        next: (response) => console.log(alert("Attività terminata con successo"), response),
+        next: () => this.activities.forEach(a => {
+          if(a.nome==nome && a.annoAcc==anno) {
+            a.aperta=false;
+          };
+        }),
         error: (error) => console.log(error),
       });
-    this.onClick2();
+      
   }
 
   cambioAttivita(event: any) {
@@ -250,6 +252,7 @@ export class AdminComponent implements OnInit {
   toggleDropdowAtt() {
     this.resService.getAttActive().subscribe({
       next: (response) => (this.activities = response),
+      complete: () => this.activities.forEach(a => a.aperta=true),
       error: (error) => console.log(error),
     });
   }
