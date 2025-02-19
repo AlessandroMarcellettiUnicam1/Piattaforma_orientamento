@@ -131,49 +131,42 @@
 
       <div class="schools-info">
         <div class="school-results">
+          <div class="school-chart">
+
+          </div>
           <div class="school-card" *ngFor="let ris of getFilteredRes()">
             <mat-accordion class="school-results-accordion">
               <mat-expansion-panel class="school-results-panel" [ngStyle]="{
                 background: ris.iscritti.length > 0 ? '#a0c4e0' : '#c9b6b6'
-              }">
+                }">
                 <mat-expansion-panel-header class="school-results-panel-header">
-                  <mat-panel-title *ngIf="ris.scuola!=null">
-                    Scuola: {{ ris.scuola.nome }}<br>
-                    Regione: {{ ris.scuola.regione }}<br>
-                    Provincia: {{ ris.scuola.provincia }}<br>
-                    Citta: {{ ris.scuola.citta }}<br>
-                    Anno: {{ creaStringaAnnoAcc(ris.annoAcc) }}
+                  <mat-panel-title class="school-results-main-data" *ngIf="ris.scuola!=null">
+                    <div>Anno: {{ creaStringaAnnoAcc(ris.annoAcc) }}</div>
+                    <div *ngIf="ris.scuola.nome!=''">Scuola: {{ ris.scuola.nome }}</div>
+                    <div *ngIf="ris.scuola.citta!=''">Citta: {{ ris.scuola.citta }}</div>
+                    <div *ngIf="ris.scuola.provincia!=''">Provincia: {{ ris.scuola.provincia }}</div>
+                    <div *ngIf="ris.scuola.regione!=''">Regione: {{ ris.scuola.regione }}</div>
                   </mat-panel-title>
                   <mat-panel-description class="school-results-subscription">
-                    <br>
                     Totale iscritti: {{ ris.iscritti.length }}
                   </mat-panel-description>
                 </mat-expansion-panel-header>
                 <div class="school-results-container">
                   <ng-container class="school-results-container-element" *ngFor="let a of ris.attivita">
-                    NomeAttività: {{ a.nomeAttivita }}<br>
-                    Tipo: {{a.tipo}}<br />
-                    Partecipanti: {{ a.partecipanti.length }}<br>
-                    Iscritti: {{ a.iscritti.length }}
-                    <br />
-                    <ng-container *ngFor="let i of a.iscritti">
-                      {{ i.nome }} {{ i.cognome }}
-                    </ng-container>
-                    <br />
+                    <div>NomeAttività: {{ a.nomeAttivita }}</div>
+                    <div *ngIf="a.tipo!=''">Tipo: {{a.tipo}}</div>
+                    <div>Partecipanti: {{ a.partecipanti.length }}</div>
+                    <div>Iscritti: {{ a.iscritti.length }}</div>
                   </ng-container>
                 </div>
                 <div *ngIf="ris.iscritti.length > 0">
                   Elenco Iscritti:<br>
-                  <ng-container *ngFor="let i of ris.iscritti">
-                    {{ i.nome }} {{ i.cognome }}
-                    <br />
+                  <ng-container *ngFor="let i of ris.iscritti.sort()">
+                    {{ i.cognome }} {{ i.nome }}<br>
                   </ng-container>
                 </div>
               </mat-expansion-panel>
             </mat-accordion>
-          </div>
-          <div class="school-chart">
-
           </div>
         </div>
       </div>
@@ -214,8 +207,7 @@
                     Tipo: {{ris.tipo}}
                   </div>
                   <div *ngFor="let i of ris.universitarii">
-                    {{ i.nome }} {{ i.cognome }}
-                    <br />
+                    {{ i.cognome }} {{ i.nome }}<br>
                   </div>
                 </ng-container>
               </mat-expansion-panel>

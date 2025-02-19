@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ResService } from 'src/app/service/res.service';
 import { ActivityAvailable } from 'src/app/interface/activityAvailable';
@@ -16,8 +16,7 @@ import { environment } from 'src/environments/environment';
 export class AdminComponent implements OnInit {
   constructor(
     private http: HttpClient,
-    private resService: ResService,
-    private cdr: ChangeDetectorRef
+    private resService: ResService
   ) { }
 
   click = 1;
@@ -50,6 +49,7 @@ export class AdminComponent implements OnInit {
   errorCitta: boolean = false;
   errorAnno: boolean = false;
   errorData: boolean = false;
+  dropdownProf: boolean = false;
 
 
   ngOnInit(): void {
@@ -271,7 +271,6 @@ export class AdminComponent implements OnInit {
     let array = this.getReferenti();
     array.subscribe(
       (result: string[]) => {
-
         this.professori = result; // Stampa i valori su console
       }
     );

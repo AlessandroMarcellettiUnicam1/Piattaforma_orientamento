@@ -71,8 +71,8 @@ export class StatsComponent implements OnInit {
   mainChartColumns=["Anno accademico", "Immatricolati"];
   mainChartData=this.arrayChart;
 
-  chartTypeAtt=ChartType.Bar;
-  chartColumnsAtt=["Attività, Immatricolati"];
+  chartTypeAtt=ChartType.PieChart;
+  chartColumnsAtt=["Attivita", "Immatricolati"];
   chartDataAtt=this.arrayChartAtt;
 
 
@@ -91,7 +91,6 @@ export class StatsComponent implements OnInit {
   onClick2() {
     this.click = 2;
     this.onClickResetFilter();
-    this.getStatsRisAttForChartBar();
   }
   onClick3() {
     this.click = 3;
@@ -242,7 +241,10 @@ export class StatsComponent implements OnInit {
   getRisAtt(): void {
     this.resatService.getRes().subscribe({
       next: (response) => (this.risAtt = response),
-      complete: () => this.creaAnniListaRisAtt(),
+      complete: () => {
+        this.creaAnniListaRisAtt();
+        this.updateChart();
+      },
       error: (error) => console.log(error),
     });
   }
@@ -278,7 +280,7 @@ export class StatsComponent implements OnInit {
     return filteredRisAtt;
   }
 
-  getStatsRisAttForChartBar() {
+  updateChart() {
     let i = this.anniRisAtt.length-1;
     while(i >= 0) {
       let immatricolati = 0;
@@ -292,14 +294,12 @@ export class StatsComponent implements OnInit {
     }
   }
 
-  updateChart() {
-    console.log("AC:",this.arrayChart)
+  updateChartAtt() {
     this.risAtt.forEach((a) => {
       if(a.annoAcc == this.anno) {
         this.arrayChartAtt.push([a.attivita, a.universitarii.length]);
       }
     });
-    console.log("ACA:", this.arrayChartAtt)
   }
 
   creaAnniListaRes() {
@@ -349,7 +349,8 @@ export class StatsComponent implements OnInit {
   cambioAnno(e: any) {
     this.anno = e;
     if(this.click==2) {
-      this.updateChart();
+      this.arrayChartAtt.length == 0;
+      this.updateChartAtt();
     }
   }
 

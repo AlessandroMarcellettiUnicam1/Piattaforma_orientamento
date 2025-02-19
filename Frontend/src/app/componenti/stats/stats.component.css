@@ -48,25 +48,23 @@ input[type="text"] {
   text-align: center;
 }
 
-.activities-info {
+.activities-info, .school-info {
   display: flex;
+  justify-content: center;
 }
 
 .school-button, .activity-button, .school-prof-button, .unicam-prof-button {
   padding-bottom: 20px;
 }
 
-.activity-results, .activity-chart, .schoole-results, .school-chart {
-  flex: 1;
-}
-
-.schoole-results, .activity-results {
+.school-results, .activity-results {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-top: 30px;
 }
 
-.activity-chart {
+.school-chart, .activity-chart {
   display: flex;
   justify-content: center;
   flex-direction: row;
@@ -81,7 +79,8 @@ input[type="text"] {
 }
 
 .school-card, .activity-card {
-  width: 500px;
+  width: auto;
+  min-width: 600px;
   padding-bottom: 10px;
   padding-left: 10px;
 }
@@ -95,8 +94,13 @@ input[type="text"] {
 }
 
 .school-results-panel-header {
-  text-align: left;
   height: 120px;
+}
+
+.school-results-main-data {
+  display: block;
+  flex-direction: column;
+  text-align: left;
 }
 
 .activity-results-panel-header {
