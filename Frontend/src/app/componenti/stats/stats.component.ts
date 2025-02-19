@@ -45,7 +45,7 @@ export class StatsComponent implements OnInit {
   public profUnicam: ProfessoriUnicam[] = [];
   public profVisual: Profvisual[] = [];
   public profUnicamVisual: ProfUnicamvisual[] = [];
-  public click = 1;
+  public click = 0;
   public anno = 0;
   public annoVisual = '';
   public res: Res[] = [];
@@ -63,17 +63,18 @@ export class StatsComponent implements OnInit {
   public regione: string = '';
   public provincia: string = '';
   public citta: string = '';
-  public arrayChart: [string, number][] = [];
-  public arrayChartAtt: [string, number][] = [];
-
-  //Dati per modificare il grafico
-  mainChartType=ChartType.Bar;
-  mainChartColumns=["Anno accademico", "Immatricolati"];
-  mainChartData=this.arrayChart;
-
-  chartTypeAtt=ChartType.PieChart;
-  chartColumnsAtt=["Attivita", "Immatricolati"];
-  chartDataAtt=this.arrayChartAtt;
+  public mainDataChart: [string, number][] = [];
+  public dataChart: [string, number][] = [];
+  public mainChartType: any;
+  public mainChartColumnsSch: any;
+  public mainChartColumnsAct: any;
+  public mainChartDataSch: any[] = [];
+  public mainChartDataAct: any[] = [];
+  public optChartType: any;
+  public optChartColumnsSch: any;
+  public optChartColumnsAct: any;
+  public optChartDataSch: any[] = [];
+  public optChartDataAct: any[] = [];
 
 
   ngOnInit(): void {
@@ -82,15 +83,28 @@ export class StatsComponent implements OnInit {
     this.getScuole();
     this.getUniversi();
     this.getProfessoriUnicam();
+    this.onClick1();
   }
 
   onClick1() {
     this.click = 1;
     this.onClickResetFilter();
+    //Dati per modificare il grafico
+    this.mainChartType=ChartType.Bar;
+    this.mainChartColumnsSch=["Anno accademico", "Partecipanti", "Immatricolati"];
+  
+    this.optChartType=ChartType.PieChart;
+    this.optChartColumnsSch=["Attivita", "Partecipanti", "Immatricolati"];
   }
   onClick2() {
     this.click = 2;
     this.onClickResetFilter();
+    //Dati per modificare il grafico
+    this.mainChartType=ChartType.Bar;
+    this.mainChartColumnsAct=["Anno accademico", "Immatricolati"];
+  
+    this.optChartType=ChartType.PieChart;
+    this.optChartColumnsAct=["Attivita", "Immatricolati"];
   }
   onClick3() {
     this.click = 3;
@@ -190,7 +204,10 @@ export class StatsComponent implements OnInit {
   getRes(): void {
     this.resService.getRes().subscribe({
       next: (response) => (this.res = response),
-      complete: () => this.creaAnniListaRes(),
+      complete: () => {
+        this.creaAnniListaRes();
+        this.updateMainChartRes();
+      },
       error: (error) => console.log(error),
     });
   }
@@ -243,7 +260,7 @@ export class StatsComponent implements OnInit {
       next: (response) => (this.risAtt = response),
       complete: () => {
         this.creaAnniListaRisAtt();
-        this.updateChart();
+        this.updateMainChartRisAtt();
       },
       error: (error) => console.log(error),
     });
@@ -280,8 +297,48 @@ export class StatsComponent implements OnInit {
     return filteredRisAtt;
   }
 
-  updateChart() {
+  updateMainChartRes() {
+    let i = this.anniRes.length-1;
+    let dataChart = [];
+    while(i >= 0) {
+      let immatricolati = 0;
+      let partecipanti = 0;
+      this.res.forEach((s) => {
+        if(s.annoAcc == this.anniRes[i].value) {
+          immatricolati += s.iscritti.length;
+          s.attivita.forEach(a => partecipanti += a.partecipanti.length)
+        }
+      });
+      dataChart.push([this.anniRes[i].viewValue, partecipanti, immatricolati]);
+      i--;
+    }
+    this.mainChartDataSch = dataChart;
+  }
+
+  updateOptChartRes() {
+    let i = this.res.length-1;
+    let dataChart = [];
+    while(i > 0) {
+      let regione = this.res[i].scuola.regione;
+      let partecipanti = 0;
+      let immatricolati = 0;
+      this.res.forEach((a) => {
+        if(a.annoAcc == this.anno) {
+          if(regione==a.scuola.regione) {
+            a.attivita.forEach(att => partecipanti += att.partecipanti.length);
+            immatricolati += a.iscritti.length;
+          }
+        }
+      });
+      dataChart.push([regione, partecipanti, immatricolati]);
+      i--;
+    }
+    this.optChartDataSch = dataChart;
+  }
+
+  updateMainChartRisAtt() {
     let i = this.anniRisAtt.length-1;
+    let dataChart = [];
     while(i >= 0) {
       let immatricolati = 0;
       this.risAtt.forEach((a) => {
@@ -289,17 +346,20 @@ export class StatsComponent implements OnInit {
           immatricolati += a.universitarii.length;
         }
       });
-      this.arrayChart.push([this.anniRisAtt[i].viewValue, immatricolati]);
+      dataChart.push([this.anniRisAtt[i].viewValue, immatricolati]);
       i--;
     }
+    this.mainChartDataAct = dataChart;
   }
 
-  updateChartAtt() {
+  updateOptChartRisAtt() {
+    let dataChart: any[] = [];
     this.risAtt.forEach((a) => {
       if(a.annoAcc == this.anno) {
-        this.arrayChartAtt.push([a.attivita, a.universitarii.length]);
+        dataChart.push([a.attivita, a.universitarii.length]);
       }
     });
+    this.optChartDataAct = dataChart;
   }
 
   creaAnniListaRes() {
@@ -348,9 +408,11 @@ export class StatsComponent implements OnInit {
 
   cambioAnno(e: any) {
     this.anno = e;
-    if(this.click==2) {
-      this.arrayChartAtt.length == 0;
-      this.updateChartAtt();
+    if(this.click==1) {
+      this.updateOptChartRes();
+    }
+    if(this.click==1) {
+      this.updateOptChartRisAtt();
     }
   }
 

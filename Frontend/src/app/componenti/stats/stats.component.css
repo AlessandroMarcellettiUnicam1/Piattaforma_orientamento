@@ -48,27 +48,14 @@ input[type="text"] {
   text-align: center;
 }
 
-.activities-info, .school-info {
-  display: flex;
-  justify-content: center;
-}
-
 .school-button, .activity-button, .school-prof-button, .unicam-prof-button {
   padding-bottom: 20px;
-}
-
-.school-results, .activity-results {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 30px;
 }
 
 .school-chart, .activity-chart {
   display: flex;
   justify-content: center;
   flex-direction: row;
-  padding-top: 20px;
   padding-right: 20px;
   padding-left: 20px;
 }
@@ -76,6 +63,14 @@ input[type="text"] {
 .chart {
   width: 600px;
   height: 300px;
+  padding-bottom: 20px;
+}
+
+.activities-info, .schools-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 30px;
 }
 
 .school-card, .activity-card {
@@ -83,6 +78,12 @@ input[type="text"] {
   min-width: 600px;
   padding-bottom: 10px;
   padding-left: 10px;
+}
+
+.school-card-name {
+  font-size: 20px;
+  font-weight: bold;
+  padding-bottom: 15px;
 }
 
 .school-results-panel {
@@ -94,7 +95,7 @@ input[type="text"] {
 }
 
 .school-results-panel-header {
-  height: 120px;
+  height: 150px;
 }
 
 .school-results-main-data {
@@ -113,6 +114,11 @@ input[type="text"] {
   text-align: center;
   justify-content: center;
   align-items: center;
+  color: #b7b7b7;
+}
+
+.school-prof-card, .unicam-prof-card {
+  background-color: #d6d6d6;
 }
 
 .school-results-subscription, .activity-results-subscription {
@@ -229,7 +235,7 @@ input[type="text"] {
     height: auto;
   }
 
-  .school-results-accordion, .activty-results-accordion {
+  .school-card, .activty-card {
     margin-bottom: 50px;
   }
 
