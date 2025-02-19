@@ -73,6 +73,14 @@ export class StatsComponent implements OnInit {
   public optChartColumnsAct: any;
   public optChartDataSch: any[] = [];
   public optChartDataAct: any[] = [];
+  public chartOptionSch = {
+    title: 'Immatricolazioni per anno',
+    colors: ['#f77272' ,'#72c4f7']
+  };
+  public mainChartOptionAct = {
+    title: 'Immatricolazioni per anno',
+    colors: ['#72c4f7']
+  };
 
 
   ngOnInit(): void {
@@ -91,8 +99,8 @@ export class StatsComponent implements OnInit {
     this.mainChartType=ChartType.Bar;
     this.mainChartColumnsSch=["Anno accademico", "Partecipanti", "Immatricolati"];
   
-    this.optChartType=ChartType.PieChart;
-    this.optChartColumnsSch=["Attivita", "Partecipanti", "Immatricolati"];
+    this.optChartType=ChartType.Bar;
+    this.optChartColumnsSch=["Regioni", "Partecipanti", "Immatricolati"];
   }
   onClick2() {
     this.click = 2;
@@ -320,18 +328,17 @@ export class StatsComponent implements OnInit {
   }
 
   updateOptChartRes() {
+    this.optChartDataSch = [];
     let i = this.res.length-1;
     let dataChart = [];
-    while(i > 0) {
+    while(i >= 0) {
       let regione = this.res[i].scuola.regione;
       let partecipanti = 0;
       let immatricolati = 0;
-      this.res.forEach((a) => {
-        if(a.annoAcc == this.anno) {
-          if(regione==a.scuola.regione) {
-            a.attivita.forEach(att => partecipanti += att.partecipanti.length);
-            immatricolati += a.iscritti.length;
-          }
+      this.getFilteredRes().forEach((a) => {
+        if(regione==a.scuola.regione) {
+          a.attivita.forEach(att => partecipanti += att.partecipanti.length);
+          immatricolati += a.iscritti.length;
         }
       });
       dataChart.push([regione, partecipanti, immatricolati]);
@@ -357,11 +364,10 @@ export class StatsComponent implements OnInit {
   }
 
   updateOptChartRisAtt() {
+    this.optChartDataAct = [];
     let dataChart: any[] = [];
-    this.risAtt.forEach((a) => {
-      if(a.annoAcc == this.anno) {
-        dataChart.push([a.attivita, a.universitarii.length]);
-      }
+    this.getFilteredRisAtt().forEach((a) => {
+      dataChart.push([a.attivita, a.universitarii.length]);
     });
     this.optChartDataAct = dataChart;
   }
@@ -415,7 +421,7 @@ export class StatsComponent implements OnInit {
     if(this.click==1) {
       this.updateOptChartRes();
     }
-    if(this.click==1) {
+    if(this.click==2) {
       this.updateOptChartRisAtt();
     }
   }
