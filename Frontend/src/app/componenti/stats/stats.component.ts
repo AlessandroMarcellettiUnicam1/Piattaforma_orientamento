@@ -64,20 +64,18 @@ export class StatsComponent implements OnInit {
   public provincia: string = '';
   public citta: string = '';
   public mainChartType: any;
-  public mainChartColumnsSch: any;
-  public mainChartColumnsAct: any;
+  public mainChartColumns: any;
   public mainChartDataSch: any[] = [];
   public mainChartDataAct: any[] = [];
   public optChartType: any;
-  public optChartColumnsSch: any;
-  public optChartColumnsAct: any;
+  public optChartColumns: any;
   public optChartDataSch: any[] = [];
   public optChartDataAct: any[] = [];
   public chartOptionSch = {
     title: 'Immatricolazioni per anno',
     colors: ['#f77272' ,'#72c4f7']
   };
-  public mainChartOptionAct = {
+  public chartOptionAct = {
     title: 'Immatricolazioni per anno',
     colors: ['#72c4f7']
   };
@@ -97,20 +95,20 @@ export class StatsComponent implements OnInit {
     this.onClickResetFilter();
     //Dati per modificare il grafico
     this.mainChartType=ChartType.Bar;
-    this.mainChartColumnsSch=["Anno accademico", "Partecipanti", "Immatricolati"];
+    this.mainChartColumns=["Anno accademico", "Partecipanti", "Immatricolati"];
   
     this.optChartType=ChartType.Bar;
-    this.optChartColumnsSch=["Regioni", "Partecipanti", "Immatricolati"];
+    this.optChartColumns=["Regioni", "Partecipanti", "Immatricolati"];
   }
   onClick2() {
     this.click = 2;
     this.onClickResetFilter();
     //Dati per modificare il grafico
     this.mainChartType=ChartType.Bar;
-    this.mainChartColumnsAct=["Anno accademico", "Immatricolati"];
+    this.mainChartColumns=["Anno accademico", "Immatricolati"];
   
     this.optChartType=ChartType.PieChart;
-    this.optChartColumnsAct=["Attivita", "Immatricolati"];
+    this.optChartColumns=["Attivita", "Immatricolati"];
   }
   onClick3() {
     this.click = 3;
@@ -310,6 +308,7 @@ export class StatsComponent implements OnInit {
   }
 
   updateMainChartRes() {
+    this.mainChartDataSch = [];
     let i = this.anniRes.length-1;
     let dataChart = [];
     while(i >= 0) {
@@ -348,6 +347,7 @@ export class StatsComponent implements OnInit {
   }
 
   updateMainChartRisAtt() {
+    this.mainChartDataAct = [];
     let i = this.anniRisAtt.length-1;
     let dataChart = [];
     while(i >= 0) {

@@ -58,12 +58,14 @@ input[type="text"] {
   flex-direction: row;
   padding-right: 20px;
   padding-left: 20px;
+  gap: 30px;
 }
 
 .chart {
-  width: 600px;
+  width: auto;
   height: 300px;
   padding-bottom: 20px;
+  
 }
 
 .activities-info, .schools-info {

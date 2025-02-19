@@ -128,8 +128,8 @@
         </button>
       </div>
       <div class="school-chart">
-        <google-chart class="main-chart-schools chart" [type]="mainChartType" [data]="mainChartDataSch" [columns]="mainChartColumnsSch" [options]="chartOptionSch"></google-chart>
-        <google-chart class="opt-chart-schools chart" *ngIf="this.anno!=0" [type]="optChartType" [data]="optChartDataSch" [columns]="optChartColumnsSch" [options]="chartOptionSch"></google-chart>
+        <google-chart class="main-chart-schools chart" [type]="mainChartType" [data]="mainChartDataSch" [columns]="mainChartColumns" [options]="chartOptionSch"></google-chart>
+        <google-chart class="opt-chart-schools chart" *ngIf="this.anno!=0" [type]="optChartType" [data]="optChartDataSch" [columns]="optChartColumns" [options]="chartOptionSch"></google-chart>
       </div>
       <div class="schools-info">
           <div class="school-card" *ngFor="let ris of getFilteredRes()">
@@ -174,8 +174,8 @@
         </button>
       </div>
       <div class="activity-chart">
-        <google-chart class="main-chart-activities chart" [type]="mainChartType" [data]="mainChartDataAct" [columns]="mainChartColumnsAct" [options]="mainChartOptionAct"></google-chart>
-        <google-chart class="opt-chart-activities chart" *ngIf="this.anno!=0" [type]="optChartType" [data]="optChartDataAct" [columns]="optChartColumnsAct"></google-chart>
+        <google-chart class="main-chart-activities chart" [type]="mainChartType" [data]="mainChartDataAct" [columns]="mainChartColumns" [options]="chartOptionAct"></google-chart>
+        <google-chart class="opt-chart-activities chart" *ngIf="this.anno!=0" [type]="optChartType" [data]="optChartDataAct" [columns]="optChartColumns"></google-chart>
       </div>
       <div class="activities-info">
           <div class="activity-card" *ngFor="let ris of getFilteredRisAtt()">
