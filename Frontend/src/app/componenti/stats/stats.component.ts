@@ -50,8 +50,8 @@ export class StatsComponent implements OnInit {
   public annoVisual = '';
   public res: Res[] = [];
   public risAtt: Risatt[] = [];
-  public ordinamenti = '';
-  public ordinamentiAtt = '';
+  public ordinamenti = 'ANNO';
+  public ordinamentiAtt = 'ANNO';
   public searchButton = document.getElementById('searchButton') as HTMLButtonElement;
   public searchInput = document.getElementById('searchInput') as HTMLInputElement;
   public textFilterC: string = '';
@@ -206,6 +206,7 @@ export class StatsComponent implements OnInit {
       next: (response) => (this.res = response),
       complete: () => {
         this.creaAnniListaRes();
+        this.res.sort((a, b) => b.annoAcc - a.annoAcc);
         this.updateMainChartRes();
       },
       error: (error) => console.log(error),
@@ -231,7 +232,9 @@ export class StatsComponent implements OnInit {
 
     if (this.res.length > 0) {
       switch (this.ordinamenti) {
-
+        case 'ANNO':
+          filteredRes.sort((a, b) => a.annoAcc - b.annoAcc);
+          break;
         case 'REGIONI':
           filteredRes.sort((a, b) =>
             a.scuola.regione.localeCompare(b.scuola.regione)
@@ -260,6 +263,7 @@ export class StatsComponent implements OnInit {
       next: (response) => (this.risAtt = response),
       complete: () => {
         this.creaAnniListaRisAtt();
+        this.risAtt.sort((a, b) => b.annoAcc - a.annoAcc);
         this.updateMainChartRisAtt();
       },
       error: (error) => console.log(error),
@@ -272,9 +276,11 @@ export class StatsComponent implements OnInit {
       filteredRisAtt = filteredRisAtt.filter(ris => ris.annoAcc == this.anno);
     }
 
-    if (this.res.length > 0) {
-      switch (this.ordinamenti) {
-
+    if (this.risAtt.length > 0) {
+      switch (this.ordinamentiAtt) {
+        case 'ANNO':
+          filteredRisAtt.sort((a, b) => b.annoAcc - a.annoAcc);
+          break;
         case 'NOME':
           filteredRisAtt.sort((a, b) =>
             a.attivita.localeCompare(b.attivita)
@@ -447,19 +453,6 @@ export class StatsComponent implements OnInit {
 
   cambioOrdinamentoAtt(e: any) {
     this.ordinamentiAtt = e
-    switch (this.ordinamentiAtt) {
-
-      case 'ISCRITTI':
-        this.risAtt.sort(
-          (a, b) => b.universitarii.length - a.universitarii.length
-        );
-        break;
-      case 'NOME':
-        this.risAtt.sort((a, b) => a.attivita.localeCompare(b.attivita));
-        break;
-      default:
-        break;
-    }
   }
   cambioRegione(e: any) {
     this.regione = e;

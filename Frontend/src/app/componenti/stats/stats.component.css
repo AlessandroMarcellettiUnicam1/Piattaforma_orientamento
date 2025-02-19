@@ -80,7 +80,7 @@ input[type="text"] {
   padding-left: 10px;
 }
 
-.school-card-name {
+.school-card-name, .activity-card-name {
   font-size: 20px;
   font-weight: bold;
   padding-bottom: 15px;
@@ -98,14 +98,14 @@ input[type="text"] {
   height: 150px;
 }
 
-.school-results-main-data {
+.school-results-main-data, .activity-results-main-data {
   display: block;
   flex-direction: column;
   text-align: left;
 }
 
 .activity-results-panel-header {
-  height: 80px;
+  height: 100px;
 }
 
 .school-prof-results, .unicam-prof-results {
@@ -199,7 +199,7 @@ input[type="text"] {
   justify-content: center;
 }
 
-.activity-panel-title, .activity-container-type {
+.activity-container-type {
   text-align: left;
 }
 
