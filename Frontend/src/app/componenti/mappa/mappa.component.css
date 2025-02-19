@@ -107,6 +107,14 @@ svg path{
   }
 }
 
+@media (max-width: 650px) {
+
+  .line {
+    font-size: 17px;
+  }
+  
+}
+
 @media (max-width: 800px) {
 
   .page-content {
