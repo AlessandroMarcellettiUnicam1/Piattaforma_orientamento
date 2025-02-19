@@ -23,6 +23,6 @@ export class ResService {
   }
 
   getAttActive() : Observable<ActivityAvailable[]>{
-    return this.http.get<ActivityAvailable[]>(environment.GET_RISULTATI_ATT);
+    return this.http.get<ActivityAvailable[]>(environment.GET_ATTIVITA_ATTIVE);
   }
 }

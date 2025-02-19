@@ -322,7 +322,7 @@ public class SimpleProfessoreService implements ProfessoreService{
 
     @Override
     public void uploadSingleProf( String nome, String cognome,String email, String scuola,String cittaScuola, String attività) {
-Scuola scuola1=scuolaRepository.getScuolaByCittaAndNome(cittaScuola.toUpperCase(),scuola);
+        Scuola scuola1=scuolaRepository.getScuolaByCittaAndNome(cittaScuola.toUpperCase(),scuola);
 
         if(professoreRepository.getProfByEmail(email)==null&&scuola!=null){
             professoreRepository.save(new Professore(nome,cognome,email,scuola1,attività));
@@ -331,7 +331,9 @@ Scuola scuola1=scuolaRepository.getScuolaByCittaAndNome(cittaScuola.toUpperCase(
 
     @Override
     public Professore getProfByString(String prof) {
-        Professore profReferente;
+        if(prof.isEmpty()) {
+            return null;
+        }
         List<String> parametri=separa(prof);
         return professoreRepository.getNomeCognome(parametri.get(0),parametri.get(1));
     }

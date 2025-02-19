@@ -48,10 +48,6 @@ export class AdminComponent implements OnInit {
   errorCitta: boolean = false;
   errorAnno: boolean = false;
   errorData: boolean = false;
-  errorProfRef: boolean = false;
-  errorProfUnicam: boolean = false;
-
-
 
 
   ngOnInit(): void {
@@ -85,12 +81,6 @@ export class AdminComponent implements OnInit {
       error = true;
     }
     if (this.checkData()) {
-      error = true;
-    }
-    if (this.checkProfRef()) {
-      error = true;
-    }
-    if (this.checkProfUnicam()) {
       error = true;
     }
     if (!error) {
@@ -174,24 +164,6 @@ export class AdminComponent implements OnInit {
     return false;
   }
 
-  checkProfRef(): boolean {
-    if (this.prof == '') {
-      this.errorProfRef = true;
-      return true;
-    }
-    this.errorProfRef = false;
-    return false;
-  }
-
-  checkProfUnicam(): boolean {
-    if (this.profUnicam == '') {
-      this.errorProfUnicam = true;
-      return true;
-    }
-    this.errorProfUnicam = false;
-    return false;
-  }
-
   onClick() {
     const nome: string = this.attivita;
     const tipo: string = this.tipo;
@@ -225,7 +197,7 @@ export class AdminComponent implements OnInit {
     this.http
       .post<string>(environment.POST_CREAZIONE_ATTIVITA_ATTIVA, body)
       .subscribe({
-        next: (response) => console.log(alert("inserimento avvenuto con successo"), response),
+        next: (response) => console.log(alert("Inserimento avvenuto con successo"), response),
         error: (error) => console.log(error),
       });
   }
@@ -236,7 +208,7 @@ export class AdminComponent implements OnInit {
     this.http
       .post(environment.POST_ATTIVITA_TERMINATA, body)
       .subscribe({
-        next: (response) => console.log(alert("inserimento avvenuto con successo"), response),
+        next: (response) => console.log(alert("Attività terminata con successo"), response),
         error: (error) => console.log(error),
       });
     this.onClick2();

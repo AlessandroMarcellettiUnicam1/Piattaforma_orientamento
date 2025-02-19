@@ -92,25 +92,23 @@
       <label class="field-title" for="pro">Professore Referente</label>
       <input type="text" list="profRefName" id="profRef" name="profRef" [(ngModel)]="prof"
         (change)="cambioProfRef($event)" (change)="toggleDropdownP()" autocomplete="off"
-        placeholder="Professore Referente" required/>
+        placeholder="Professore Referente"/>
       <datalist class="profRef-list" id="profRefName">
         <option value="">-</option>
         <option *ngFor="let prof of professori" [value]="prof">{{prof}}</option>
       </datalist>
     </div>
-    <label class="error-label" *ngIf="errorProfRef">Inserire il professore referente dell'attività.</label>
 
     <div class="unicam-prof-field">
       <label class="field-title" for="prof">Professore Unicam</label>
       <input type="text" list="profUniName" id="profUni" name="profUni" [(ngModel)]="profUnicam"
         (change)="cambioProfUni($event)" (change)="toggleDropdownU()" autocomplete="off"
-        placeholder="Professore Unicam" required/>
+        placeholder="Professore Unicam"/>
       <datalist class="profUni-list" id="profUniName">
         <option value="">-</option>
         <option *ngFor="let profUnicam of professoriUnicam" [value]="profUnicam">{{profUnicam}}</option>
       </datalist>
     </div>
-    <label class="error-label" *ngIf="errorProfUnicam">Inserire il professore Unicam dell'attività.</label>
 
     <button class="submit-button" type="button" (click)="inviaForm()">Carica!</button>
     <label class="error-label" *ngIf="errorAttivita || errorSede || errorAnno || errorCitta || errorData">ERRORE NELLA COMPILAZIONE DEL FORM!</label>
@@ -127,15 +125,15 @@
               {{ act.nome }}<br>
             </mat-card-title>
             <mat-card-content class="activity-card-content">
-              ANNO ACCADEMICO: {{ creaStringaAnnoAcc(act.annoAcc) }}<br>
-              DATA: {{ act.dataFine.toString().slice(0,10) }} / {{ act.dataFine.toString().slice(0,10) }}<br>
-              ISCRIZIONI: {{ act.studPartecipanti.length }}<br>
-              PROF. UNICAM: {{ act.profUnicam.nome }} {{ act.profUnicam.cognome }}<br>
-              PROF. REFERENTE: {{ act.profReferente.nome }} {{ act.profReferente.cognome }}<br>
-              SCUOLA: {{ act.profReferente.scuolaImp.nome }}<br>
-              CITTA': {{ act.profReferente.scuolaImp.citta }}<br>
-              POVINCIA: {{ act.profReferente.scuolaImp.provincia }}<br>
-              REGIONE: {{ act.profReferente.scuolaImp.regione }}<br>
+              <div>ANNO ACCADEMICO: {{ creaStringaAnnoAcc(act.annoAcc) }}</div>
+              <div>DATA: {{ act.dataFine.toString().slice(0,10) }} / {{ act.dataFine.toString().slice(0,10) }}</div>
+              <div>ISCRIZIONI: {{ act.studPartecipanti.length }}</div>
+              <div *ngIf="act.profUnicam!=null">PROF. UNICAM: {{ act.profUnicam.nome }} {{ act.profUnicam.cognome }}</div>
+              <div *ngIf="act.profReferente!=null">PROF. REFERENTE: {{ act.profReferente.nome }} {{ act.profReferente.cognome }}</div>
+              <div *ngIf="act.profReferente!=null">SCUOLA: {{ act.profReferente.scuolaImp.nome }}</div>
+              <div *ngIf="act.profReferente!=null">CITTA': {{ act.profReferente.scuolaImp.provincia }}</div>
+              <div *ngIf="act.profReferente!=null">POVINCIA: {{ act.profReferente.scuolaImp.provincia }}</div>
+              <div *ngIf="act.profReferente!=null">REGIONE: {{ act.profReferente.scuolaImp.regione }}</div>
             </mat-card-content>
             <mat-card-actions class="activity-card-action">
               <button class="close-activity-button" (click)="handleButtonClick(act.nome, act.annoAcc)">Termina
