@@ -19,7 +19,7 @@ export class UploadatComponent implements OnInit {
   private dataIscr = new FormData();
   private dataProf = new FormData();
   private dataProfUnicam = new FormData();
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
   private anno = 0;
   anni: Anni[] = [];
   annoAccademicoInizio: number = 0;
@@ -124,7 +124,7 @@ export class UploadatComponent implements OnInit {
         this.tipo +
         '$' +
         this.sede +
-        '-' +
+        '£' +
         this.dataInizio.toString() +
         ' ' +
         this.dataFine.toString() +
@@ -143,9 +143,9 @@ export class UploadatComponent implements OnInit {
         this.tipo +
         '$' +
         this.scuola.toString() +
-        '-' +
+        '£' +
         this.citta.toString() +
-        '-' +
+        '£' +
         this.sede +
         '*' +
         this.dataInizio.toString() +
@@ -409,15 +409,13 @@ export class UploadatComponent implements OnInit {
 
   toggleDropdownS() {
     let array = this.getScuole();
-    array.subscribe(
-      (result: string[]) => {
-        // Qui puoi utilizzare i valori emessi dall'Observable come un array di stringhe
-        this.scuole = result;
-        if (this.scuole.length == 0) {
-          this.scuola = '';
-        }
+    array.subscribe((result: string[]) => {
+      // Qui puoi utilizzare i valori emessi dall'Observable come un array di stringhe
+      this.scuole = result;
+      if (this.scuole.length == 0) {
+        this.scuola = '';
       }
-    );
+    });
   }
 
   getScuole(): Observable<string[]> {
@@ -553,7 +551,9 @@ export class UploadatComponent implements OnInit {
     if (this.citta == '') {
       return this.cittaLista;
     }
-    return this.cittaLista.filter(c => c.startsWith(this.citta.toUpperCase()));
+    return this.cittaLista.filter(c =>
+      c.startsWith(this.citta.toUpperCase())
+    );
   }
   public getScuola(): string {
     return this.scuola;
