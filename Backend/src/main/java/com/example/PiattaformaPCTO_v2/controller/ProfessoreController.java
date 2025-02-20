@@ -10,24 +10,15 @@ import com.example.PiattaformaPCTO_v2.collection.Professore;
 import com.example.PiattaformaPCTO_v2.collection.ProfessoreUnicam;
 import com.example.PiattaformaPCTO_v2.service.ProfessoreService;
 import com.example.PiattaformaPCTO_v2.service.ProfessoreUnicamService;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 @RestController
 @RequestMapping("/professori")
@@ -54,11 +45,9 @@ public class ProfessoreController {
     @PostMapping("/createEmptyActivity1")
     public void createEmptyActivity1(@RequestBody ActivityRequest create)
     {
-        System.out.println("Create:"+create);
 
-ProfessoreUnicam prof=professoreUnicamService.getProfByString(create.getProfUnicam());
-Professore profReferente=professoreService.getProfByString(create.getProfReferente());
-
+        ProfessoreUnicam prof=professoreUnicamService.getProfByString(create.getProfUnicam());
+        Professore profReferente=professoreService.getProfByString(create.getProfReferente());
         professoreService.createEmptyActivity(create.getNome(), create.getTipo(), create.getScuola(),create.getAnno(),
                create.getSede(), create.getDataInizio(),create.getDataFine(),create.getDescrizione(),prof,profReferente);}
 
@@ -81,12 +70,8 @@ Professore profReferente=professoreService.getProfByString(create.getProfReferen
     }
 
 
-
-
-
     @PostMapping("/uploadActivityDefinitively")
     public void uploadActivityDefinitively(@RequestBody UploadDefinitively uploadDefinitively) throws IOException {
-        System.out.println("UpNome: "+uploadDefinitively.getNome()+"\nUpAnno: "+uploadDefinitively.getAnno());
         professoreService.uploadActivityDefinitively(uploadDefinitively.getNome(), uploadDefinitively.getAnno());
     }
 

@@ -10,11 +10,11 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +22,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -200,83 +201,70 @@ public class SimpleAttivitaService implements AttivitaService {
 
 
     /**
-     * Metodo che da un attività crea la vista sulle scuole e sugli studenti che hanno partecipato; compresi quelli iscritti all'università.
+     * metodo che da un attività crea la vista sulle scuola
      * @param attivita
      */
     private void createRisultati(Attivita attivita){
-        Presenza presenza = createPresenza(attivita);
-        List<Risultati> risultati = risultatiRepository.findAll();
-        // Se l'attività ha una scuola associata (non vuota)
-        if (!attivita.getScuola().equals("")) {
-            Scuola scuola = scuolaRepository.getScuolaByCittaAndNome(citySchool, attivita.getScuola());
-            if (scuola == null) {
-                System.out.println("Scuola non trovata per la città " + citySchool + " e nome " + attivita.getScuola());
-                return;
-            }
-            // Cerca se esiste già un record Risultati per questa scuola e anno accademico
-            Risultati risultatoEsistente = null;
-            for (Risultati r : risultati) {
-                if (r.getScuola() != null && r.getScuola().getIdScuola() != null &&
-                        r.getScuola().getIdScuola().equals(scuola.getIdScuola()) &&
-                        r.getAnnoAcc() == attivita.getAnnoAcc()) {
-                    risultatoEsistente = r;
-                    break;
+        Presenza presenza=createPresenza(attivita);
+
+        List<Risultati> risultati=risultatiRepository.findAll();
+
+
+
+        //se l'attività ha una scuola in cui si è svolta
+        if(!attivita.getScuola().equals("")){
+            Scuola scuola=scuolaRepository.getScuolaByCittaAndNome(citySchool , attivita.getScuola());
+            Query query = new Query();
+            query.addCriteria(Criteria.where("scuola").is(scuola));
+            Scuola scuola1=null;
+            for(int i=0;i< risultati.size();i++){
+                if(risultati.get(i).getScuola().getIdScuola().equals(scuola.getIdScuola())&&
+                        risultati.get(i).getAnnoAcc()==attivita.getAnnoAcc()){
+                    scuola1=scuola;
                 }
             }
-            // Se non esiste un record, creane uno nuovo
-            if (risultatoEsistente == null) {
-                Risultati nuovoRisultato = new Risultati(attivita.getAnnoAcc(), scuola);
-                nuovoRisultato.addAttivita(presenza);
-                nuovoRisultato.addIscritti(presenza.getIscritti());
-                risultatiRepository.save(nuovoRisultato);
-            } else {
-                // Se esiste già un record, aggiorna la lista degli iscritti e delle attività evitando duplicati
-                List<Universitario> iscrittiEsistenti = risultatoEsistente.getIscritti();
-                Set<Universitario> universitarioSet = new LinkedHashSet<>();
-                if (iscrittiEsistenti != null) {
-                    universitarioSet.addAll(iscrittiEsistenti);
-                }
-                // Aggiungi i nuovi iscritti dalla presenza
-                List<Universitario> nuoviIscritti = presenza.getIscritti();
-                if (nuoviIscritti != null) {
-                    universitarioSet.addAll(nuoviIscritti);
-                }
-                risultatoEsistente.setIscritti(new ArrayList<>(universitarioSet));
-                List<Presenza> attivitaEsistenti = risultatoEsistente.getAttivita();
-                Set<Presenza> attivitaSet = new LinkedHashSet<>();
-                if (attivitaEsistenti != null) {
-                    attivitaSet.addAll(attivitaEsistenti);
-                }
-                attivitaSet.add(presenza);
-                risultatoEsistente.setAttivita(new ArrayList<>(attivitaSet));
-                risultatiRepository.save(risultatoEsistente);
+
+            //se la scuola non ha altre attività fatte creao un nuovo risultati
+            if(scuola1==null) {
+                Risultati risultato = new Risultati(attivita.getAnnoAcc(), scuola);
+                risultato.addAttivita(presenza);
+                risultato.addIscritti(presenza.getIscritti());
+                risultatiRepository.save(risultato);
+
+            }
+            else{
+                List<Universitario> universitario=risultatiRepository.findByScuolaId(scuola.getIdScuola()).get(0).getIscritti();
+                List<Presenza> presenze=risultatiRepository.findByScuolaId(scuola.getIdScuola()).get(0).getAttivita();
+                universitario.addAll(presenza.getIscritti());
+                presenze.add(presenza);
+                Query query1 = new Query();
+                query1.addCriteria(Criteria.where("scuola").is(scuola));
+                Update update = new Update();
+                update.set("attivita", presenze);
+                update.set("iscritti",universitario);
+                mongoTemplate.updateFirst(query1, update, Risultati.class);
             }
         }
     }
 
     /**
-     * Metodo che crea la presenza
+     * metodo che crea la presenza
      * @param attivita
      */
     private Presenza createPresenza(Attivita attivita) {
-        return getPresenza(attivita, risultatiAttRepository);
-
-
-    }
-    @NotNull
-    public Presenza getPresenza(Attivita attivita, RisultatiAttRepository risultatiAttRepository) {
-        Set<Universitario> universitariSet = extractUniversitariFromAttivita(attivita);
-        universitariSet.addAll(risultatiAttRepository.findbyNomeAttivita(attivita.getNome()).get(0).getUniversitarii());
+        List<Universitario> universitari=risultatiAttRepository.findbyNomeAttivita(attivita.getNome()).get(0).getUniversitarii();
         Presenza presenza=new Presenza(attivita.getNome());
         presenza.setTipo(attivita.getTipo());
         presenza.addPartecipanti(attivita.getStudPartecipanti());
-        presenza.addIscritti(new ArrayList<>(universitariSet));
+        presenza.addIscritti(universitari);
         return presenza;
+
+
     }
 
 
     /**
-     * Metodo che crea la vista dei risultati di quella attività va a vedere gli studenti che sono diventati universitari.
+     * metodo che crea la vista dei risultati di quella attività va a vedere gli studenti che sono diventati universitari
      * @param attivita
      */
     private void  createRisulataiAtt(Attivita attivita){
@@ -284,44 +272,15 @@ public class SimpleAttivitaService implements AttivitaService {
         risultatiAtt.setAnnoAcc(attivita.getAnnoAcc());
         risultatiAtt.setAttivita(attivita.getNome());
         risultatiAtt.setTipo(attivita.getTipo());
-        Set<Universitario> universitariSet= extractUniversitariFromAttivita(attivita);
-        risultatiAtt.setUniversitarii(new ArrayList<>(universitariSet));
-        risultatiAttRepository.save(risultatiAtt);
-    }
-
-    /**
-     * Metodo che aggiorna i risultatiAtt in modo da aggiungere gli studenti che sono diventati universitari dopo la creazione dell'attività.
-     */
-    public void updateRisultatiAtt(){
-        List<RisultatiAtt> risultatiAttList= risultatiAttRepository.findAll();
-        for (RisultatiAtt risultatoAttività : risultatiAttList) {
-            Attivita attivita = attivitaRepository.findByNomeAndAnno(risultatoAttività.getAttivita(), risultatoAttività.getAnnoAcc());
-            if (attivita == null) continue;
-            // Estrae i nuovi universitari dalla attività
-            Set<Universitario> universitariSetUpdated = extractUniversitariFromAttivita(attivita);
-            // Unisce con quelli già presenti
-            universitariSetUpdated.addAll(risultatoAttività.getUniversitarii());
-            risultatoAttività.setUniversitarii(new ArrayList<>(universitariSetUpdated));
-            risultatiAttRepository.save(risultatoAttività);
-        }
-    }
-
-    /**
-     * Metodo che estrae e normalizza i dati dei partecipanti all’attività per ottenere un Set di Universitari senza duplicati.
-     *
-     * @param attivita
-     * @return universitariSet
-     */
-    private Set<Universitario> extractUniversitariFromAttivita(Attivita attivita) {
-        Set<Universitario> universitariSet = new LinkedHashSet<>();
-        for (Studente stud : attivita.getStudPartecipanti()) {
-            // Normalizza: rimuove spazi multipli, elimina spazi iniziali/finali e converte in maiuscolo
-            Universitario universitario = universitarioRepository.findByNomeAndCognome(stud.getNome().toUpperCase().trim(), stud.getCognome().toUpperCase().trim());
-            if (universitario != null) {
-                universitariSet.add(universitario);
+        List<Universitario> universitarioList=new ArrayList<>();
+        for(int i=0;i<attivita.getStudPartecipanti().size();i++){
+            Studente stud=attivita.getStudPartecipanti().get(i);
+            Universitario universitario=universitarioRepository.findByNomeAndCognome(stud.getNome(),stud.getCognome());
+            if(universitario!=null){
+                risultatiAtt.addUniversitari(universitario);
             }
         }
-        return universitariSet;
+        risultatiAttRepository.save(risultatiAtt);
     }
 
 
@@ -336,8 +295,6 @@ public class SimpleAttivitaService implements AttivitaService {
 
 
     private Scuola findScuola(String citta, String scuola){
-        citta = citta.toUpperCase();
-        scuola = scuola.toUpperCase();
         List<Scuola> scuole = scuolaRepository.getScuolaByCitta(citta);
         List<String> nomi = new ArrayList<>();
         for (Scuola s : scuole){

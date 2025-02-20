@@ -1,40 +1,31 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { ChartType } from 'angular-google-charts';
 import { Anni } from 'src/app/interface/anni';
-
 import { Res } from 'src/app/interface/res';
 import { Risreg } from 'src/app/interface/risreg';
 import { ResService } from 'src/app/service/res.service';
-
-
-
-
-
 
 @Component({
   selector: 'app-mappa',
   templateUrl: './mappa.component.html',
   styleUrls: ['./mappa.component.css']
 })
+
 export class MappaComponent implements OnInit {
-
-
-
-
 
   constructor(private resService: ResService,
     public dialog :MatDialog) {}
 
-  public risultati : Res[] = []
+  public risultati : Res[] = [];
   public risreg : Risreg[] | undefined;
   public anno : number =0;
-  public a : Anni[] =[]
-  public visualizza = false
-  public visualRis : Res[] = []
-
-
-
-
+  public a : Anni[] =[];
+  public visualizza = false;
+  public visualRis : Res[] = [];
+  public chartType = ChartType.Table;
+  public chartColumns = ["Scuola", "Immatricolazioni"];
+  public chartData: any[] = [];
 
 public coord = [
   { nome : "Marche", iscr :0,id :"IT-57"},
@@ -71,6 +62,7 @@ public coord = [
 
 
   openDialog(c:any): void {
+    this.chartData = [];
     while(this.visualRis.length>0){
       this.visualRis.pop()
     }
@@ -94,7 +86,7 @@ public coord = [
         }
       })
     }
-
+    this.chartData = this.visualRis.map(r => [r.scuola.nome, r.iscritti.length])
   }
 
 
@@ -159,8 +151,10 @@ public coord = [
         this.risultati= response;
       },
       complete : ()=> {
-        this.anno=this.risultati[this.risultati.length-1].annoAcc;
-        this.setMap();
+        if(this.risultati.length != 0) {
+          this.anno=this.risultati[this.risultati.length-1].annoAcc;
+          this.setMap();
+        }
       },
       error: (error) => console.log(error),
     });

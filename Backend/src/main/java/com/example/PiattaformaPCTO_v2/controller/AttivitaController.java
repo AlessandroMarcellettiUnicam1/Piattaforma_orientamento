@@ -53,8 +53,8 @@ public class AttivitaController {
         create=create.substring(create.indexOf("&")+1);
         String tipo=create.substring(0,create.indexOf("$"));
         create=create.substring(create.indexOf("$")+1);
-        String s=create.substring(0,create.indexOf("£"));
-        create=create.substring(create.indexOf("£")+1);
+        String s=create.substring(0,create.indexOf("-"));
+        create=create.substring(create.indexOf("-")+1);
         String sede="";
         String scuola="";
         String cittàScuola="";
@@ -62,8 +62,8 @@ public class AttivitaController {
             sede = s;
         }else {
             scuola = s;
-            cittàScuola=create.substring(0,create.indexOf("£"));
-            create=create.substring(create.indexOf("£")+1);
+            cittàScuola=create.substring(0,create.indexOf("-"));
+            create=create.substring(create.indexOf("-")+1);
             sede = create.substring(0, create.indexOf("*"));
             create = create.substring(create.indexOf("*") + 1);
         }

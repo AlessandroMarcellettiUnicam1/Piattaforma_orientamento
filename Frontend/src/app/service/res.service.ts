@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Res } from '../interface/res';
 import { ActivityAvailable } from '../interface/activityAvailable';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,15 +14,15 @@ export class ResService {
 
 
   getRes() : Observable<Res[]>{
-    return this.http.get<Res[]>('http://localhost:8080/risultati/res')
+    return this.http.get<Res[]>(environment.GET_RES_RISULTATI)
   }
 
 
   getResAnno(a:number): Observable<Res[]>{
-    return this.http.get<Res[]>('http://localhost:8080/risultati/res/'+a)
+    return this.http.get<Res[]>(environment.GET_RES_RISULTATI_DA_ANNO+a)
   }
 
-  getResAttActive() : Observable<ActivityAvailable[]>{
-    return this.http.get<ActivityAvailable[]>('http://localhost:8080/professori/getPendingActivities');
+  getAttActive() : Observable<ActivityAvailable[]>{
+    return this.http.get<ActivityAvailable[]>(environment.GET_ATTIVITA_ATTIVE);
   }
 }

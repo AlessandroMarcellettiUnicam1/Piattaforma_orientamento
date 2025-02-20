@@ -12,4 +12,5 @@ export interface ActivityAvailable {
     descrizione: string;
     profUnicam: ProfessoriUnicam;
     profReferente: Professori;
+    aperta: boolean;
 }

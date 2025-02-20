@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +32,7 @@ public class SimpleProfessoreService implements ProfessoreService{
     @Autowired
     private ScuolaRepository scuolaRepository;
     @Autowired
-    private SimpleAttivitaService attivitaService;
+    private AttivitaService attivitaService;
     @Autowired
     private AttivitaRepository attivitaRepository;
 
@@ -46,10 +45,6 @@ public class SimpleProfessoreService implements ProfessoreService{
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    @Autowired
-    private ScuolaService scuolaService;
-    @Autowired
-    private SimpleStringFinderHelper simpleStringFinderHelper;
     @Override
     public String save(Professore professore) {
         return professoreRepository.save(professore).getEmail();
@@ -79,14 +74,13 @@ public class SimpleProfessoreService implements ProfessoreService{
     public void createEmptyActivity(String nome, String tipo, String scuola, int anno,Sede sede, LocalDateTime dataInizio, LocalDateTime dataFine
             , String descrizione, ProfessoreUnicam profUnicam, Professore profReferente) {
 
-if(attivitaRepository.findByNomeAnno(nome,anno).isEmpty()) {
-    Attivita attivita = new Attivita(nome, tipo, anno, new ArrayList<>(), sede, dataInizio, dataFine, descrizione, profUnicam, profReferente, true);
+        if(attivitaRepository.findByNomeAnno(nome,anno).isEmpty()) {
+            Attivita attivita = new Attivita(nome, tipo, anno, new ArrayList<>(), sede, dataInizio, dataFine, descrizione, profUnicam, profReferente, true);
 
-    attivita.setScuola(scuola);
+            attivita.setScuola(scuola);
 
-
-    attivitaRepository.save(attivita);
-}
+            attivitaRepository.save(attivita);
+        }
     }
 
 
@@ -106,7 +100,7 @@ if(attivitaRepository.findByNomeAnno(nome,anno).isEmpty()) {
     }
 
     /**
-     * Metodo che da un attività crea la vista sulle scuole
+     * metodo che da un attività crea la vista sulle scuola
      * @param attivita
      */
     private void createRisultati(Attivita attivita){
@@ -161,7 +155,15 @@ if(attivitaRepository.findByNomeAnno(nome,anno).isEmpty()) {
      * @param attivita
      */
     private Presenza createPresenza(Attivita attivita) {
-        return attivitaService.getPresenza(attivita, risultatiAttRepository);
+
+      List<Universitario> universitari=risultatiAttRepository.findbyNomeAttivita(attivita.getNome()).get(0).getUniversitarii();
+      Presenza presenza=new Presenza(attivita.getNome());
+      presenza.setTipo(attivita.getTipo());
+      presenza.addPartecipanti(attivita.getStudPartecipanti());
+      presenza.addIscritti(universitari);
+      return presenza;
+
+
     }
 
 
@@ -175,15 +177,15 @@ if(attivitaRepository.findByNomeAnno(nome,anno).isEmpty()) {
         risultatiAtt.setAttivita(attivita.getNome());
         risultatiAtt.setTipo(attivita.getTipo());
         List<Universitario> universitarioList=new ArrayList<>();
-for(int i=0;i<attivita.getStudPartecipanti().size();i++){
-    Studente stud=attivita.getStudPartecipanti().get(i);
-    Universitario universitario=universitarioRepository.findByNomeAndCognome(stud.getNome(),stud.getCognome());
-    if(universitario!=null){
-       risultatiAtt.addUniversitari(universitario);
+        for(int i=0;i<attivita.getStudPartecipanti().size();i++){
+            Studente stud=attivita.getStudPartecipanti().get(i);
+            Universitario universitario=universitarioRepository.findByNomeAndCognome(stud.getNome(),stud.getCognome());
+            if(universitario!=null){
+               risultatiAtt.addUniversitari(universitario);
+            }
+        }
+        risultatiAttRepository.save(risultatiAtt);
     }
-}
-risultatiAttRepository.save(risultatiAtt);
-}
 
 
     @Override
@@ -191,33 +193,24 @@ risultatiAttRepository.save(risultatiAtt);
         Sheet dataSheet = this.fileOpenerHelper(file);
         Iterator<Row> iterator = dataSheet.rowIterator();
         iterator.next();
-        List<String> allCities = scuolaService.getCitta();
+
         while (iterator.hasNext()){
             Row row = iterator.next();
             if(row.getCell(0)==null)break;
-            String nome=row.getCell(0).getStringCellValue().trim();
-            String cognome=row.getCell(1).getStringCellValue().trim();
+            String nome=row.getCell(0).getStringCellValue();
+            String cognome=row.getCell(1).getStringCellValue();
             String attivita=row.getCell(2).getStringCellValue();
-            String scuola=row.getCell(3).getStringCellValue().toUpperCase();
-            String cittascuola=row.getCell(4).getStringCellValue().toUpperCase();
+            String scuola=row.getCell(3).getStringCellValue();
+            String cittascuola=row.getCell(4).getStringCellValue();
             String email=row.getCell(5).getStringCellValue();
 
-            String bestMatchingCity = simpleStringFinderHelper.findClosestCity(cittascuola, allCities);
 
-            List<Scuola> scuoleNellaCitta = scuolaRepository.getScuolaByCitta(bestMatchingCity);
-
-            Scuola bestMatchingSchool = simpleStringFinderHelper.findClosestScuola(scuola, scuoleNellaCitta);
-
-            System.out.println("Attività già fatta dal professore? "+checkactivity(nome,cognome,attivita));
-
-            if (bestMatchingSchool != null && !checkactivity(nome,cognome,attivita)) {
-                Professore professoreEsistente = professoreRepository.getProfessoreByNomeCognomeScuola(nome, cognome, bestMatchingSchool.getIdScuola());
-                if (professoreEsistente == null) {
-                    Professore prof = new Professore(nome, cognome, email, bestMatchingSchool, attivita);
-                    professoreRepository.save(prof);
-                } else {
-                    System.out.println("Professore già presente nella scuola: " + nome + " " + cognome + " - " + bestMatchingSchool.getNome());
-                }
+            Scuola scuola1 =scuolaRepository.getScuolaByCittaAndNome(cittascuola,scuola);
+            System.out.println(checkactivity(nome,cognome,attivita));
+            if(scuolaRepository.getScuolaByCittaAndNome(cittascuola,scuola)!=null&&
+            !checkactivity(nome,cognome,attivita)) {
+                Professore prof=new Professore(nome,cognome,email,scuola1,attivita);
+                professoreRepository.save(prof);
             }
         }
 
@@ -260,27 +253,21 @@ risultatiAttRepository.save(risultatiAtt);
         row0.createCell(0).setCellValue("Email");
         row0.createCell(1).setCellValue("Nome");
         row0.createCell(2).setCellValue("Cognome");
-        row0.createCell(3).setCellValue("Id Scuola");
-        row0.createCell(4).setCellValue("Nome Scuola");
-        row0.createCell(5).setCellValue("Città Scuola");
-        row0.createCell(6).setCellValue("Attività");
+        row0.createCell(3).setCellValue("Scuola");
+        row0.createCell(4).setCellValue("Attività");
         for (int i=0;i< professori.size();i++) {
             // Creazione della prima riga
             Row row = sheet.createRow(i+1);
             Cell cellEmail = row.createCell(0);
             Cell cellNome = row.createCell(1);
             Cell cellCognome = row.createCell(2);
-            Cell cellIdScuola = row.createCell(3);
-            Cell cellNomeScuola = row.createCell(4);
-            Cell cellCittàScuola = row.createCell(5);
-            Cell cellAttivita = row.createCell(6);
+            Cell cellScuola = row.createCell(3);
+            Cell cellAttivita = row.createCell(4);
             // Impostazione dei valori delle celle
             cellEmail.setCellValue(professori.get(i).getEmail());
             cellNome.setCellValue(professori.get(i).getNome());
             cellCognome.setCellValue(professori.get(i).getCognome());
-            cellIdScuola.setCellValue(professori.get(i).getScuolaImp().getIdScuola());
-            cellNomeScuola.setCellValue(professori.get(i).getScuolaImp().getNome());
-            cellCittàScuola.setCellValue(professori.get(i).getScuolaImp().getCitta());
+            cellScuola.setCellValue(professori.get(i).getScuolaImp().getIdScuola());
             cellAttivita.setCellValue(professori.get(i).getAttivita());
         }
 
@@ -335,7 +322,7 @@ risultatiAttRepository.save(risultatiAtt);
 
     @Override
     public void uploadSingleProf( String nome, String cognome,String email, String scuola,String cittaScuola, String attività) {
-Scuola scuola1=scuolaRepository.getScuolaByCittaAndNome(cittaScuola.toUpperCase(),scuola);
+        Scuola scuola1=scuolaRepository.getScuolaByCittaAndNome(cittaScuola.toUpperCase(),scuola);
 
         if(professoreRepository.getProfByEmail(email)==null&&scuola!=null){
             professoreRepository.save(new Professore(nome,cognome,email,scuola1,attività));
@@ -344,7 +331,9 @@ Scuola scuola1=scuolaRepository.getScuolaByCittaAndNome(cittaScuola.toUpperCase(
 
     @Override
     public Professore getProfByString(String prof) {
-        Professore profReferente;
+        if(prof.isEmpty()) {
+            return null;
+        }
         List<String> parametri=separa(prof);
         return professoreRepository.getNomeCognome(parametri.get(0),parametri.get(1));
     }
