@@ -1,7 +1,7 @@
 # Piattaforma di Orientamento Unicam
 
 ## Descrizione
-La piattaforma è pensata per i docenti Unicam e l'università, offrendo statistiche sull’impatto delle attività di orientamento (e non solo) svolte negli istituti superiori. Essa consente di:
+La piattaforma è pensata per i docenti Unicam e i docenti delle scuole referenti, offrendo statistiche sull’impatto delle attività di orientamento (e non solo) svolte negli istituti superiori. Essa consente di:
 - Valutare quali attività funzionano meglio.
 - Analizzare la geolocalizzazione degli studenti iscritti per verificare l’efficacia delle attività in diverse zone.
 - Organizzare e gestire tutte le informazioni sulle attività organizzate dall'università.
