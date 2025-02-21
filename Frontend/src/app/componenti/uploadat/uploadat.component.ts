@@ -409,13 +409,15 @@ export class UploadatComponent implements OnInit {
 
   toggleDropdownS() {
     let array = this.getScuole();
-    array.subscribe((result: string[]) => {
-      // Qui puoi utilizzare i valori emessi dall'Observable come un array di stringhe
-      this.scuole = result;
-      if (this.scuole.length == 0) {
-        this.scuola = '';
+    array.subscribe(
+      (result: string[]) => {
+        // Qui puoi utilizzare i valori emessi dall'Observable come un array di stringhe
+        this.scuole = result;
+        if (this.scuole.length == 0) {
+          this.scuola = '';
+        }
       }
-    });
+    );
   }
 
   getScuole(): Observable<string[]> {
