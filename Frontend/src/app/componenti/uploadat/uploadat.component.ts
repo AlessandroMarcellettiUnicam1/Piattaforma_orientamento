@@ -411,20 +411,13 @@ export class UploadatComponent implements OnInit {
     let array = this.getScuole();
     array.subscribe(
       (result: string[]) => {
-<<<<<<< HEAD
-      // Qui puoi utilizzare i valori emessi dall'Observable come un array di stringhe
-      this.scuole = result;
-      if (this.scuole.length == 0) {
-        this.scuola = '';
-=======
         // Qui puoi utilizzare i valori emessi dall'Observable come un array di stringhe
         this.scuole = result;
         if (this.scuole.length == 0) {
           this.scuola = '';
         }
->>>>>>> Merge-into-Fix-error-with-merge
       }
-    });
+    );
   }
 
   getScuole(): Observable<string[]> {
