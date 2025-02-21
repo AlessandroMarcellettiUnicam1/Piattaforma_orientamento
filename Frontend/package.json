@@ -23,7 +23,6 @@
     "@grapecity/spread-excelio": "^16.2.6",
     "@grapecity/spread-sheets": "^16.2.2",
     "@grapecity/spread-sheets-angular": "^16.2.2",
-    "@syncfusion/ej2-angular-spreadsheet": "^22.2.12",
     "@types/geojson": "^7946.0.10",
     "@types/googlemaps": "^3.39.13",
     "@types/leaflet": "^1.9.4",
