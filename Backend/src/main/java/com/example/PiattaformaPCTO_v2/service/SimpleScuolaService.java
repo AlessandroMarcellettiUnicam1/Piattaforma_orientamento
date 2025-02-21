@@ -38,7 +38,7 @@ public class SimpleScuolaService implements ScuolaService{
 
     @Override
     public String upload() {
-        String filePath="src/main/resources/scuole-statali.xlsx";
+        String filePath="src/main/resources/scuole-statali_24-25.xlsx";
         try {
             FileInputStream excel = new FileInputStream(new File(filePath));
 
@@ -46,23 +46,26 @@ public class SimpleScuolaService implements ScuolaService{
             Sheet dataSheet = workbook.getSheetAt(0);
             Iterator<Row> iterator = dataSheet.rowIterator();
             iterator.next();
-            iterator.next();
-            iterator.next();
+
             while(iterator.hasNext()){
                 Row row = iterator.next();
-                if (!row.getCell(7).getStringCellValue().equals("SCUOLA PRIMO GRADO")){
-                    if (!row.getCell(7).getStringCellValue().equals("SCUOLA PRIMARIA")){
-                        if (!row.getCell(7).getStringCellValue().equals("SCUOLA INFANZIA")){
-                            String id = row.getCell(2).getStringCellValue();
-                            String nome = row.getCell(3).getStringCellValue();
-                            String regione = row.getCell(0).getStringCellValue();
-                            String provincia = row.getCell(1).getStringCellValue();
-                            String citta = row.getCell(6).getStringCellValue();
-                            String tipo =row.getCell(7).getStringCellValue();
-                            Scuola scuola = new Scuola(id,nome,regione,provincia,citta,tipo);
-                            this.save(scuola);
-                        }
-                    }
+                if (row.getCell(5).getStringCellValue().equals("SCUOLA PRIMO GRADO") || row.getCell(5).getStringCellValue().equals("SCUOLA PRIMARIA") || row.getCell(5).getStringCellValue().equals("SCUOLA INFANZIA")){
+                    continue;
+                }
+                String regione = row.getCell(0).getStringCellValue();
+                String provincia = row.getCell(1).getStringCellValue();
+                String id = row.getCell(2).getStringCellValue();
+                String nome = row.getCell(3).getStringCellValue();
+                String citta = row.getCell(4).getStringCellValue();
+                String tipo =row.getCell(5).getStringCellValue();
+
+                // Controlla se esiste già una scuola con lo stesso nome nella stessa città
+                Scuola scuolaEsistente = scuolaRepository.getScuolaByCittaAndNome(citta, nome);
+                if (scuolaEsistente == null) {
+                    Scuola scuola = new Scuola(id, nome, regione, provincia, citta, tipo);
+                    this.save(scuola);
+                } else {
+                    System.out.println("Scuola duplicata: " + nome + " in " + citta);
                 }
             }
         } catch (IOException e) {
