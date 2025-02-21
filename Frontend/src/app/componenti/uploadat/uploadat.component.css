@@ -175,6 +175,11 @@ select[required] {
   margin-top: 20px;
 }
 
+.upload-button:hover {
+  color: #fff;
+  background-color: #5a3ba8;
+}
+
 .img-iscr {
   display: block;
   text-align: center;

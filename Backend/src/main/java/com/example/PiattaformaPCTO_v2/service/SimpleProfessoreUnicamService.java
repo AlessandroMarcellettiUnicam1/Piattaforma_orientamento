@@ -80,7 +80,9 @@ public class SimpleProfessoreUnicamService implements ProfessoreUnicamService {
 
     @Override
     public ProfessoreUnicam getProfByString(String prof) {
-        List<ProfessoreUnicam> professoreUnicam=new ArrayList<>();
+        if(prof.isEmpty()) {
+            return null;
+        }
         List<String> parametri=separa(prof);
         return professoreUnicamRepository.getByNomeCognome(parametri.get(0),parametri.get(1));
     }

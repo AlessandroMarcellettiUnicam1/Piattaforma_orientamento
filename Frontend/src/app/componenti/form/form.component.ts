@@ -1,11 +1,10 @@
-
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ActivityAvailable } from 'src/app/interface/activityAvailable';
 import { ResService } from 'src/app/service/res.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-Form',
@@ -40,7 +39,7 @@ export class FormdatComponent implements OnInit {
   }
 
   toggleDropdownAtt() {
-    let array = this.resService.getResAttActive();
+    let array = this.resService.getAttActive();
     array.subscribe(
       (result: ActivityAvailable[]) => {
         result.forEach(a => this.listaAttivita.push(a.nome+'%'+a.annoAcc));
@@ -68,14 +67,14 @@ export class FormdatComponent implements OnInit {
 
   getCitta(): Observable<string[]> {
     return this.http
-      .get<string[]>('http://localhost:8080/scuola/orderCitta')
+      .get<string[]>(environment.GET_LISTA_CITTA)
       .pipe(
         map((response: any) => response.map((citta: any) => citta.toString()))
       );
   }
 
   getScuole(): Observable<string[]> {
-    return this.http.get<string[]>('http://localhost:8080/scuola/scuoleCitta/' + this.citta).pipe(
+    return this.http.get<string[]>(environment.GET_LISTA_SCUOLE_DA_CITTA + this.citta).pipe(
       map((response: any) => response.map((scuola: any) => scuola.toString()))
     );
   }
@@ -91,7 +90,7 @@ export class FormdatComponent implements OnInit {
     let body = { nome, cognome, email, nomeAttivita, anno, scuola };
 
     this.http
-        .post('http://localhost:8080/studente/addIscrizione1', body)
+        .post(environment.POST_ISCRIZIONE_STUDENTE, body)
         .subscribe({
           next: (response) => console.log(alert("inserimento avvenuto con successo"), response),
           error: (error) => console.log(error),

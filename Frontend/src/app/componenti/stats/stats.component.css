@@ -48,32 +48,44 @@ input[type="text"] {
   text-align: center;
 }
 
-.activities-info {
-  display: flex;
-}
-
 .school-button, .activity-button, .school-prof-button, .unicam-prof-button {
   padding-bottom: 20px;
 }
 
-.activity-results, .activity-chart, .schoole-results, .school-chart {
-  flex: 1;
+.school-chart, .activity-chart {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  padding-right: 20px;
+  padding-left: 20px;
+  gap: 30px;
 }
 
-.schoole-results, .activity-results {
+.chart {
+  width: auto;
+  height: 300px;
+  padding-bottom: 20px;
+  
+}
+
+.activities-info, .schools-info {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.activity-chart {
-  display: block;
+  padding-top: 30px;
 }
 
 .school-card, .activity-card {
-  width: 500px;
+  width: auto;
+  min-width: 600px;
   padding-bottom: 10px;
   padding-left: 10px;
+}
+
+.school-card-name, .activity-card-name {
+  font-size: 20px;
+  font-weight: bold;
+  padding-bottom: 15px;
 }
 
 .school-results-panel {
@@ -85,12 +97,17 @@ input[type="text"] {
 }
 
 .school-results-panel-header {
+  height: 150px;
+}
+
+.school-results-main-data, .activity-results-main-data {
+  display: block;
+  flex-direction: column;
   text-align: left;
-  height: 120px;
 }
 
 .activity-results-panel-header {
-  height: 80px;
+  height: 100px;
 }
 
 .school-prof-results, .unicam-prof-results {
@@ -99,6 +116,11 @@ input[type="text"] {
   text-align: center;
   justify-content: center;
   align-items: center;
+  color: #b7b7b7;
+}
+
+.school-prof-card, .unicam-prof-card {
+  background-color: #d6d6d6;
 }
 
 .school-results-subscription, .activity-results-subscription {
@@ -179,7 +201,7 @@ input[type="text"] {
   justify-content: center;
 }
 
-.activity-panel-title, .activity-container-type {
+.activity-container-type {
   text-align: left;
 }
 
@@ -193,6 +215,11 @@ input[type="text"] {
 }
 
 @media (max-width: 710px) {
+
+  .bottoni {
+    height: auto;
+  }
+
   .school-prof-results, .unicam-prof-results {
     width: 75%;
   }
@@ -206,7 +233,11 @@ input[type="text"] {
 
 @media (max-width: 550px) {
 
-  .school-results-accordion, .activty-results-accordion {
+  .bottoni {
+    height: auto;
+  }
+
+  .school-card, .activty-card {
     margin-bottom: 50px;
   }
 

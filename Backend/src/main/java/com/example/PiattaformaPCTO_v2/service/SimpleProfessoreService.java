@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -79,14 +78,13 @@ public class SimpleProfessoreService implements ProfessoreService{
     public void createEmptyActivity(String nome, String tipo, String scuola, int anno,Sede sede, LocalDateTime dataInizio, LocalDateTime dataFine
             , String descrizione, ProfessoreUnicam profUnicam, Professore profReferente) {
 
-if(attivitaRepository.findByNomeAnno(nome,anno).isEmpty()) {
-    Attivita attivita = new Attivita(nome, tipo, anno, new ArrayList<>(), sede, dataInizio, dataFine, descrizione, profUnicam, profReferente, true);
+        if(attivitaRepository.findByNomeAnno(nome,anno).isEmpty()) {
+            Attivita attivita = new Attivita(nome, tipo, anno, new ArrayList<>(), sede, dataInizio, dataFine, descrizione, profUnicam, profReferente, true);
 
-    attivita.setScuola(scuola);
+            attivita.setScuola(scuola);
 
-
-    attivitaRepository.save(attivita);
-}
+            attivitaRepository.save(attivita);
+        }
     }
 
 
@@ -175,15 +173,15 @@ if(attivitaRepository.findByNomeAnno(nome,anno).isEmpty()) {
         risultatiAtt.setAttivita(attivita.getNome());
         risultatiAtt.setTipo(attivita.getTipo());
         List<Universitario> universitarioList=new ArrayList<>();
-for(int i=0;i<attivita.getStudPartecipanti().size();i++){
-    Studente stud=attivita.getStudPartecipanti().get(i);
-    Universitario universitario=universitarioRepository.findByNomeAndCognome(stud.getNome(),stud.getCognome());
-    if(universitario!=null){
-       risultatiAtt.addUniversitari(universitario);
+        for(int i=0;i<attivita.getStudPartecipanti().size();i++){
+            Studente stud=attivita.getStudPartecipanti().get(i);
+            Universitario universitario=universitarioRepository.findByNomeAndCognome(stud.getNome(),stud.getCognome());
+            if(universitario!=null){
+               risultatiAtt.addUniversitari(universitario);
+            }
+        }
+        risultatiAttRepository.save(risultatiAtt);
     }
-}
-risultatiAttRepository.save(risultatiAtt);
-}
 
 
     @Override
@@ -335,7 +333,7 @@ risultatiAttRepository.save(risultatiAtt);
 
     @Override
     public void uploadSingleProf( String nome, String cognome,String email, String scuola,String cittaScuola, String attività) {
-Scuola scuola1=scuolaRepository.getScuolaByCittaAndNome(cittaScuola.toUpperCase(),scuola);
+        Scuola scuola1=scuolaRepository.getScuolaByCittaAndNome(cittaScuola.toUpperCase(),scuola);
 
         if(professoreRepository.getProfByEmail(email)==null&&scuola!=null){
             professoreRepository.save(new Professore(nome,cognome,email,scuola1,attività));
@@ -344,7 +342,9 @@ Scuola scuola1=scuolaRepository.getScuolaByCittaAndNome(cittaScuola.toUpperCase(
 
     @Override
     public Professore getProfByString(String prof) {
-        Professore profReferente;
+        if(prof.isEmpty()) {
+            return null;
+        }
         List<String> parametri=separa(prof);
         return professoreRepository.getNomeCognome(parametri.get(0),parametri.get(1));
     }

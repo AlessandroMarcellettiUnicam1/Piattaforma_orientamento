@@ -3,11 +3,14 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Anni } from 'src/app/interface/anni';
+import { environment } from 'src/environments/environment';
+
 @Component({
   selector: 'app-uploadat',
   templateUrl: './uploadat.component.html',
   styleUrls: ['./uploadat.component.css'],
 })
+
 export class UploadatComponent implements OnInit {
   private tipo: string = '';
   visualizza: string = 'ATT';
@@ -97,9 +100,8 @@ export class UploadatComponent implements OnInit {
   onClickIscr() {
     let anno = this.annoAccademicoInizio * 10000 + this.annoAccademicoFine;
     this.http
-
       .post(
-        'http://localhost:8080/universitari/uploadConAnno1/' + '' + anno,
+        environment.POST_CARICA_IMMATRICOLATI + '' + anno,
         this.dataIscr
       )
       .subscribe({
@@ -160,7 +162,7 @@ export class UploadatComponent implements OnInit {
 
     this.http
       .post(
-        'http://localhost:8080/attivita/uploadConAnno1/' + '' + param,
+        environment.POST_CARICA_ATTIVITA + '' + param,
         this.data
       )
       .subscribe({
@@ -172,7 +174,7 @@ export class UploadatComponent implements OnInit {
 
   onclickProf() {
     this.http
-      .post('http://localhost:8080/professori/uploadConFile1', this.dataProf)
+      .post(environment.POST_CARICA_FILE_PROFESSORI_REFERENTI, this.dataProf)
       .subscribe({
         next: (response) =>
           console.log(alert('inserimento avvenuto con successo'), response),
@@ -183,7 +185,7 @@ export class UploadatComponent implements OnInit {
   onclickProfUnicam() {
     this.http
       .post(
-        'http://localhost:8080/professoriUnicam/uploadConFile1',
+        environment.POST_CARICA_FILE_PROFESSORI_UNICAM,
         this.dataProfUnicam
       )
       .subscribe({
@@ -357,6 +359,7 @@ export class UploadatComponent implements OnInit {
   checkAnnoAccademico(): boolean {
     if (this.annoAccademico == '') {
       this.errorAnno = true;
+      return true;
     }
     this.errorAnno = false;
     return false;
@@ -408,17 +411,25 @@ export class UploadatComponent implements OnInit {
     let array = this.getScuole();
     array.subscribe(
       (result: string[]) => {
+<<<<<<< HEAD
       // Qui puoi utilizzare i valori emessi dall'Observable come un array di stringhe
       this.scuole = result;
       if (this.scuole.length == 0) {
         this.scuola = '';
+=======
+        // Qui puoi utilizzare i valori emessi dall'Observable come un array di stringhe
+        this.scuole = result;
+        if (this.scuole.length == 0) {
+          this.scuola = '';
+        }
+>>>>>>> Merge-into-Fix-error-with-merge
       }
     });
   }
 
   getScuole(): Observable<string[]> {
     return this.http
-      .get<string[]>('http://localhost:8080/scuola/scuoleCitta/' + this.citta)
+      .get<string[]>(environment.GET_LISTA_SCUOLE_DA_CITTA + this.citta)
       .pipe(
         map((response: any) => response.map((scuola: any) => scuola.toString()))
       );
@@ -436,7 +447,7 @@ export class UploadatComponent implements OnInit {
 
   getCitta(): Observable<string[]> {
     return this.http
-      .get<string[]>('http://localhost:8080/scuola/orderCitta')
+      .get<string[]>(environment.GET_LISTA_CITTA)
       .pipe(
         map((response: any) => response.map((citta: any) => citta.toString()))
       );
@@ -465,7 +476,7 @@ export class UploadatComponent implements OnInit {
       scuola != ''
     ) {
       this.http
-        .post('http://localhost:8080/professori/uploadSingleProf', body)
+        .post(environment.POST_CARICA_PROFESSORE_REFERENTE, body)
         .subscribe({
           next: (response) =>
             console.log(alert('inserimento avvenuto con successo'), response),
@@ -485,7 +496,7 @@ export class UploadatComponent implements OnInit {
 
     if (nome != '' && cognome != '' && email != '') {
       this.http
-        .post('http://localhost:8080/professoriUnicam/uploadSingleProf', body)
+        .post(environment.POST_CARICA_FILE_PROFESSORI_UNICAM, body)
         .subscribe({
           next: (response) =>
             console.log(alert('inserimento avvenuto con successo'), response),
@@ -506,7 +517,7 @@ export class UploadatComponent implements OnInit {
 
   getReferenti(): Observable<string[]> {
     return this.http
-      .get<string[]>('http://localhost:8080/professori/getReferenti')
+      .get<string[]>(environment.GET_LISTA_PROFESSORI_REFERENTI)
       .pipe(
         map((response: any) => response.map((prof: any) => prof.toString()))
       );
@@ -522,7 +533,7 @@ export class UploadatComponent implements OnInit {
 
   getProfUnicam(): Observable<string[]> {
     return this.http
-      .get<string[]>('http://localhost:8080/professoriUnicam/getProfUnicam')
+      .get<string[]>(environment.GET_LISTA_PROFESSORI_UNICAM)
       .pipe(
         map((response: any) =>
           response.map((profUnicam: any) => profUnicam.toString())

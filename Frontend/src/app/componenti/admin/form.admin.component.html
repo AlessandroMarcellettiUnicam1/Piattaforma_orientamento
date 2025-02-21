@@ -7,7 +7,7 @@
     <button mat-button class="btn1" id="btn1" (click)="onClick1()" [ngStyle]="{
       background: click==1 ? '#d4eab9' : '#7FBD32'
     }">
-      Creazione Attività
+      Creazione attività
     </button>
     <button mat-button class="btn2" id="btn2" (click)="onClick2()" [ngStyle]="{
       background: click==2 ? '#d4eab9' : '#7FBD32'
@@ -18,13 +18,13 @@
   <div class="admin-form" *ngIf="click==1">
     <div class="activity-name-field">
       <label class="field-title">Nome attività</label>
-      <input [value]="getAttivita()" type="text" id="text" (change)="cambioAttivita($event)" placeholder="Attività"
+      <input [value]="getAttivita()" type="text" id="nome" (change)="cambioAttivita($event)" placeholder="Attività"
         required />
     </div>
-    <label class="error-label" *ngIf="errorAttivita">Inserire il nome dell'attività</label>
+    <label class="error-label" *ngIf="errorAttivita">Inserire il nome dell'attività.</label>
     <div class="activity-type-field">
       <label class="field-title">Tipo attività</label>
-      <input type="text" id="text" (change)="cambioTipo($event)" placeholder="Tipologia" />
+      <input type="text" id="tipo" (change)="cambioTipo($event)" placeholder="Tipologia" />
     </div>
     <div class="sede-field">
       <label class="field-title" for="sede">Sede</label>
@@ -36,7 +36,7 @@
         <option value="altro">Altro</option>
       </select>
     </div>
-    <label class="error-label" *ngIf="errorSede">Inserire la sede dell'attività</label>
+    <label class="error-label" *ngIf="errorSede">Inserire la sede dell'attività.</label>
 
     <div class="city-field">
       <label class="field-title" for="citta">Città della Scuola</label>
@@ -47,7 +47,7 @@
         <option *ngFor="let c of getListaCitta()" [value]="c">{{c}}</option>
       </datalist>
     </div>
-    <label class="error-label" *ngIf="errorCitta">Inserire correttamente il nome della città</label>
+    <label class="error-label" *ngIf="errorCitta">Inserire correttamente il nome della città.</label>
 
     <div class="school-field" *ngIf="scuole.length > 0">
       <label class="field-title">Scuole Presenti</label>
@@ -58,14 +58,14 @@
     </div>
 
     <div class="year-field">
-      <label class="field-title" for="annoInizio">Anno Accademico</label>
-      <select type="number" id="annoInizio" name="annoInizio" [(ngModel)]="annoAccademico"
+      <label class="field-title" for="annoAccademico">Anno Accademico</label>
+      <select type="number" id="annoAccademico" name="annoAccademico" [(ngModel)]="annoAccademico"
         (change)="onSelectionChangeY($event)" required>
         <option value="">-</option>
         <option *ngFor="let anno of listaAnni" [value]="anno">{{anno}}</option>
       </select>
     </div>
-    <label class="error-label" *ngIf="errorAnno">Inserire l'anno accademico dell'attività</label>
+    <label class="error-label" *ngIf="errorAnno">Inserire l'anno accademico dell'attività.</label>
 
     <div class="data-fields">
       <div class="data-inizio-field">
@@ -79,20 +79,20 @@
       </div>
     </div>
     <label class="error-label" *ngIf="errorData">
-      Controllare se la data inserita è corretta<br>
-      L'anno deve esserre lo stesso dell'anno accademico
+      Controllare se la data inserita è corretta.<br>
+      L'anno deve esserre lo stesso dell'anno accademico.
     </label>
 
     <div class="description-field">
       <label class="field-title" for="descrizione">Descrizione</label>
-      <input type="text" id="text" (change)="cambioDescrizione($event)" placeholder="Descrizione" />
+      <input type="text" id="descrizione" (change)="cambioDescrizione($event)" placeholder="Descrizione" />
     </div>
 
     <div class="school-prof-field">
       <label class="field-title" for="pro">Professore Referente</label>
       <input type="text" list="profRefName" id="profRef" name="profRef" [(ngModel)]="prof"
         (change)="cambioProfRef($event)" (change)="toggleDropdownP()" autocomplete="off"
-        placeholder="Professore Referente" />
+        placeholder="Professore Referente"/>
       <datalist class="profRef-list" id="profRefName">
         <option value="">-</option>
         <option *ngFor="let prof of professori" [value]="prof">{{prof}}</option>
@@ -103,7 +103,7 @@
       <label class="field-title" for="prof">Professore Unicam</label>
       <input type="text" list="profUniName" id="profUni" name="profUni" [(ngModel)]="profUnicam"
         (change)="cambioProfUni($event)" (change)="toggleDropdownU()" autocomplete="off"
-        placeholder="Professore Unicam" />
+        placeholder="Professore Unicam"/>
       <datalist class="profUni-list" id="profUniName">
         <option value="">-</option>
         <option *ngFor="let profUnicam of professoriUnicam" [value]="profUnicam">{{profUnicam}}</option>
@@ -111,7 +111,7 @@
     </div>
 
     <button class="submit-button" type="button" (click)="inviaForm()">Carica!</button>
-
+    <label class="error-label" *ngIf="errorAttivita || errorSede || errorAnno || errorCitta || errorData">ERRORE NELLA COMPILAZIONE DEL FORM!</label>
   </div>
 
 
@@ -122,22 +122,22 @@
           background: act.studPartecipanti.length > 0 ? '#a0c4e0' : '#c9b6b6'
         }">
             <mat-card-title class="activity-card-title">
-              {{ act.nome }}<br>
+              {{ act.nome }}
             </mat-card-title>
             <mat-card-content class="activity-card-content">
-              DATA: {{ act.dataFine.toString().slice(0,10) }} / {{ act.dataFine.toString().slice(0,10) }}<br>
-              ANNO ACCADEMICO: {{ creaStringaAnnoAcc(act.annoAcc) }}<br>
-              ISCRIZIONI: {{ act.studPartecipanti.length }}<br>
-              PROF. UNICAM: {{ act.profUnicam.nome }} {{ act.profUnicam.cognome }}<br>
-              PROF. REFERENTE: {{ act.profReferente.nome }} {{ act.profReferente.cognome }}<br>
-              SCUOLA: {{ act.profReferente.scuolaImp.nome }}<br>
-              CITTA': {{ act.profReferente.scuolaImp.citta }}<br>
-              POVINCIA: {{ act.profReferente.scuolaImp.provincia }}<br>
-              REGIONE: {{ act.profReferente.scuolaImp.regione }}<br>
+              <div>ANNO ACCADEMICO: {{ creaStringaAnnoAcc(act.annoAcc) }}</div>
+              <div>DATA: {{ act.dataFine.toString().slice(0,10) }} / {{ act.dataFine.toString().slice(0,10) }}</div>
+              <div>ISCRIZIONI: {{ act.studPartecipanti.length }}</div>
+              <div *ngIf="act.profUnicam!=null">PROF. UNICAM: {{ act.profUnicam.nome }} {{ act.profUnicam.cognome }}</div>
+              <div *ngIf="act.profReferente!=null">PROF. REFERENTE: {{ act.profReferente.nome }} {{ act.profReferente.cognome }}</div>
+              <div *ngIf="act.profReferente!=null">SCUOLA: {{ act.profReferente.scuolaImp.nome }}</div>
+              <div *ngIf="act.profReferente!=null">CITTA': {{ act.profReferente.scuolaImp.provincia }}</div>
+              <div *ngIf="act.profReferente!=null">POVINCIA: {{ act.profReferente.scuolaImp.provincia }}</div>
             </mat-card-content>
             <mat-card-actions class="activity-card-action">
-              <button class="close-activity-button" (click)="handleButtonClick(act.nome, act.annoAcc)">Termina
+              <button class="close-activity-button" *ngIf="act.aperta==true" (click)="handleActivityButtonClear(act.nome, act.annoAcc)">Termina
                 Iscrizione</button>
+                <div class="close-activity-label" *ngIf="act.aperta==false">Attività chiusa</div>
             </mat-card-actions>
       </mat-card>
     </div>

@@ -41,7 +41,7 @@
         <mat-form-field class="view-filter" *ngIf="click == 1">
           <mat-label>Ordinamento vista</mat-label>
           <mat-select class="view-filter-option" (selectionChange)="cambioOrdinamento($event.value)">
-            <mat-option value="">-</mat-option>
+            <mat-option value="ANNO">Per anno accademico</mat-option>
             <mat-option value="ISCRITTI">Per numero di iscritti</mat-option>
             <mat-option value="REGIONI">Alfabetico per regione</mat-option>
             <mat-option value="SCUOLE">Alfabetico per le scuole</mat-option>
@@ -61,7 +61,7 @@
         <mat-form-field class="view-filter" *ngIf="click == 2">
           <mat-label>Ordinamento vista</mat-label>
           <mat-select class="view-filter-option" (selectionChange)="cambioOrdinamentoAtt($event.value)">
-            <mat-option value="">-</mat-option>
+            <mat-option value="ANNO">Per anno accademico</mat-option>
             <mat-option value="ISCRITTI">Per numero di iscritti</mat-option>
             <mat-option value="NOME">Alfabetico per attività</mat-option>
           </mat-select>
@@ -109,7 +109,7 @@
           placeholder="Filtra per città" />
         <datalist class="profUni-list" id="text-filter">
           <option value="">-</option>
-          <option *ngFor="let c of getVisualRis()" [value]="c.scuola.citta">{{c.scuola.citta}}</option>
+          <option *ngFor="let c of getFilteredRes()" [value]="c.scuola.citta">{{c.scuola.citta}}</option>
         </datalist>
       </div>
 
@@ -127,55 +127,43 @@
           <span class="button-content">Scarica Vista Scuole </span>
         </button>
       </div>
-
-
+      <div class="school-chart">
+        <google-chart class="main-chart-schools chart" [type]="mainChartType" [data]="mainChartDataSch" [columns]="mainChartColumns" [options]="chartOptionSch"></google-chart>
+        <google-chart class="opt-chart-schools chart" *ngIf="this.anno!=0" [type]="optChartType" [data]="optChartDataSch" [columns]="optChartColumns" [options]="chartOptionSch"></google-chart>
+      </div>
       <div class="schools-info">
-        <div class="school-results">
-          <div class="school-card" *ngFor="let ris of getVisualRis()">
-            <mat-accordion class="school-results-accordion">
+          <div class="school-card" *ngFor="let ris of getFilteredRes()">
               <mat-expansion-panel class="school-results-panel" [ngStyle]="{
                 background: ris.iscritti.length > 0 ? '#a0c4e0' : '#c9b6b6'
-              }">
+                }">
                 <mat-expansion-panel-header class="school-results-panel-header">
-                  <mat-panel-title *ngIf="ris.scuola!=null">
-                    Scuola: {{ ris.scuola.nome }}<br>
-                    Regione: {{ ris.scuola.regione }}<br>
-                    Provincia: {{ ris.scuola.provincia }}<br>
-                    Citta: {{ ris.scuola.citta }}<br>
-                    Anno: {{ creaStringaAnnoAcc(ris.annoAcc) }}
+                  <mat-panel-title class="school-results-main-data" *ngIf="ris.scuola!=null">
+                    <div *ngIf="ris.scuola.nome!=''" class="school-card-name">{{ ris.scuola.nome }}</div>
+                    <div *ngIf="ris.scuola.citta!=''">Citta: {{ ris.scuola.citta }}</div>
+                    <div *ngIf="ris.scuola.provincia!=''">Provincia: {{ ris.scuola.provincia }}</div>
+                    <div *ngIf="ris.scuola.regione!=''">Regione: {{ ris.scuola.regione }}</div>
+                    <div>Anno: {{ creaStringaAnnoAcc(ris.annoAcc) }}</div>
                   </mat-panel-title>
                   <mat-panel-description class="school-results-subscription">
-                    <br>
                     Totale iscritti: {{ ris.iscritti.length }}
                   </mat-panel-description>
                 </mat-expansion-panel-header>
                 <div class="school-results-container">
                   <ng-container class="school-results-container-element" *ngFor="let a of ris.attivita">
-                    NomeAttività: {{ a.nomeAttivita }}<br>
-                    Tipo: {{a.tipo}}<br />
-                    Partecipanti: {{ a.partecipanti.length }}<br>
-                    Iscritti: {{ a.iscritti.length }}
-                    <br />
-                    <ng-container *ngFor="let i of a.iscritti">
-                      {{ i.nome }} {{ i.cognome }}
-                    </ng-container>
-                    <br />
+                    <div>NomeAttività: {{ a.nomeAttivita }}</div>
+                    <div *ngIf="a.tipo!=''">Tipo: {{a.tipo}}</div>
+                    <div>Partecipanti: {{ a.partecipanti.length }}</div>
+                    <div>Iscritti: {{ a.iscritti.length }}</div>
                   </ng-container>
                 </div>
                 <div *ngIf="ris.iscritti.length > 0">
                   Elenco Iscritti:<br>
                   <ng-container *ngFor="let i of ris.iscritti">
-                    {{ i.nome }} {{ i.cognome }}
-                    <br />
+                    {{ i.cognome }} {{ i.nome }}<br>
                   </ng-container>
                 </div>
               </mat-expansion-panel>
-            </mat-accordion>
           </div>
-          <div class="school-chart">
-
-          </div>
-        </div>
       </div>
     </div>
 
@@ -185,17 +173,19 @@
           <span class="button-content">Scarica Vista Risultati </span>
         </button>
       </div>
+      <div class="activity-chart">
+        <google-chart class="main-chart-activities chart" [type]="mainChartType" [data]="mainChartDataAct" [columns]="mainChartColumns" [options]="chartOptionAct"></google-chart>
+        <google-chart class="opt-chart-activities chart" *ngIf="this.anno!=0" [type]="optChartType" [data]="optChartDataAct" [columns]="optChartColumns"></google-chart>
+      </div>
       <div class="activities-info">
-        <div class="activity-results">
-          <div class="activity-card" *ngFor="let ris of getVisualRisAtt()">
-            <mat-accordion class="activity-results-accordion">
+          <div class="activity-card" *ngFor="let ris of getFilteredRisAtt()">
               <mat-expansion-panel class="activity-results-panel" [hidden]="ris.universitarii.length == 0"
                 [hideToggle]="ris.universitarii.length == 0" [ngStyle]="{
                   background: ris.universitarii.length > 0 ? '#a0c4e0' : '#c9b6b6'
                 }">
                 <mat-expansion-panel-header class="activity-results-panel-header">
-                  <mat-panel-title class="activity-panel-title">
-                    Attività: {{ ris.attivita }}<br>
+                  <mat-panel-title class="activity-results-main-data">
+                    <div class="activity-card-name">{{ ris.attivita }}</div>
                     Anno: {{ creaStringaAnnoAcc(ris.annoAcc) }}
                   </mat-panel-title>
                   <mat-panel-description class="activity-results-subscription">
@@ -206,21 +196,15 @@
                   NESSUN DATO DA SEGNALARE
                 </ng-container>
                 <ng-container *ngIf="ris.universitarii.length > 0">
-                  <div class="activity-container-type" *ngIf="ris.tipo==''">
+                  <div class="activity-container-type" *ngIf="ris.tipo!=''">
                     Tipo: {{ris.tipo}}
                   </div>
                   <div *ngFor="let i of ris.universitarii">
-                    {{ i.nome }} {{ i.cognome }}
-                    <br />
+                    {{ i.cognome }} {{ i.nome }}<br>
                   </div>
                 </ng-container>
               </mat-expansion-panel>
-            </mat-accordion>
           </div>
-        </div>
-        <div class="activity-chart">
-          CIAO
-        </div>
       </div>
     </div>
 
@@ -234,7 +218,7 @@
 
       <div class="school-prof-results" *ngFor="let p of getProfList()">
 
-        <mat-card>
+        <mat-card class="school-prof-card">
           <mat-card-header class="school-prof-name">
             <h1>{{ p.professore.nome }} {{ p.professore.cognome }}</h1>
           </mat-card-header>
@@ -260,7 +244,7 @@
       </div>
 
       <div class="unicam-prof-results" *ngFor="let p of getProfUnicamList()">
-        <mat-card>
+        <mat-card class="unicam-prof-card">
           <mat-card-header class="unicam-prof-name">
             <h1>{{ p.professore.nome }} {{ p.professore.cognome }}</h1>
           </mat-card-header>
