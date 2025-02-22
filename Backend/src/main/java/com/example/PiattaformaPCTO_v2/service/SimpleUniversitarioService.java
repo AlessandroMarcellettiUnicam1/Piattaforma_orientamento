@@ -85,6 +85,9 @@ metodo che inserisce tutti quei studenti inseriti nell'exel in quell'anno
           else {
               this.immatricolazioniRepository.save(i);
           }
+          SimpleAttivitaService simpleAttivitaService = new SimpleAttivitaService();
+          simpleAttivitaService.updateRisultatiAtt(); //aggiorna i risultati attività
+
         return "caricati";
     }
 
