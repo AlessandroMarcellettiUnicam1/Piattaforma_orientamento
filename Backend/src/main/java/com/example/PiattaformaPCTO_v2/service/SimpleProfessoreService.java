@@ -32,7 +32,7 @@ public class SimpleProfessoreService implements ProfessoreService{
     @Autowired
     private ScuolaRepository scuolaRepository;
     @Autowired
-    private AttivitaService attivitaService;
+    private SimpleAttivitaService attivitaService;
     @Autowired
     private AttivitaRepository attivitaRepository;
 
@@ -160,13 +160,7 @@ public class SimpleProfessoreService implements ProfessoreService{
      * @param attivita
      */
     private Presenza createPresenza(Attivita attivita) {
-
-      List<Universitario> universitari=risultatiAttRepository.findbyNomeAttivita(attivita.getNome()).get(0).getUniversitarii();
-      Presenza presenza=new Presenza(attivita.getNome());
-      presenza.setTipo(attivita.getTipo());
-      presenza.addPartecipanti(attivita.getStudPartecipanti());
-      presenza.addIscritti(universitari);
-      return presenza;
+        return attivitaService.getPresenza(attivita, risultatiAttRepository);
 
 
     }
@@ -268,21 +262,27 @@ public class SimpleProfessoreService implements ProfessoreService{
         row0.createCell(0).setCellValue("Email");
         row0.createCell(1).setCellValue("Nome");
         row0.createCell(2).setCellValue("Cognome");
-        row0.createCell(3).setCellValue("Scuola");
-        row0.createCell(4).setCellValue("Attività");
+        row0.createCell(3).setCellValue("Id Scuola");
+        row0.createCell(4).setCellValue("Nome Scuola");
+        row0.createCell(5).setCellValue("Città Scuola");
+        row0.createCell(6).setCellValue("Attività");
         for (int i=0;i< professori.size();i++) {
             // Creazione della prima riga
             Row row = sheet.createRow(i+1);
             Cell cellEmail = row.createCell(0);
             Cell cellNome = row.createCell(1);
             Cell cellCognome = row.createCell(2);
-            Cell cellScuola = row.createCell(3);
-            Cell cellAttivita = row.createCell(4);
+            Cell cellIdScuola = row.createCell(3);
+            Cell cellNomeScuola = row.createCell(4);
+            Cell cellCittàScuola = row.createCell(5);
+            Cell cellAttivita = row.createCell(6);
             // Impostazione dei valori delle celle
             cellEmail.setCellValue(professori.get(i).getEmail());
             cellNome.setCellValue(professori.get(i).getNome());
             cellCognome.setCellValue(professori.get(i).getCognome());
-            cellScuola.setCellValue(professori.get(i).getScuolaImp().getIdScuola());
+            cellIdScuola.setCellValue(professori.get(i).getScuolaImp().getIdScuola());
+            cellNomeScuola.setCellValue(professori.get(i).getScuolaImp().getNome());
+            cellCittàScuola.setCellValue(professori.get(i).getScuolaImp().getCitta());
             cellAttivita.setCellValue(professori.get(i).getAttivita());
         }
 
